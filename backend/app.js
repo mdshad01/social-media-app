@@ -46,7 +46,7 @@ app.use(express.static(path.join(__dirname, "public"))); // Static assets
 
 // Routes
 
-app.use("/api/user", userRouter);
+app.use("/api/v1/user", userRouter);
 
 app.get("/", (req, res) => {
   res.send("You are currently in root😎");
