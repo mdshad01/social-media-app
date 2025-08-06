@@ -1,9 +1,34 @@
-const app = require("./app.js");
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-const port = 5000;
-
-app.get("/", (req, res) => {
-  res.send("You are currently at root route");
+process.on("uncaughtException", (err) => {
+  console.log("UNCATCH EXCEPTION! Shutting down");
+  console.log(err.name, err.message);
+  process.exit(1);
 });
 
-const server = app.listen(port, () => console.log(`Server running at 5000`));
+dotenv.config({ path: "./.env" });
+import app from "./app.js";
+
+mongoose
+  .connect(process.env.DB)
+  .then(() => {
+    console.log("Database connected successfully 😎");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+const port = process.env.PORT || 5000;
+
+const server = app.listen(port, () => {
+  console.log(`Server running at ${port}`);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.log("UNHANDLE REJECTION! shutting down");
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});

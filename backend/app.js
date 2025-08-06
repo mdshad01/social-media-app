@@ -1,26 +1,63 @@
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
-const helmet = require("helmet");
-const mongoSanitize = require("express-mongo-sanitize");
-const morgan = require("morgan");
-const path = require("path");
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
+import globalErrorHandler from "./controllers/errorController.js";
+import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+import AppError from "./utils/appError.js";
+import userRouter from "./routers/userRouter.js";
+
+// ES module __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
-app.use("/", express.static("uploads")); //?
+// Security middleware first
+app.use(helmet());
 
-app.use(cookieParser()); //?
-
-app.use(halmet());
-
+// CORS configuration
 app.use(
   cors({
-    origin: ["http://localhost:5000"],
+    origin: ["http://localhost:3000"],
     credentials: true,
   })
 );
 
-app.use(path.join(__dirname, "public"));
+// Development logging
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
-module.exports = app;
+// Body parsing middleware
+app.use(express.json({ limit: "10kb" }));
+app.use(cookieParser()); // Parse cookies from requests
+
+// Data sanitization
+app.use(mongoSanitize());
+
+// Static file serving
+app.use("/uploads", express.static("uploads")); // User uploads
+app.use(express.static(path.join(__dirname, "public"))); // Static assets
+
+// Routes
+
+app.use("/api/user", userRouter);
+
+app.get("/", (req, res) => {
+  res.send("You are currently in root😎");
+});
+
+// Handle undefined routes
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+});
+
+// Global error handler (must be last)
+app.use(globalErrorHandler);
+
+export default app;
