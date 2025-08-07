@@ -96,7 +96,10 @@ const UserSchema = new Schema(
       type: Date,
       default: null,
     },
-    resetPasswordOTPExpire: {
+    resetPasswordOTP: {
+      type: String,
+    },
+    resetPasswordOTPExpires: {
       type: Date,
       default: null,
     },
@@ -120,6 +123,10 @@ UserSchema.pre("save", async function (next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+UserSchema.methods.correctPassword = async function (userPassword, databasePassword) {
+  return await bcrypt.compare(userPassword, databasePassword);
+};
 
 const User = mongoose.models.user || mongoose.model("User", UserSchema);
 export default User;
