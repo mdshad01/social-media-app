@@ -78,7 +78,7 @@ const UserSchema = new Schema(
         ref: "Post",
       },
     ],
-    savedPost: [
+    savedPosts: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
@@ -107,10 +107,6 @@ const UserSchema = new Schema(
       type: Date,
       default: Date.now(),
     },
-    updatedAt: {
-      type: Date,
-      default: Date.now(),
-    },
   },
   {
     timestamps: true,
@@ -128,5 +124,5 @@ UserSchema.methods.correctPassword = async function (userPassword, databasePassw
   return await bcrypt.compare(userPassword, databasePassword);
 };
 
-const User = mongoose.models.user || mongoose.model("User", UserSchema);
+const User = mongoose.models.User || mongoose.model("User", UserSchema);
 export default User;

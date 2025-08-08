@@ -223,7 +223,7 @@ export const resetPassword = catchAsync(async (req, res, next) => {
   }
   user.password = password;
   user.passwordConfirm = passwordConfirm;
-  user.resetPasswordOtp = undefined;
+  user.resetPasswordOTP = undefined;
   user.resetPasswordOTPExpires = undefined;
 
   await user.save();
