@@ -10,7 +10,7 @@ import {
   verifyAccount,
 } from "../controllers/authController.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
-import { editProfile, getProfile } from "../controllers/userController.js";
+import { editProfile, followUnfollow, getProfile, suggestedUser } from "../controllers/userController.js";
 import upload from "../middleware/multer.js";
 
 const userRouter = Router();
@@ -36,5 +36,8 @@ userRouter.post(
   ]),
   editProfile
 );
+
+userRouter.get("/suggested-user", isAuthenticated, suggestedUser);
+userRouter.post("/follow-unfollow/:id", isAuthenticated, followUnfollow);
 
 export default userRouter;
