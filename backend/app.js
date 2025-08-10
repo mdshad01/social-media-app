@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import AppError from "./utils/appError.js";
 import userRouter from "./routers/userRouter.js";
+import postRouter from "./routers/postRouter.js";
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
@@ -46,7 +47,8 @@ app.use(express.static(path.join(__dirname, "public"))); // Static assets
 
 // Routes
 
-app.use("/api/v1/user", userRouter);
+app.use("/api/v1/users", userRouter); //post man user => users
+app.use("/api/v1/posts", postRouter);
 
 app.get("/", (req, res) => {
   res.send("You are currently in root😎");

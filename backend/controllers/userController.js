@@ -13,7 +13,7 @@ export const getProfile = catchAsync(async (req, res, next) => {
       options: { sort: { createdAt: -1 } },
     })
     .populate({
-      path: "savePosts",
+      path: "savedPosts",
       options: { sort: { createdAt: -1 } },
     });
 
@@ -128,6 +128,19 @@ export const followUnfollow = catchAsync(async (req, res, next) => {
     message: isFollowing ? "Unfollowed user" : "Followed user",
     data: {
       user: updatedLoggedInUser,
+    },
+  });
+});
+
+export const getMe = catchAsync(async (req, res, next) => {
+  const user = req.user;
+  if (!user) return next(new AppError("User Not Authenticated", 404));
+
+  res.status(200).json({
+    status: "success",
+    message: "Authenticated User",
+    data: {
+      user,
     },
   });
 });
