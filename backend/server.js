@@ -13,7 +13,7 @@ import app from "./app.js";
 mongoose
   .connect(process.env.DB)
   .then(() => {
-    console.log("Database connected successfully 😎");
+    console.log("Database connected successfully");
   })
   .catch((error) => {
     console.log(error);
