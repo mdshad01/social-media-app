@@ -4,6 +4,13 @@ import React, { ChangeEvent, FormEvent, useState } from "react";
 import PasswordInput from "./PasswordInput";
 import LoadingButton from "../Helper/LoadingButton";
 import Link from "next/link";
+import { BASE_API_URL } from "@/server";
+import axios from "axios";
+import { handleAuthRequest } from "../util/apiRequest";
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "@/store/authSlice";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   username: string;
@@ -13,6 +20,8 @@ interface FormData {
 }
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
     username: "",
@@ -25,11 +34,18 @@ const Signup = () => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  // console.log("FORMDATA", formData);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // create our request
+    const signupReq = async () => axios.post(`${BASE_API_URL}/users/signup`, formData, { withCredentials: true });
+    const result = await handleAuthRequest(signupReq, setIsLoading);
+    if (result) {
+      dispatch(setAuthUser(result.data.data.user));
+      toast.success(result.data.message);
+      router.push("/");
+    }
   };
+
   return (
     <div className="w-full h-screen overflow-hidden">
       <div className="flex flex-col lg:flex-row ">
