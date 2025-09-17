@@ -8,7 +8,6 @@ import { BASE_API_URL } from "@/server";
 import axios from "axios";
 import { handleAuthRequest } from "../util/apiRequest";
 import { toast } from "sonner";
-import { useDispatch } from "react-redux";
 import { setAuthUser } from "@/store/authSlice";
 import { useRouter } from "next/navigation";
 
@@ -21,6 +20,7 @@ interface FormData {
 
 const Signup = () => {
   const dispatch = useDispatch();
+
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -42,7 +42,7 @@ const Signup = () => {
     if (result) {
       dispatch(setAuthUser(result.data.data.user));
       toast.success(result.data.message);
-      router.push("/");
+      router.push("/auth/verify");
     }
   };
 

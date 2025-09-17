@@ -1,11 +1,33 @@
 "use client";
-import { MailCheck } from "lucide-react";
-import React, { ChangeEvent, KeyboardEvent, useRef, useState } from "react";
+import { Loader, MailCheck } from "lucide-react";
+import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 import LoadingButton from "../Helper/LoadingButton";
+import axios from "axios";
+import { BASE_API_URL } from "@/server";
+import { handleAuthRequest } from "../util/apiRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { setAuthUser } from "@/store/authSlice";
+import { RootState } from "@/store/store";
 
 const Verify = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state?.auth.user);
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const [isPageLoading, setIsPageLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) {
+      router.replace("/auth/login");
+    } else if (user && user.isVerified) {
+      router.replace("/");
+    } else {
+      setIsPageLoading(false);
+    }
+  }, [user, router]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   console.log(otp);
   const handleChanges = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
@@ -24,11 +46,45 @@ const Verify = () => {
       inputRefs.current[index - 1]?.focus();
     }
   };
+
+  const handleSubmit = async () => {
+    const otpValue = otp.join("");
+    const verifyReq = async () =>
+      await axios.post(`${BASE_API_URL}/users/verify`, { otp: otpValue }, { withCredentials: true });
+
+    const result = await handleAuthRequest(verifyReq, setIsLoading);
+    console.log(result);
+
+    if (result) {
+      dispatch(setAuthUser(result.data.data.user));
+      toast.success(result.data.message);
+      router.push("/");
+    }
+  };
+
+  const handleResendOtp = async () => {
+    const resendOtpReq = async () =>
+      await axios.post(`${BASE_API_URL}/users/resend-otp`, null, { withCredentials: true });
+    const result = await handleAuthRequest(resendOtpReq, setIsLoading);
+    console.log(result);
+    if (result) {
+      toast.success(result.data.message);
+    }
+  };
+
+  if (isPageLoading) {
+    return (
+      <div className="h-screen flex justify-center items-center">
+        <Loader className="w-20 h-20 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen flex flex-col justify-center items-center">
       <MailCheck className="w-20 h-20 sm:h-32 sm:w-32 text-blue-500 mb-12" />
       <h1 className="text-2xl  sm:text-3xl font-bold mb-3">OTP Verification</h1>
-      <p className="text-sm mb-6 sm:text-base font-medium text-gray-600">We have sent a code to code@example.com</p>
+      <p className="text-sm mb-6 sm:text-base font-medium text-gray-600">We have sent a code to {user?.email}</p>
       <div className="flex space-x-4">
         {[0, 1, 2, 3, 4, 5].map((index) => {
           return (
@@ -49,9 +105,11 @@ const Verify = () => {
       </div>
       <div className="flex items-center mt-4 space-x-2">
         <h3 className="text-sm sm:text-lg font-medium text-gray-700">Didn&apos;t get the otp?</h3>
-        <button className="text-sm sm:text-lg font-medium text-blue-900 underline">Resend code</button>
+        <button onClick={handleResendOtp} className="text-sm sm:text-lg font-medium text-blue-900 underline">
+          Resend code
+        </button>
       </div>
-      <LoadingButton isLoading={isLoading} size={"lg"} className="mt-6 w-52">
+      <LoadingButton onClick={handleSubmit} isLoading={isLoading} size={"lg"} className="mt-6 w-52">
         Verify
       </LoadingButton>
     </div>

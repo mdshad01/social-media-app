@@ -14,7 +14,7 @@ export interface User {
   following: string[];
   posts: Post[];
   savedPosts: string | Post[];
-  isVarified: boolean;
+  isVerified: boolean;
 }
 
 export interface Comment {
