@@ -37,7 +37,7 @@ const PasswordInput = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`px-4 py-4 w-full rounded-lg bg-gray-200 block outline-none ${inputClassName}`}
+          className={`px-4 py-4 w-full rounded-lg bg-gray-100 block outline-none ${inputClassName}`}
         />
         <button
           type="button"

@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Lobster, Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import ClientProvider from "@/HOC/ClientProvider";
 
-const font = Roboto({
+const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ["latin"],
+});
+
+const lobster = Lobster({
+  weight: ["400"],
+  variable: "--font-lobster",
   subsets: ["latin"],
 });
 
@@ -34,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${font.className}`}>
+      <body className={`${roboto.className} ${lobster.variable} font-sans`}>
         <ClientProvider>
           {children}
           <Toaster />

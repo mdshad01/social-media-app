@@ -47,7 +47,7 @@ app.use(express.static(path.join(__dirname, "public"))); // Static assets
 
 // Routes
 
-app.use("/api/v1/users", userRouter); //post man user => users
+app.use("/api/v1/users", userRouter); //postman user => users
 app.use("/api/v1/posts", postRouter);
 
 app.get("/", (req, res) => {

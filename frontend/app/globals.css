@@ -119,6 +119,27 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* .font-logo {
+  font-family: var(--font-lobster);
+  } */
+  .gradient-btn {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: #fff;
+    border-radius: 0.5rem; /* rounded-md */
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+    background: linear-gradient(to right, #3b82f6, #1d4ed8); /* blue-400 → 700 */
+  }
+
+  .gradient-btn:hover {
+    /* background: linear-gradient(to right, #2563eb, #1e40af, #1e3a8a);  */
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+  }
 }
 
 @layer utilities {
