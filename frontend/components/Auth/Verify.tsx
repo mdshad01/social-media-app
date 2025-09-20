@@ -29,7 +29,7 @@ const Verify = () => {
     }
   }, [user, router]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  console.log(otp);
+  // console.log(otp);
   const handleChanges = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target;
     if (/^\d*$/.test(value) && value.length <= 1) {
