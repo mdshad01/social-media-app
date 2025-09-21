@@ -140,6 +140,11 @@
     /* background: linear-gradient(to right, #2563eb, #1e40af, #1e3a8a);  */
     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
   }
+
+  .place-color::placeholder {
+    color: #575f78; /* Change to your desired color */
+    opacity: 1; /* Ensures the color is not faded */
+  }
 }
 
 @layer utilities {
