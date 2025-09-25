@@ -1,17 +1,39 @@
+import { BASE_API_URL } from "@/server";
+import { setAuthUser } from "@/store/authSlice";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 import React from "react";
+import { AiFillHome } from "react-icons/ai";
 import { FaBookmark, FaFlag, FaHome, FaShoppingCart, FaStar, FaUserFriends, FaUsers } from "react-icons/fa";
+import { MdLogout } from "react-icons/md";
+import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 const LeftSidebar = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    await axios.post(`${BASE_API_URL}/users/logout`, {}, { withCredentials: true });
+    dispatch(setAuthUser(null));
+    toast.success("Logged out successfully");
+    router.push("/auth/login");
+  };
+
+  const handleSidebar = (label: string) => {
+    if (label === "Home") router.push("/");
+    if (label == "Logout") handleLogout();
+  };
   const sideBarLinks = [
     {
-      icon: <FaHome className="text-blue-500 w-5 h-5" />,
+      icon: <AiFillHome className="text-blue-500 w-5 h-5" />,
       label: "Home",
       bg: "bg-blue-100 group-hover:bg-blue-200 transition-all duration-100",
     },
     {
-      icon: <FaUserFriends className="text-[#209855] w-5 h-5" />,
+      icon: <FaUserFriends className="text-green-600 w-5 h-5" />,
       label: "Friends",
-      bg: "bg-[#aeeecf] group-hover:bg-green-200 transition-all duration-100",
+      bg: "bg-[#aefecf] group-hover:bg-green-200 transition-all duration-100",
     },
     {
       icon: <FaUsers className="text-orange-500 w-5 h-5" />,
@@ -24,9 +46,9 @@ const LeftSidebar = () => {
       bg: "bg-purple-200 group-hover:bg-purple-300 transition-all duration-100",
     },
     {
-      icon: <FaBookmark className="text-red-500 w-5 h-5" />,
+      icon: <FaBookmark className="text-rose-500 w-5 h-5" />,
       label: "Saved",
-      bg: "bg-red-200 group-hover:bg-red-300 transition-all duration-100",
+      bg: "bg-rose-200 group-hover:bg-rose-300 transition-all duration-100",
     },
     {
       icon: <FaFlag className="text-cyan-500 w-5 h-5" />,
@@ -38,6 +60,11 @@ const LeftSidebar = () => {
       label: "Favourites",
       bg: "bg-gray-300 group-hover:bg-gray-400 transition-all duration-100",
     },
+    {
+      icon: <MdLogout className="text-red-600 w-5 h-5" />,
+      label: "Logout",
+      bg: "bg-red-100 group-hover:bg-red-200 transition-all duration-100",
+    },
   ];
 
   return (
@@ -45,7 +72,8 @@ const LeftSidebar = () => {
       {sideBarLinks.map((item, index) => (
         <div
           key={index}
-          className="group flex items-center justify-start lg:pl-4 xl:pl-6 gap-4 mb-1.5 py-1 cursor-pointer hover:bg-gray-200 rounded-lg transition-all duration-100 hover:scale-103">
+          className="group flex items-center justify-start lg:pl-4 xl:pl-6 gap-4 mb-1.5 py-1 cursor-pointer hover:bg-gray-200 rounded-lg transition-all duration-100 hover:scale-103"
+          onClick={() => handleSidebar(item.label)}>
           {/* Icon with hover effect controlled by parent group */}
           <span className={`w-10 h-10 flex items-center justify-center rounded-full ${item.bg}`}>{item.icon}</span>
           <span>{item.label}</span>

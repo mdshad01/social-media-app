@@ -8,10 +8,13 @@ import Feed from "./Feed";
 import RightSidebar from "./RightSidebar";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { MenuIcon } from "lucide-react";
+import { BiAperture } from "react-icons/bi";
+import { useRouter } from "next/navigation";
 
 const Home = () => {
   // const user = useSelector((state: RootState) => state?.auth.user);
   // console.log(user);
+  const router = useRouter();
   return (
     <div className="flex flex-col">
       <div className="w-full h-[12vh]  ">
@@ -30,13 +33,19 @@ const Home = () => {
               <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
                 <SheetTitle></SheetTitle>
                 <SheetDescription></SheetDescription>
+                <div className="text-[#1b2356] flex items-center gap-2  justify-start">
+                  <BiAperture className="w-10 h-10" />{" "}
+                  <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
+                    Shadsocial.
+                  </span>
+                </div>
                 <LeftSidebar />
               </SheetContent>
             </Sheet>
           </div>
           <Feed />
         </div>
-        <div className="w-[30%] pt-8 px-6 lg:block hidden bg-orange-400">
+        <div className="w-[30%] pt-8 px-6 lg:block hidden ">
           <RightSidebar />
         </div>
       </div>

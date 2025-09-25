@@ -11,6 +11,10 @@ import { IoSearch, IoSearchSharp } from "react-icons/io5";
 const Navbar = () => {
   const user = useSelector((state: RootState) => state?.auth.user);
   const router = useRouter();
+
+  const handleNavbar = async (label: string) => {
+    if (label == "profile") router.push(`/profile/${user?._id}`);
+  };
   const navIcons = [
     {
       icon: <BiSolidMessageDetail className="text-2xl text-[#1a2254]" />,
@@ -53,6 +57,7 @@ const Navbar = () => {
       <div className="flex gap-8 items-center pl-20 w-[30%]  h-full">
         {navIcons.map((item, index) => (
           <span
+            onClick={() => handleNavbar(item.label)}
             key={index}
             className="cursor-pointer w-12 h-12 bg-[#f3f5f7] hover:bg-[#eff7fe] flex items-center justify-center rounded-full">
             {item.icon}
