@@ -7,11 +7,16 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { handleAuthRequest } from "../util/apiRequest";
-import { Loader } from "lucide-react";
+import { Loader, MenuIcon } from "lucide-react";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 import LeftSidebar from "../Home/LeftSidebar";
+import { BiAperture } from "react-icons/bi";
+import Navbar from "../Home/Navbar";
+import ProfileCard from "./util/ProfileCard";
+import UserInfoCard from "./util/UserInfoCard";
 
 type Props = {
-  id: string;
+  id?: string;
 };
 
 const Profile = ({ id }: Props) => {
@@ -44,11 +49,55 @@ const Profile = ({ id }: Props) => {
     );
   }
 
-  return <div className="bg-gray-700 h-screen w-full">
-    <div className="">
-        <LeftSidebar
+  return (
+    <div className="flex flex-col">
+      {/* Navbar (optional) */}
+      <div className="w-full h-[12vh]">
+        <Navbar />
+      </div>
+
+      {/* Main layout */}
+      <div className="flex h-[88vh] bg-[#f4f6f8]">
+        {/* Left Sidebar */}
+        <div className="w-[20%] hidden md:block fixed h-full">
+          <LeftSidebar />
+        </div>
+
+        {/* Feed Section */}
+        <div className="flex-1 md:ml-[20%] overflow-y-auto">
+          {/* Mobile Sidebar (Sheet) */}
+          <div className="md:hidden p-2">
+            <Sheet>
+              <SheetTrigger>
+                <MenuIcon />
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
+                <SheetTitle></SheetTitle>
+                <SheetDescription></SheetDescription>
+
+                <div className="text-[#1b2356] flex items-center gap-2 justify-start">
+                  <BiAperture className="w-10 h-10" />
+                  <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
+                    Shadsocial.
+                  </span>
+                </div>
+
+                <LeftSidebar />
+              </SheetContent>
+            </Sheet>
+          </div>
+          <div className="w-full h-[50vh] ">
+            <ProfileCard userProfile={userProfile} />
+          </div>
+        </div>
+
+        {/* Right Sidebar */}
+        <div className="w-[30%] px-6 lg:block hidden">
+          <UserInfoCard userProfile={userProfile} id={id} />
+        </div>
+      </div>
     </div>
-  </div>;
+  );
 };
 
 export default Profile;

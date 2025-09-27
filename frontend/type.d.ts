@@ -10,6 +10,7 @@ export interface User {
   work?: string;
   bio: string;
   website?: string;
+  joined?: Date;
   followers: string[];
   following: string[];
   posts: Post[];

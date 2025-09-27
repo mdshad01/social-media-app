@@ -68,14 +68,14 @@ const LeftSidebar = () => {
   ];
 
   return (
-    <div className="mt-6 h-full w-full sm:px-3 md:px-3 lg:px-8 flex flex-col item-center justify-start">
+    <div className="mt-4 ml-8 py-4 w-[78%] sm:px-3 md:px-3 lg:px-4 flex flex-col item-center justify-start bg-white rounded-lg gap-1 shadow ">
       {sideBarLinks.map((item, index) => (
         <div
           key={index}
-          className="group flex items-center justify-start lg:pl-4 xl:pl-6 gap-4 mb-1.5 py-1 cursor-pointer hover:bg-gray-200 rounded-lg transition-all duration-100 hover:scale-103"
+          className="group flex items-center justify-start lg:pl-2 xl:pl-2 gap-5 mb-1.5 py-1 cursor-pointer hover:bg-gray-200 rounded-lg transition-all duration-100 hover:scale-103"
           onClick={() => handleSidebar(item.label)}>
           {/* Icon with hover effect controlled by parent group */}
-          <span className={`w-10 h-10 flex items-center justify-center rounded-full ${item.bg}`}>{item.icon}</span>
+          <span className={`w-9 h-9 flex items-center justify-center rounded-full ${item.bg}`}>{item.icon}</span>
           <span>{item.label}</span>
         </div>
       ))}

@@ -60,6 +60,9 @@ const UserSchema = new Schema(
     website: {
       type: String,
     },
+    joined: {
+      type: Date,
+    },
     followers: [
       {
         type: mongoose.Schema.Types.ObjectId,

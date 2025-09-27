@@ -37,11 +37,10 @@ const Navbar = () => {
   return (
     <nav className="flex px-4 items-center w-full h-full">
       {/* Logo */}
-      <div className="text-[#1b2356] flex items-center gap-2 w-[20%] justify-center">
-        <BiAperture className="w-10 h-10" />{" "}
-        <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
-          Shadsocial.
-        </span>
+      <div
+        onClick={() => router.push("/")}
+        className="text-[#1b2356] cursor-pointer flex items-center gap-2 w-[20%] justify-center">
+        <BiAperture className="w-10 h-10" /> <span className="text-2xl sm:text-3xl font-bold">Shadsocial.</span>
       </div>
       {/* Search box */}
       <div className="flex relative items-center justify-end w-1/2 h-full">

@@ -3,6 +3,7 @@ import { Lobster, Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import ClientProvider from "@/HOC/ClientProvider";
+import Navbar from "@/components/Home/Navbar";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
