@@ -12,9 +12,8 @@ type Props = {
 const ProfileCard = ({ userProfile }: Props) => {
   const user = useSelector((state: RootState) => state?.auth.user);
 
-  console.log(user);
   return (
-    <div className=" flex flex-col items-center justify-center gap-4 px-5 mt-4">
+    <div className=" flex flex-col items-center justify-center gap-4 ">
       <div className="relative h-60 w-full shadow">
         <Image
           src={userProfile?.backgroundImage || "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"}

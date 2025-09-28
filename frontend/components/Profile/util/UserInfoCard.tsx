@@ -1,12 +1,8 @@
-import { handleAuthRequest } from "@/components/util/apiRequest";
-import { BASE_API_URL } from "@/server";
 import { RootState } from "@/store/store";
 import { User } from "@/type";
-import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { FaCalendarAlt, FaLink } from "react-icons/fa";
+import { FaLink } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoCalendar, IoSchool } from "react-icons/io5";
 import { MdOutlineWork } from "react-icons/md";
@@ -15,30 +11,22 @@ import { useSelector } from "react-redux";
 type Props = {
   userProfile?: User;
   id?: string;
+  idFollowing?: boolean;
 };
 
-const UserInfoCard = ({ userProfile, id }: Props) => {
+const UserInfoCard = ({ userProfile, id, idFollowing }: Props) => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state?.auth.user);
   const isOwnProfile = user?._id === id;
-  //   const [userProfile, setUserProfile] = useState<User>();
-  //   const [isLoading, setIsLoading] = useState(false);
-  //   console.log(isOwnProfile);
-  //   useEffect(() => {
-  //     const fetchUser = async () => {
-  //       const fetchUserReq = async () => await axios.get(`${BASE_API_URL}/users/profile/${id}`);
-  //       const result = await handleAuthRequest(fetchUserReq, setIsLoading);
-  //       if (result) setUserProfile(result.data.data.user);
-  //     };
-  //     fetchUser();
-  //   }, [id]);
   return (
-    <div className=" max-w-xs min-w-xs px-4 pt-4 mt-5 bg-white rounded-lg shadow text-sm flex flex-col gap-2">
+    <div className=" max-w-xs min-w-xs px-4 pt-4  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-gray-500">User Information</span>
         {isOwnProfile ? (
-          <span onClick={() => router.push("profile/edit}")}>edit</span>
+          <span className="text-[#1a2254] cursor-pointer" onClick={() => router.push("profile/edit}")}>
+            edit
+          </span>
         ) : (
           <Link href="/" className="text-[#1a2254] text-xs">
             See all
@@ -88,10 +76,13 @@ const UserInfoCard = ({ userProfile, id }: Props) => {
             {userProfile?.website && <Link href={userProfile?.website} />}
           </div>
         </div>
+
         <div className="flex flex-col pb-2 gap-2 ">
-          <button className="bg-[#1a2254] text-white w-full p-2 font-medium rounded-md cursor-pointer">
-            Following
-          </button>
+          {isOwnProfile ? null : !idFollowing ? (
+            <button className="bg-[#1a2254] text-white w-full p-2 font-medium rounded-md cursor-pointer">Follow</button>
+          ) : (
+            <button className="bg-red-600 text-white w-full p-2 font-medium rounded-md cursor-pointer">Unfollow</button>
+          )}
           <button className="text-red-500 opacity-90 text-xs self-end font-medium cursor-pointer">Block User</button>
         </div>
       </div>

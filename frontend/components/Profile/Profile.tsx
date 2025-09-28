@@ -14,9 +14,11 @@ import { BiAperture } from "react-icons/bi";
 import Navbar from "../Home/Navbar";
 import ProfileCard from "./util/ProfileCard";
 import UserInfoCard from "./util/UserInfoCard";
+import Feed from "./util/Feed";
+import LeftMenu from "../Home/LeftMenu";
 
 type Props = {
-  id?: string;
+  id: string;
 };
 
 const Profile = ({ id }: Props) => {
@@ -27,7 +29,8 @@ const Profile = ({ id }: Props) => {
   const [userProfile, setuserProfile] = useState<User>();
 
   const isProfileOwn = user?._id === id;
-  const idFollowing = user?.following.includes(id);
+  const idFollowing = id ? user?.following.includes(id) : false;
+  // const idFollowing = true;
 
   console.log("User", userProfile);
   console.log(isProfileOwn);
@@ -50,53 +53,55 @@ const Profile = ({ id }: Props) => {
   }
 
   return (
-    <div className="flex flex-col">
-      {/* Navbar (optional) */}
-      <div className="w-full h-[12vh]">
-        <Navbar />
+    // <div className="flex flex-col">
+    //   {/* Navbar (optional) */}
+    //   {/* <div className="w-full h-[12vh]">
+    //     <Navbar />
+    //   </div> */}
+
+    //   {/* Main layout */}
+    <div className="flex  bg-slate-100 pt-6">
+      {/* Left Sidebar */}
+      <div className="w-[20%] hidden md:block  h-full ">
+        {/* <LeftSidebar /> */}
+        <LeftMenu type="profile" />
       </div>
 
-      {/* Main layout */}
-      <div className="flex h-[88vh] bg-[#f4f6f8]">
-        {/* Left Sidebar */}
-        <div className="w-[20%] hidden md:block fixed h-full">
-          <LeftSidebar />
+      {/* Feed Section */}
+      <div className="  w-full lg:w-[70%] xl:w-[55%] bg-slate-100">
+        {/* Mobile Sidebar (Sheet) */}
+        <div className="md:hidden p-2">
+          <Sheet>
+            <SheetTrigger>
+              <MenuIcon />
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
+              <SheetTitle></SheetTitle>
+              <SheetDescription></SheetDescription>
+
+              <div className="text-[#1b2356] flex items-center gap-2 justify-start">
+                <BiAperture className="w-10 h-10" />
+                <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
+                  Shadsocial.
+                </span>
+              </div>
+
+              <LeftSidebar />
+            </SheetContent>
+          </Sheet>
         </div>
-
-        {/* Feed Section */}
-        <div className="flex-1 md:ml-[20%] overflow-y-auto">
-          {/* Mobile Sidebar (Sheet) */}
-          <div className="md:hidden p-2">
-            <Sheet>
-              <SheetTrigger>
-                <MenuIcon />
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
-                <SheetTitle></SheetTitle>
-                <SheetDescription></SheetDescription>
-
-                <div className="text-[#1b2356] flex items-center gap-2 justify-start">
-                  <BiAperture className="w-10 h-10" />
-                  <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
-                    Shadsocial.
-                  </span>
-                </div>
-
-                <LeftSidebar />
-              </SheetContent>
-            </Sheet>
-          </div>
-          <div className="w-full h-[50vh] ">
-            <ProfileCard userProfile={userProfile} />
-          </div>
+        <div className=" h-[45vh] px-5 bg-slate-100">
+          <ProfileCard userProfile={userProfile} />
+          <Feed />
         </div>
+      </div>
 
-        {/* Right Sidebar */}
-        <div className="w-[30%] px-6 lg:block hidden">
-          <UserInfoCard userProfile={userProfile} id={id} />
-        </div>
+      {/* Right Sidebar */}
+      <div className="hidden xl:block w-[25%]">
+        <UserInfoCard userProfile={userProfile} id={id} idFollowing={idFollowing} />
       </div>
     </div>
+    // </div>
   );
 };
 

@@ -26,14 +26,14 @@ const SuggestedUser = () => {
   }, []);
   if (isLoading) {
     return (
-      <div className="w-full h-screen flex items-center justify-center flex-col">
+      <div className="w-full h-screen flex items-center justify-center flex-col ">
         <Loader className="animate-spin " />
       </div>
     );
   }
   return (
-    <div className="px-10">
-      <div className="flex items-center justify-between mt-8">
+    <div className="max-w-xs min-w-x bg-white p-4 rounded">
+      <div className="flex items-center justify-between">
         <h2 className="font-medium text-gray-700 text-[15px]">Suggested User</h2>
         <span className=" cursor-pointer text-sm">See all</span>
       </div>
@@ -41,9 +41,9 @@ const SuggestedUser = () => {
         return (
           <div onClick={() => router.push(`/profile/${sUser?._id}`)} key={sUser._id} className="mt-6 cursor-pointer">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4 cursor-pointer gap-2">
+              <div className="flex items-center space-x-3 cursor-pointer">
                 <Avatar className="w-9 h-9  rounded-full">
-                  <AvatarImage src={sUser?.profilePicture} className="h-full w-full rounded-full" />
+                  <AvatarImage src={sUser?.profilePicture} className="h-full w-full rounded-full b" />
                   <AvatarFallback className="bg-white">CN</AvatarFallback>
                 </Avatar>
                 <h2 className="font-medium">{sUser.username}</h2>

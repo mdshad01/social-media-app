@@ -1,15 +1,14 @@
 "use client";
 import React from "react";
-import { FaBell, FaCommentDots } from "react-icons/fa";
+import { FaBell } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { BiAperture, BiSolidMessageDetail } from "react-icons/bi";
-import { PiApertureBold, PiApertureFill } from "react-icons/pi";
 import { useRouter } from "next/navigation";
-import { IoSearch, IoSearchSharp } from "react-icons/io5";
+import { IoSearch } from "react-icons/io5";
 const Navbar = () => {
-  const user = useSelector((state: RootState) => state?.auth.user);
+  // const user = useSelector((state: RootState) => state?.auth.user);
   const router = useRouter();
 
   const handleNavbar = async (label: string) => {
@@ -24,22 +23,22 @@ const Navbar = () => {
       icon: <FaBell className="text-2xl text-[#1a2254]" />,
       label: "notifications",
     },
-    {
-      icon: (
-        <Avatar className="w-12 h-12">
-          <AvatarImage src={user?.profilePicture} className="w-full h-full" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-      ),
-      label: "profile",
-    },
+    // {
+    //   icon: (
+    //     <Avatar className="w-12 h-12">
+    //       <AvatarImage src={user?.profilePicture} className="w-full h-full" />
+    //       <AvatarFallback>CN</AvatarFallback>
+    //     </Avatar>
+    //   ),
+    //   label: "profile",
+    // },
   ];
   return (
     <nav className="flex px-4 items-center w-full h-full">
       {/* Logo */}
       <div
         onClick={() => router.push("/")}
-        className="text-[#1b2356] cursor-pointer flex items-center gap-2 w-[20%] justify-center">
+        className="text-[#1b2356] cursor-pointer flex items-center gap-0 w-[20%] justify-center">
         <BiAperture className="w-10 h-10" /> <span className="text-2xl sm:text-3xl font-bold">Shadsocial.</span>
       </div>
       {/* Search box */}

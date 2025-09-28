@@ -42,10 +42,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} ${lobster.variable} font-sans`}>
-        <ClientProvider>
-          {children}
-          <Toaster />
-        </ClientProvider>
+        <div className="w-full bg-white px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 h-[12vh] ">
+          <Navbar />
+        </div>
+        <div className="bg-slate-100 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+          <ClientProvider>
+            {children}
+            <Toaster />
+          </ClientProvider>
+        </div>
       </body>
     </html>
   );

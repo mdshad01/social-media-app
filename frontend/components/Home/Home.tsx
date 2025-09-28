@@ -10,6 +10,9 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from 
 import { MenuIcon } from "lucide-react";
 import { BiAperture } from "react-icons/bi";
 import { useRouter } from "next/navigation";
+import LeftMenu from "./LeftMenu";
+import Stories from "./Util/Stories";
+import Addpost from "./Util/Addpost";
 
 const Home = () => {
   // const user = useSelector((state: RootState) => state?.auth.user);
@@ -17,35 +20,41 @@ const Home = () => {
   const router = useRouter();
   return (
     <div className="flex flex-col">
-      <div className="w-full h-[12vh]  ">
+      {/* <div className="w-full h-[12vh] bg-white ">
         <Navbar />
-      </div>
-      <div className="flex h-[88vh] bg-[#f4f6f8]">
-        <div className="w-[20%] hidden md:block fixed">
-          <LeftSidebar />
+      </div> */}
+      <div className="flex gap-6   pt-6">
+        <div className="w-[22%] hidden md:block">
+          {/* <LeftSidebar /> */}
+          <LeftMenu type="home" />
         </div>
-        <div className=" flex-1 md:ml-[20%]  overflow-y-auto bg-yellow-300">
-          <div className="md:hidden">
-            <Sheet>
-              <SheetTrigger>
-                <MenuIcon />
-              </SheetTrigger>
-              <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
-                <SheetTitle></SheetTitle>
-                <SheetDescription></SheetDescription>
-                <div className="text-[#1b2356] flex items-center gap-2  justify-start">
-                  <BiAperture className="w-10 h-10" />{" "}
-                  <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
-                    Shadsocial.
-                  </span>
-                </div>
-                <LeftSidebar />
-              </SheetContent>
-            </Sheet>
+
+        <div className="md:hidden">
+          <Sheet>
+            <SheetTrigger>
+              <MenuIcon />
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
+              <SheetTitle></SheetTitle>
+              <SheetDescription></SheetDescription>
+              <div className="text-[#1b2356] flex items-center gap-2  justify-start">
+                <BiAperture className="w-10 h-10" />{" "}
+                <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
+                  Shadsocial.
+                </span>
+              </div>
+              <LeftSidebar />
+            </SheetContent>
+          </Sheet>
+        </div>
+        <div className="w-full lg:w-[70%] xl:w-[50%]">
+          <div className="flex flex-col gap-6 bg-slate-100">
+            <Stories />
+            <Addpost />
+            <Feed />
           </div>
-          <Feed />
         </div>
-        <div className="w-[30%] pt-8 px-6 lg:block hidden ">
+        <div className="w-[28%] lg:block hidden ">
           <RightSidebar />
         </div>
       </div>
