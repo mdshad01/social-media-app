@@ -13,7 +13,9 @@ const ProfileCard = () => {
   console.log(user);
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md flex flex-col gap-6">
+    <div
+      onClick={() => router.push(`/profile/${user?._id}`)}
+      className="p-4 bg-white rounded-lg shadow-md flex flex-col gap-6">
       <div className="relative h-20">
         <Image
           src="https://images.pexels.com/photos/32637548/pexels-photo-32637548.jpeg"
@@ -57,7 +59,11 @@ const ProfileCard = () => {
           </div>
           <span className="text-sm text-gray-500">500 Followers</span>
         </div>
-        <button className="bg-blue-500 text-white text-xs p-2 rounded-md">My Profile</button>
+        <button
+          onClick={() => router.push(`/profile/${user?._id}`)}
+          className="bg-blue-500 text-white text-xs p-2 rounded-md">
+          My Profile
+        </button>
       </div>
     </div>
   );

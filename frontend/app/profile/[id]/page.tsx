@@ -5,7 +5,7 @@ const ProfilePage = async ({ params }: { params: { id: string } }) => {
   const id = (await params).id;
   //   console.log(id);
   return (
-    <div>
+    <div className="bg-slate-100">
       <Profile id={id} />
     </div>
   );

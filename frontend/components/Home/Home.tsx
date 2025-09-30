@@ -19,11 +19,8 @@ const Home = () => {
   // console.log(user);
   const router = useRouter();
   return (
-    <div className="flex flex-col">
-      {/* <div className="w-full h-[12vh] bg-white ">
-        <Navbar />
-      </div> */}
-      <div className="flex gap-6   pt-6">
+    <div className="flex flex-col ">
+      <div className="flex gap-6 pt-6">
         <div className="w-[22%] hidden md:block">
           {/* <LeftSidebar /> */}
           <LeftMenu type="home" />
@@ -48,7 +45,7 @@ const Home = () => {
           </Sheet>
         </div>
         <div className="w-full lg:w-[70%] xl:w-[50%]">
-          <div className="flex flex-col gap-6 bg-slate-100">
+          <div className="flex flex-col gap-6 ">
             <Stories />
             <Addpost />
             <Feed />

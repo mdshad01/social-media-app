@@ -10,8 +10,6 @@ type Props = {
 };
 
 const ProfileCard = ({ userProfile }: Props) => {
-  const user = useSelector((state: RootState) => state?.auth.user);
-
   return (
     <div className=" flex flex-col items-center justify-center gap-4 ">
       <div className="relative h-60 w-full shadow">

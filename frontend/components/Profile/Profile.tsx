@@ -16,6 +16,7 @@ import ProfileCard from "./util/ProfileCard";
 import UserInfoCard from "./util/UserInfoCard";
 import Feed from "./util/Feed";
 import LeftMenu from "../Home/LeftMenu";
+import UserMediaCart from "./util/UserMediaCart";
 
 type Props = {
   id: string;
@@ -46,62 +47,49 @@ const Profile = ({ id }: Props) => {
   }, [user, router, id]);
   if (isLoading) {
     return (
-      <div className="w-full h-screen flex flex-col items-center justify-center">
+      <div className="w-full h-screen flex flex-col items-center justify-center bg-slate-100">
         <Loader className="animate-spin" />
       </div>
     );
   }
 
   return (
-    // <div className="flex flex-col">
-    //   {/* Navbar (optional) */}
-    //   {/* <div className="w-full h-[12vh]">
-    //     <Navbar />
-    //   </div> */}
-
-    //   {/* Main layout */}
-    <div className="flex  bg-slate-100 pt-6">
-      {/* Left Sidebar */}
+    <div className="flex pt-6 bg-slate-100">
       <div className="w-[20%] hidden md:block  h-full ">
         {/* <LeftSidebar /> */}
         <LeftMenu type="profile" />
       </div>
 
-      {/* Feed Section */}
-      <div className="  w-full lg:w-[70%] xl:w-[55%] bg-slate-100">
-        {/* Mobile Sidebar (Sheet) */}
-        <div className="md:hidden p-2">
-          <Sheet>
-            <SheetTrigger>
-              <MenuIcon />
-            </SheetTrigger>
-            <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
-              <SheetTitle></SheetTitle>
-              <SheetDescription></SheetDescription>
-
-              <div className="text-[#1b2356] flex items-center gap-2 justify-start">
-                <BiAperture className="w-10 h-10" />
-                <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
-                  Shadsocial.
-                </span>
-              </div>
-
-              <LeftSidebar />
-            </SheetContent>
-          </Sheet>
-        </div>
-        <div className=" h-[45vh] px-5 bg-slate-100">
+      <div className="md:hidden p-2">
+        <Sheet>
+          <SheetTrigger>
+            <MenuIcon />
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
+            <SheetTitle></SheetTitle>
+            <SheetDescription></SheetDescription>
+            <div className="text-[#1b2356] flex items-center gap-2 justify-start">
+              <BiAperture className="w-10 h-10" />
+              <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
+                Shadsocial.
+              </span>
+            </div>
+            <LeftSidebar />
+          </SheetContent>
+        </Sheet>
+      </div>
+      <div className="  w-full lg:w-[70%] xl:w-[55%] ">
+        <div className=" px-5 flex flex-col ">
           <ProfileCard userProfile={userProfile} />
           <Feed />
         </div>
       </div>
 
-      {/* Right Sidebar */}
-      <div className="hidden xl:block w-[25%]">
+      <div className="hidden xl:flex xl:flex-col gap-6 w-[25%] ">
         <UserInfoCard userProfile={userProfile} id={id} idFollowing={idFollowing} />
+        <UserMediaCart />
       </div>
     </div>
-    // </div>
   );
 };
 

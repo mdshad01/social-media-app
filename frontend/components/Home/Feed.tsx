@@ -1,5 +1,5 @@
 import React from "react";
-import Post from "../Profile/util/Post";
+import Post from "./Util/Post";
 
 const Feed = () => {
   return (

@@ -39,6 +39,7 @@ export interface Post {
   user: User | undefined;
   likes: string[];
   comments: Comment[];
+  share: string[];
   createdAt: string;
   updatedAt: string;
 }
