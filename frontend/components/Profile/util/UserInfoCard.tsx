@@ -2,6 +2,7 @@ import { RootState } from "@/store/store";
 import { User } from "@/type";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction } from "react";
 import { FaLink } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoCalendar, IoSchool } from "react-icons/io5";
@@ -12,19 +13,20 @@ type Props = {
   userProfile?: User;
   id?: string;
   idFollowing?: boolean;
+  setIsEdit: Dispatch<SetStateAction<boolean>>;
 };
 
-const UserInfoCard = ({ userProfile, id, idFollowing }: Props) => {
+const UserInfoCard = ({ userProfile, id, idFollowing, setIsEdit }: Props) => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state?.auth.user);
   const isOwnProfile = user?._id === id;
   return (
-    <div className=" max-w-xs min-w-xs px-4 pt-4  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
+    <div className=" max-w-xs min-w-[19rem] px-4 pt-4  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-gray-500">User Information</span>
         {isOwnProfile ? (
-          <span className="text-[#1a2254] cursor-pointer" onClick={() => router.push("profile/edit}")}>
+          <span className="text-[#1a2254] cursor-pointer" onClick={() => setIsEdit((prev) => !prev)}>
             edit
           </span>
         ) : (

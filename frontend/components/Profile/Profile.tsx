@@ -28,6 +28,7 @@ const Profile = ({ id }: Props) => {
   const [postOrSave, setPostOrSave] = useState<string>("POST");
   const [isLoading, setIsLoading] = useState(false);
   const [userProfile, setuserProfile] = useState<User>();
+  const [isEdit, setIsEdit] = useState(false);
 
   const isProfileOwn = user?._id === id;
   const idFollowing = id ? user?.following.includes(id) : false;
@@ -55,7 +56,7 @@ const Profile = ({ id }: Props) => {
 
   return (
     <div className="flex pt-6 bg-slate-100">
-      <div className="w-[20%] hidden md:block  h-full ">
+      <div className="lg:w-[20%] xl:w-[18%] hidden md:block  h-full ">
         {/* <LeftSidebar /> */}
         <LeftMenu type="profile" />
       </div>
@@ -78,17 +79,18 @@ const Profile = ({ id }: Props) => {
           </SheetContent>
         </Sheet>
       </div>
-      <div className="  w-full lg:w-[70%] xl:w-[55%] ">
+      <div className="  w-full lg:w-[70%] xl:w-[60%] ">
         <div className=" px-5 flex flex-col ">
           <ProfileCard userProfile={userProfile} />
           <Feed />
         </div>
       </div>
 
-      <div className="hidden xl:flex xl:flex-col gap-6 w-[25%] ">
-        <UserInfoCard userProfile={userProfile} id={id} idFollowing={idFollowing} />
+      <div className="hidden xl:flex xl:flex-col gap-6 w-[22%] ">
+        <UserInfoCard setIsEdit={setIsEdit} userProfile={userProfile} id={id} idFollowing={idFollowing} />
         <UserMediaCart />
       </div>
+      {isEdit && <div className="z-10 absolute">Edit</div>}
     </div>
   );
 };

@@ -21,7 +21,7 @@ const Home = () => {
   return (
     <div className="flex flex-col ">
       <div className="flex gap-6 pt-6">
-        <div className="w-[22%] hidden md:block">
+        <div className="w-[20%] hidden md:block">
           {/* <LeftSidebar /> */}
           <LeftMenu type="home" />
         </div>
@@ -44,7 +44,7 @@ const Home = () => {
             </SheetContent>
           </Sheet>
         </div>
-        <div className="w-full lg:w-[70%] xl:w-[50%]">
+        <div className="w-full lg:w-[65%] xl:w-[50%]">
           <div className="flex flex-col gap-6 ">
             <Stories />
             <Addpost />

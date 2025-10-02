@@ -4,7 +4,7 @@ import React from "react";
 
 const UserMediaCart = () => {
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md text-sm">
+    <div className="p-4 bg-white rounded-lg shadow-md text-sm min-w-[19rem]">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-gray-500">User Media</span>

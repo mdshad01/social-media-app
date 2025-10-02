@@ -15,26 +15,26 @@ const ProfileCard = () => {
   return (
     <div
       onClick={() => router.push(`/profile/${user?._id}`)}
-      className="p-4 bg-white rounded-lg shadow-md flex flex-col gap-6">
-      <div className="relative h-20">
+      className="p-2 h-60 bg-white rounded-lg shadow-md flex flex-col gap-6">
+      <div className="relative h-24">
         <Image
-          src="https://images.pexels.com/photos/32637548/pexels-photo-32637548.jpeg"
+          src={user?.backgroundImage || "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"}
           alt=""
           fill
           className="rounded-md object-cover"
         />
         <Image
-          src="https://images.pexels.com/photos/24902523/pexels-photo-24902523.jpeg"
+          src={user?.profilePicture || "https://images.pexels.com/photos/2811089/pexels-photo-2811089.jpeg"}
           alt=""
           width={48}
           height={48}
-          className="rounded-full object-cover w-12 h-12 absolute left-0 right-0 m-auto -bottom-6 ring-1 ring-white z-10 "
+          className="rounded-full object-cover w-18 h-18 absolute left-0 right-28 m-auto -bottom-6 ring-1 ring-white z-10 "
         />
       </div>
-      <div className="h-22 flex flex-col gap-2 items-center ">
+      <div className="h-22 flex flex-col gap-2 items-start px-3">
         <span className="text-xl font-semibold">Jhon Carter</span>
         <div className="flex items-center gap-4">
-          <div className="flex">
+          {/* <div className="flex">
             <Image
               src="https://images.pexels.com/photos/24902523/pexels-photo-24902523.jpeg"
               alt=""
@@ -56,14 +56,16 @@ const ProfileCard = () => {
               height={12}
               className="rounded-full object-cover w-3 h-3"
             />
-          </div>
-          <span className="text-sm text-gray-500">500 Followers</span>
+          </div> */}
+          <span className="text-sm text-gray-500">{user?.bio || "No bio avaliable"}</span>
         </div>
-        <button
-          onClick={() => router.push(`/profile/${user?._id}`)}
-          className="bg-blue-500 text-white text-xs p-2 rounded-md">
-          My Profile
-        </button>
+        <div className="h-12 mb-4 self-center w-full">
+          <button
+            onClick={() => router.push(`/profile/${user?._id}`)}
+            className="bg-blue-500 text-white text-xs p-2 rounded-md w-full">
+            My Profile
+          </button>
+        </div>
       </div>
     </div>
   );

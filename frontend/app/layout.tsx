@@ -45,7 +45,7 @@ export default function RootLayout({
         <div className="w-full bg-white px-4 md:px-8 lg:px-16 xl:px-24 2xl:px-48 h-[12vh] ">
           <Navbar />
         </div>
-        <div className="bg-slate-100  px-4 md:px-8 lg:px-16 xl:px-24 2xl:px-48">
+        <div className="bg-slate-100  px-4 md:px-8 lg:px-16 xl:px-28 2xl:px-64">
           <ClientProvider>
             {children}
             <Toaster />
