@@ -18,6 +18,7 @@ import Feed from "./util/Feed";
 import LeftMenu from "../Home/LeftMenu";
 import UserMediaCart from "./util/UserMediaCart";
 import Edit from "./util/Edit";
+import Edit2 from "./util/Edit2";
 
 type Props = {
   id: string;
@@ -91,7 +92,7 @@ const Profile = ({ id }: Props) => {
         <UserInfoCard setIsEdit={setIsEdit} userProfile={userProfile} id={id} idFollowing={idFollowing} />
         <UserMediaCart />
       </div>
-      {isEdit && <Edit />}
+      {isEdit && <Edit2 setIsEdit={setIsEdit} />}
     </div>
   );
 };
