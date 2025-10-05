@@ -1,14 +1,14 @@
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
+// dotenv.config({ path: "./.env" });
+import "./config/env.js";
 import mongoose from "mongoose";
+import app from "./app.js";
 
 process.on("uncaughtException", (err) => {
   console.log("UNCATCH EXCEPTION! Shutting down");
   console.log(err.name, err.message);
   process.exit(1);
 });
-
-dotenv.config({ path: "./.env" });
-import app from "./app.js";
 
 mongoose
   .connect(process.env.DB)

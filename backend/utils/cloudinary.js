@@ -9,7 +9,7 @@ cloudinary.v2.config({
 
 export const uploadToCloudinary = async (fileUrl) => {
   try {
-    const response = await cloudinary.uploader.upload(fileUrl);
+    const response = await cloudinary.v2.uploader.upload(fileUrl);
     return response;
   } catch (error) {
     console.log(error);

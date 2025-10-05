@@ -66,8 +66,16 @@ const Edit = ({ setIsEdit }: Props) => {
     setHasChanges(changed);
   }, [profilePictureFile, backgroundImageFile, bio, city, school, work, website, newPassword, passwordConfirm, user]);
 
-  const handleProfilePictureChange = () => {
-    if (fileInputRef.current) fileInputRef.current.click();
+  const handleProfilePictureChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setProfilePictureFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfilePicturePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleBackgroundImageChange = (event: ChangeEvent<HTMLInputElement>) => {

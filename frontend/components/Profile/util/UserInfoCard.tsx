@@ -41,10 +41,8 @@ const UserInfoCard = ({ userProfile, id, idFollowing, setIsEdit }: Props) => {
         <span className="text-gray-500 font-medium">@{userProfile?.username.replace(/\s+/g, "").toLowerCase()}</span>
       </div>
       <p className="text-gray-700">
-        {userProfile?.bio
-          ? `${userProfile.bio.slice(0, 12)}...`
-          : `${userProfile?.bio}` ||
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aliquid atque, dolore libero quisquam."}
+        {userProfile?.bio ||
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aliquid atque, dolore libero quisquam."}
       </p>
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 items-center">

@@ -5,7 +5,7 @@ const storage = multer.memoryStorage(); // Files will be stored in memory as Buf
 const upload = multer({
   storage,
   limits: {
-    fileSize: 2 * 1024 * 1024, // 2MB
+    fileSize: 2.5 * 1024 * 1024, // 2.5MB
   },
 }); // Multer instance using memory storage
 
