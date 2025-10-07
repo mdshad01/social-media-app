@@ -15,7 +15,7 @@ const ProfileCard = () => {
   return (
     <div
       onClick={() => router.push(`/profile/${user?._id}`)}
-      className="p-2 h-60 bg-white rounded-lg shadow-md flex flex-col gap-6">
+      className="p-2 bg-white rounded-lg shadow-md flex flex-col gap-6">
       <div className="relative h-24">
         <Image
           src={user?.backgroundImage || "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"}
@@ -31,38 +31,15 @@ const ProfileCard = () => {
           className="rounded-full object-cover w-18 h-18 absolute left-0 right-28 m-auto -bottom-6 ring-1 ring-white z-10 "
         />
       </div>
-      <div className="h-22 flex flex-col gap-2 items-start px-3">
+      <div className=" flex flex-col gap-2 items-start px-3">
         <span className="text-xl font-semibold">Jhon Carter</span>
         <div className="flex items-center gap-4">
-          {/* <div className="flex">
-            <Image
-              src="https://images.pexels.com/photos/24902523/pexels-photo-24902523.jpeg"
-              alt=""
-              width={12}
-              height={12}
-              className="rounded-full object-cover w-3 h-3"
-            />
-            <Image
-              src="https://images.pexels.com/photos/24902523/pexels-photo-24902523.jpeg"
-              alt=""
-              width={12}
-              height={12}
-              className="rounded-full object-cover w-3 h-3"
-            />
-            <Image
-              src="https://images.pexels.com/photos/24902523/pexels-photo-24902523.jpeg"
-              alt=""
-              width={12}
-              height={12}
-              className="rounded-full object-cover w-3 h-3"
-            />
-          </div> */}
           <span className="text-sm text-gray-500">{user?.bio || "No bio avaliable"}</span>
         </div>
-        <div className="h-12 mb-4 self-center w-full">
+        <div className="self-center w-full mb-1">
           <button
             onClick={() => router.push(`/profile/${user?._id}`)}
-            className="bg-blue-500 text-white text-xs p-2 rounded-md w-full">
+            className="bg-[#1a2254] text-white text-xs p-2 rounded-md w-full">
             My Profile
           </button>
         </div>

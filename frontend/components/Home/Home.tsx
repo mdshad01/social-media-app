@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import LeftMenu from "./LeftMenu";
 import Stories from "./Util/Stories";
 import Addpost from "./Util/Addpost";
+import Addpost2 from "./Util/Addpost2";
 
 const Home = () => {
   // const user = useSelector((state: RootState) => state?.auth.user);
@@ -46,8 +47,8 @@ const Home = () => {
         </div>
         <div className="w-full lg:w-[65%] xl:w-[50%]">
           <div className="flex flex-col gap-6 ">
-            <Stories />
-            <Addpost />
+            {/* <Stories /> */}
+            <Addpost2 />
             <Feed />
           </div>
         </div>

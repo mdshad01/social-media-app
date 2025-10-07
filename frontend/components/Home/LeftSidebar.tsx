@@ -68,7 +68,7 @@ const LeftSidebar = () => {
   ];
 
   return (
-    <div className="mt-4 ml-8 py-4 w-[78%] sm:px-3 md:px-3 lg:px-4 flex flex-col item-center justify-start bg-white rounded-lg gap-1 shadow ">
+    <div className="mt-4 py-4 sm:px-3 md:px-3 lg:px-4 flex flex-col item-center justify-start bg-white rounded-lg gap-1 shadow ">
       {sideBarLinks.map((item, index) => (
         <div
           key={index}

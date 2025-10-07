@@ -67,7 +67,7 @@ const Login = () => {
   ];
 
   return (
-    <div className="w-full h-screen overflow-hidden">
+    <div className="w-full h-[88vh] overflow-hidden">
       <div className="flex flex-col lg:flex-row ">
         {/* Banner */}
         <div className="lg:w-[55%] h-screen hidden lg:block relative">
