@@ -3,6 +3,7 @@ import Image from "next/image";
 import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import CreatePostModal from "./CreatePostModal";
+import CreatePostModal2 from "./CreatePostModal2";
 
 const Addpost2 = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -31,7 +32,7 @@ const Addpost2 = () => {
           <div className="flex gap-4">
             <div
               onClick={() => handleOpenModal()}
-              className="bg-slate-100 rounded-lg flex-1 p-2 cursor-pointer hover:bg-slate-200 transition-colors">
+              className="bg-slate-100 rounded-xl flex-1 p-3 cursor-pointer hover:bg-slate-200 transition-colors">
               <span className="text-gray-500">What&apos;s on your mind?</span>
             </div>
             <Image src="/emoji.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" />
@@ -67,13 +68,14 @@ const Addpost2 = () => {
       </div>
 
       {/* Modal */}
-      {isModalOpen && (
-        <CreatePostModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          initialMediaType={activeMediaType}
-          user={user}
-        />
+      {isModalOpen && user && (
+        <CreatePostModal2 isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} user={user} />
+        // <CreatePostModal
+        //   isOpen={isModalOpen}
+        //   initialMediaType={activeMediaType}
+        //   onClose={() => setIsModalOpen(false)}
+        //   user={user}
+        // />
       )}
     </>
   );

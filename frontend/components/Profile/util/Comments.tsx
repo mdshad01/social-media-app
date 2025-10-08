@@ -1,19 +1,25 @@
+import { Post, User } from "@/type";
 import Image from "next/image";
 import React from "react";
 
-const Comments = () => {
+type Props = {
+  user: User;
+  post: Post;
+};
+
+const Comments = ({ user, post }: Props) => {
   return (
     <div>
       {/* WRITE */}
       <div className="flex items-center gap-4">
         <Image
-          src="https://images.pexels.com/photos/32409117/pexels-photo-32409117.jpeg"
+          src={user.profilePicture || "https://images.pexels.com/photos/32409117/pexels-photo-32409117.jpeg"}
           alt=""
           width={32}
           height={32}
           className="rounded-full w-8 h-8 cursor-pointer "
         />
-        <div className="flex items-center justify-between bg-slate-100 rounded-xl text-sm px-6 py-2 w-[90%]">
+        <div className="flex items-center justify-between bg-slate-100 rounded-xl text-sm px-4 py-2 w-[90%]">
           <input type="text" placeholder="write a comment..." className="bg-transparent outline-none flex-1" />
           <Image src="/emoji.png" alt="" height={16} width={16} className="cursor-pointer h-4 w-4" />
         </div>

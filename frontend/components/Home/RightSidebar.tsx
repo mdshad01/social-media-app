@@ -3,6 +3,7 @@ import React from "react";
 import ProfileCard from "./Util/ProfileCard";
 import SuggestedUser from "./Util/SuggestedUser";
 import FriendRequests from "./Util/FriendRequests";
+import Ad from "./Util/Ad";
 
 const RightSidebar = () => {
   return (
@@ -10,6 +11,7 @@ const RightSidebar = () => {
       {/* <ProfileCard /> */}
       <FriendRequests />
       <SuggestedUser />
+      <Ad size="md" />
     </div>
   );
 };

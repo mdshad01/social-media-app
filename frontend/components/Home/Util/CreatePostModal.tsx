@@ -1,14 +1,15 @@
+import { User } from "@/type";
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 
-interface CreatePostModalProps {
+interface Props {
   isOpen: boolean;
   onClose: () => void;
   initialMediaType: "photo" | "video" | "poll" | "event" | null;
-  user: any;
+  user: User;
 }
 
-const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, initialMediaType, user }) => {
+const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => {
   const [postText, setPostText] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
@@ -125,7 +126,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, init
 
   return (
     <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold">Create post</h2>
@@ -144,7 +145,7 @@ const CreatePostModal: React.FC<CreatePostModalProps> = ({ isOpen, onClose, init
             className="w-14 h-14 object-cover rounded-full"
           />
           <div>
-            <p className="font-semibold">{user?.name || "User"}</p>
+            <p className="font-semibold">{user?.username || "User"}</p>
             <select className="text-sm bg-gray-100 rounded px-2 py-1 mt-1">
               <option>Public</option>
               <option>Friends</option>
