@@ -103,8 +103,8 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
               <Image
                 src={previewImage}
                 alt="Image"
-                width={400}
-                height={400}
+                width={500}
+                height={500}
                 className="overflow-auto object-contain max-h-96 rounded-md w-full"
               />
             </div>

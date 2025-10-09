@@ -10,6 +10,7 @@ import { handleAuthRequest } from "@/components/util/apiRequest";
 import { setPost } from "@/store/postSlice";
 import { Loader } from "lucide-react";
 import PostCard from "./Util/PostCard";
+import DotButton from "./Util/DotButton";
 
 const Feed = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,6 @@ const Feed = () => {
 
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [dotButton, setDotButton] = useState(false);
 
   console.log("POSTS", posts);
 
@@ -50,8 +50,7 @@ const Feed = () => {
   }
   return (
     <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12 scrollbar-hide">
-      {user && posts.map((post, index) => <PostCard post={post} user={user} key={index} setDotButton={setDotButton} />)}
-      {/* <PostCard /> */}
+      {user && posts.map((post, index) => <PostCard post={post} user={user} key={index} />)}
     </div>
   );
 };

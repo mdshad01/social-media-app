@@ -45,7 +45,7 @@ const Home = () => {
             </SheetContent>
           </Sheet>
         </div>
-        <div className="w-full lg:w-[65%] xl:w-[50%]">
+        <div className="w-full lg:w-[60%] xl:w-[50%]">
           <div className="flex flex-col gap-6 ">
             {/* <Stories /> */}
             <Addpost2 />
