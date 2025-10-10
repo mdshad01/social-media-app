@@ -1,15 +1,16 @@
 import Image from "next/image";
 import React from "react";
-import Comments from "./Comments";
+import Comments from "../../Home/Util/Comments";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
 import { FaCommentDots, FaRegHeart } from "react-icons/fa";
-import { Post } from "@/type";
+import { Post, User } from "@/type";
 
 type Props = {
   post: Post;
+  user: User;
 };
 
-const Post = ({ post }: Props) => {
+const PostCard = ({ post, user }: Props) => {
   return (
     <div className="flex flex-col gap-4">
       {/* USER */}
@@ -52,7 +53,7 @@ const Post = ({ post }: Props) => {
             {/* <FaHeart /> */}
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              {post.likes.length} <span className="hidden md:inline">Likes</span>{" "}
+              {post?.likes?.length} <span className="hidden md:inline">Likes</span>{" "}
             </span>
           </div>
           <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
@@ -60,7 +61,7 @@ const Post = ({ post }: Props) => {
             <FaCommentDots className="h-5 w-5" />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              {post.comments.length} <span className="hidden md:inline">Comments</span>{" "}
+              {post?.comments?.length} <span className="hidden md:inline">Comments</span>{" "}
             </span>
           </div>
         </div>
@@ -74,9 +75,9 @@ const Post = ({ post }: Props) => {
           </div>
         </div>
       </div>
-      <Comments />
+      <Comments post={post} user={user} />
     </div>
   );
 };
 
-export default Post;
+export default PostCard;

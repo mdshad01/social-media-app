@@ -57,6 +57,16 @@ const Navbar = () => {
     setShowDropdown(false);
     handleLogout();
   };
+  const handleAvatarClick = () => {
+    // If user is not logged in, redirect to login page
+    if (!user) {
+      router.push("/auth/login");
+    } else {
+      // If user is logged in, toggle dropdown
+      setShowDropdown(!showDropdown);
+    }
+  };
+
 
   const navIcons = [
     {
@@ -106,7 +116,7 @@ const Navbar = () => {
         {/* Avatar with Dropdown */}
         <div className="relative" ref={dropdownRef}>
           <span
-            onClick={() => setShowDropdown(!showDropdown)}
+            onClick={handleAvatarClick}
             className="cursor-pointer w-12 h-12 bg-[#f3f5f7] hover:bg-[#eff7fe] flex items-center justify-center rounded-full">
             <Avatar className="w-11 h-11">
               <AvatarImage src={user?.profilePicture} className="w-full h-full" />
@@ -115,7 +125,7 @@ const Navbar = () => {
           </span>
 
           {/* Dropdown Menu */}
-          {showDropdown && (
+          {user && showDropdown && (
             <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
               <button
                 onClick={handleViewProfile}

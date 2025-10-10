@@ -1,10 +1,16 @@
+"use client";
 import Image from "next/image";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { PiDotsThreeOutlineFill } from "react-icons/pi";
-import { FaCommentDots, FaRegHeart } from "react-icons/fa";
-import Comments from "@/components/Profile/util/Comments";
+import { FaCommentDots, FaHeart, FaRegHeart } from "react-icons/fa";
+import Comments from "@/components/Home/Util/Comments";
 import { Post, User } from "@/type";
 import DotButton from "./DotButton";
+import axios from "axios";
+import { BASE_API_URL } from "@/server";
+import { useDispatch } from "react-redux";
+import { likeOrDislike } from "@/store/postSlice";
+import { toast } from "sonner";
 
 type Props = {
   post: Post | null;
@@ -14,7 +20,18 @@ type Props = {
 };
 
 const PostCard = ({ post, user }: Props) => {
+  const dispatch = useDispatch();
   const [commButton, setCommButton] = useState(false);
+
+  const handleLikeOrDislike = async (id: string) => {
+    const result = await axios.post(`${BASE_API_URL}/posts/like-dislike/${id}`, {}, { withCredentials: true });
+    if (result.data.status == "success") {
+      if (user?._id) {
+        dispatch(likeOrDislike({ postId: id, userId: user?._id }));
+        toast(result.data.message);
+      }
+    }
+  };
   return (
     <div className="flex flex-col gap-4">
       {/* USER */}
@@ -56,16 +73,25 @@ const PostCard = ({ post, user }: Props) => {
             />
           </div>
         )}
-        {post?.caption && <p>{post.caption}</p>}
+        <p>{post?.caption}</p>
       </div>
       {/* INTERFACE */}
-      <div className="flex items-center justify-between text-sm mb-4">
+      <div className="flex items-center justify-between text-sm mb-4 px-2 ">
         <div className="flex gap-8">
           <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-xl">
-            <Image src="/like.png" alt="" width={20} height={20} className="cursor-pointer" />
+            <div onClick={() => handleLikeOrDislike(post!._id)} className="">
+              {user?._id && post?.likes.includes(user?._id) ? (
+                <Image src="/liked.png" alt="" width={20} height={20} className="cursor-pointer" />
+              ) : (
+                // <FaHeart className="text-red-500 h-5 w-5" />
+                <Image src="/like.png" alt="" width={20} height={20} className="cursor-pointer" />
 
-            {/* <FaRegHeart className="hover:text-red-500 h-5 w-5" /> */}
-            {/* <FaHeart /> */}
+                // <FaRegHeart className=" h-5 w-5" />
+              )}
+            </div>
+
+            {/* <FaRegHeart className="text-red-500 h-5 w-5" /> */}
+
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
               {post?.likes.length} <span className="hidden md:inline">Likes</span>{" "}
