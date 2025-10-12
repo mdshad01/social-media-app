@@ -34,9 +34,6 @@ const Feed = () => {
     };
     getPosts();
   }, [dispatch]);
-  const handleLikeOrDislike = async (id: string) => {};
-
-  const handleSaveUnsave = async (id: string) => {};
   const handleComment = async (id: string) => {};
   if (isLoading) {
     return (

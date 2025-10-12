@@ -8,6 +8,7 @@ import axios from "axios";
 import { Bookmark, Delete, Ellipsis, UserCircleIcon, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { GoBookmarkSlash } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -22,8 +23,8 @@ const DotButton = ({ post, user }: Props) => {
 
   const dispatch = useDispatch();
   const handleDeletePost = async () => {};
-  const handleSaveUnsave = async (id?: string) => {
-    const result = await axios.post(`${BASE_API_URL}/posts/save-unsave/${id}`);
+  const handleSaveUnsave = async (id: string) => {
+    const result = await axios.post(`${BASE_API_URL}/posts/save-unsave-post/${id}`, {}, { withCredentials: true });
 
     if (result.data.status == "success") {
       dispatch(setAuthUser(result.data.data.user));
@@ -52,13 +53,22 @@ const DotButton = ({ post, user }: Props) => {
                 User profile
               </Button>
             </Link>
-            <Link href={`/profile/${post?.user?._id}`}>
+
+            {user &&
+            post?._id &&
+            (user?.savedPosts as string[])?.some((savePostId: string) => savePostId === post?._id) ? (
+              <Button onClick={() => handleSaveUnsave(post?._id)} variant={"secondary"}>
+                {" "}
+                <GoBookmarkSlash className="text-xl" />
+                Unsave post
+              </Button>
+            ) : (
               <Button onClick={() => handleSaveUnsave(post?._id)} variant={"secondary"}>
                 {" "}
                 <Bookmark size={20} />
                 Save post
               </Button>
-            </Link>
+            )}
             {isOwnPost && (
               <Button variant={"destructive"} onClick={handleDeletePost}>
                 <MdDeleteOutline className="text-xl" />

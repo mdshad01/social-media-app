@@ -80,7 +80,7 @@ const PostCard = ({ post, user }: Props) => {
         <div className="flex gap-8">
           <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-xl">
             <div onClick={() => handleLikeOrDislike(post!._id)} className="">
-              {user?._id && post?.likes.includes(user?._id) ? (
+              {user?._id && post?.likes && post?.likes.includes(user?._id) ? (
                 <Image src="/liked.png" alt="" width={20} height={20} className="cursor-pointer" />
               ) : (
                 // <FaHeart className="text-red-500 h-5 w-5" />
@@ -94,7 +94,7 @@ const PostCard = ({ post, user }: Props) => {
 
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              {post?.likes.length} <span className="hidden md:inline">Likes</span>{" "}
+              {post?.likes?.length} <span className="hidden md:inline">Likes</span>{" "}
             </span>
           </div>
           <div
@@ -104,7 +104,7 @@ const PostCard = ({ post, user }: Props) => {
             {/* <FaCommentDots className="h-5 w-5" /> */}
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              {post?.comments.length} <span className="hidden md:inline">Comments</span>{" "}
+              {post?.comments?.length} <span className="hidden md:inline">Comments</span>{" "}
             </span>
           </div>
         </div>
@@ -113,7 +113,7 @@ const PostCard = ({ post, user }: Props) => {
             <Image src="/share.png" alt="" width={20} height={20} className="cursor-pointer" />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              {post?.share.length} <span className="hidden md:inline">Shares</span>{" "}
+              {post?.share?.length} <span className="hidden md:inline">Shares</span>{" "}
             </span>
           </div>
         </div>

@@ -117,6 +117,8 @@ export const saveOrUnsavePost = catchAsync(async (req, res, next) => {
   const userId = req.user._id;
   const postId = req.params.postId;
 
+  console.log(userId, postId);
+
   const user = await User.findById(userId);
   if (!user) return next(new AppError("User not found", 404));
 
@@ -131,7 +133,7 @@ export const saveOrUnsavePost = catchAsync(async (req, res, next) => {
     return res.status(200).json({
       status: "success",
       message: "Removed from saved post",
-      data: { savedPosts: user.savedPosts },
+      data: { user },
     });
   } else {
     user.savedPosts.push(postId);
@@ -140,7 +142,7 @@ export const saveOrUnsavePost = catchAsync(async (req, res, next) => {
     return res.status(200).json({
       status: "success",
       message: "Post saved successfully",
-      data: { savedPosts: user.savedPosts },
+      data: { user },
     });
   }
 });
