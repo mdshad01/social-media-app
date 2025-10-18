@@ -83,13 +83,16 @@ const Profile = ({ id }: Props) => {
       <div className="  w-full lg:w-[70%] xl:w-[60%] ">
         <div className=" px-5 flex flex-col ">
           <ProfileCard userProfile={userProfile} />
-          <Feed />
+          <div className="px-8 py-2">
+            <Feed />
+          </div>
         </div>
       </div>
 
       <div className="hidden xl:flex xl:flex-col gap-6 w-[22%] ">
         <UserInfoCard setIsEdit={setIsEdit} userProfile={userProfile} id={id} idFollowing={idFollowing} />
-        <UserMediaCart />
+
+        <UserMediaCart userProfile={userProfile} />
       </div>
       {isEdit && <Edit setIsEdit={setIsEdit} />}
     </div>

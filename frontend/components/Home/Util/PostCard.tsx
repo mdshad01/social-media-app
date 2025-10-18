@@ -28,7 +28,7 @@ const PostCard = ({ post, user }: Props) => {
     if (result.data.status == "success") {
       if (user?._id) {
         dispatch(likeOrDislike({ postId: id, userId: user?._id }));
-        toast(result.data.message);
+        toast.success(result.data.message);
       }
     }
   };

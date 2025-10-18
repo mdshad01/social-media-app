@@ -10,7 +10,6 @@ import { useRouter } from "next/navigation";
 const ProfileCard = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
-  console.log(user);
 
   return (
     <div

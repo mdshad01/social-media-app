@@ -28,7 +28,7 @@ const Feed = () => {
     if (user) handleGetUserPost(user._id);
   }, [dispatch]);
 
-  console.log(user);
+  // console.log(user);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">

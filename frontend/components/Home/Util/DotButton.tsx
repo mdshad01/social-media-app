@@ -31,6 +31,7 @@ const DotButton = ({ post, user }: Props) => {
       toast.success(result.data.message);
     }
   };
+  if (post === null) return null;
   return (
     <div className="max-w-xs">
       <Dialog>
