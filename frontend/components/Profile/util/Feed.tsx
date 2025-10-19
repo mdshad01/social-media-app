@@ -10,7 +10,11 @@ import { setPost } from "@/store/postSlice";
 import { Loader } from "lucide-react";
 import PostCard from "@/components/Home/Util/PostCard";
 
-const Feed = () => {
+type Props = {
+  userProfile: User | undefined;
+};
+
+const Feed = ({ userProfile }: Props) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const posts = useSelector((state: RootState) => state.posts.posts);
   const dispatch = useDispatch();
@@ -25,7 +29,7 @@ const Feed = () => {
         dispatch(setPost(result.data.data.posts));
       }
     };
-    if (user) handleGetUserPost(user._id);
+    if (userProfile?._id) handleGetUserPost(userProfile._id);
   }, [dispatch]);
 
   // console.log(user);

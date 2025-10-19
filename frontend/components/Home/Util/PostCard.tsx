@@ -32,6 +32,7 @@ const PostCard = ({ post, user }: Props) => {
       }
     }
   };
+  console.log(post);
   return (
     <div className="flex flex-col gap-4">
       {/* USER */}
@@ -44,7 +45,7 @@ const PostCard = ({ post, user }: Props) => {
             height={40}
             className="w-10 h-10 rounded-full"
           />
-          <span className="font-medium">Jhon Carter</span>
+          <span className="font-medium">{post?.user?.username}</span>
         </div>
         {/* <Image
           onClick={() => setDotButton((prev) => !prev)}

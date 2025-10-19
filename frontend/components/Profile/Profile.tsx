@@ -18,6 +18,8 @@ import Feed from "./util/Feed";
 import LeftMenu from "../Home/LeftMenu";
 import UserMediaCart from "./util/UserMediaCart";
 import Edit from "./util/Edit";
+import PostOrSaveBtn from "./util/PostOrSaveBtn";
+import SaveFeed from "./util/SaveFeed";
 
 type Props = {
   id: string;
@@ -26,9 +28,9 @@ type Props = {
 const Profile = ({ id }: Props) => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
-  // const [postOrSave, setPostOrSave] = useState<string>("POST");
+  const [postOrSave, setPostOrSave] = useState<string>("POST");
   const [isLoading, setIsLoading] = useState(false);
-  const [userProfile, setuserProfile] = useState<User>();
+  const [userProfile, setUserProfile] = useState<User>();
   const [isEdit, setIsEdit] = useState(false);
 
   const isProfileOwn = user?._id === id;
@@ -43,7 +45,7 @@ const Profile = ({ id }: Props) => {
     const getUser = async () => {
       const getUserReq = async () => await axios.get(`${BASE_API_URL}/users/profile/${id}`);
       const result = await handleAuthRequest(getUserReq, setIsLoading);
-      if (result) setuserProfile(result.data.data.user);
+      if (result) setUserProfile(result.data.data.user);
     };
     getUser();
   }, [user, router, id]);
@@ -84,7 +86,9 @@ const Profile = ({ id }: Props) => {
         <div className=" px-5 flex flex-col ">
           <ProfileCard userProfile={userProfile} />
           <div className="px-8 py-2">
-            <Feed />
+            <PostOrSaveBtn postOrSave={postOrSave} isProfileOwn={isProfileOwn} setPostOrSave={setPostOrSave} />
+            {postOrSave === "POST" && <Feed userProfile={userProfile} />}
+            {postOrSave === "SAVE" && <SaveFeed userProfile={userProfile} />}
           </div>
         </div>
       </div>
