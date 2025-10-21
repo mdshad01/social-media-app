@@ -32,7 +32,6 @@ const PostCard = ({ post, user }: Props) => {
       }
     }
   };
-  console.log(post);
   return (
     <div className="flex flex-col gap-4">
       {/* USER */}
@@ -43,7 +42,7 @@ const PostCard = ({ post, user }: Props) => {
             alt=""
             width={40}
             height={40}
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full object-cover"
           />
           <span className="font-medium">{post?.user?.username}</span>
         </div>

@@ -15,6 +15,11 @@ export const getProfile = catchAsync(async (req, res, next) => {
     .populate({
       path: "savedPosts",
       options: { sort: { createdAt: -1 } },
+      populate: {
+        //  Add nested populate for user
+        path: "user",
+        select: "username profilePicture bio _id",
+      },
     });
 
   if (!user) {

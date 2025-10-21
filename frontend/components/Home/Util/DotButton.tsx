@@ -5,7 +5,7 @@ import { BASE_API_URL } from "@/server";
 import { setAuthUser } from "@/store/authSlice";
 import { Post, User } from "@/type";
 import axios from "axios";
-import { Bookmark, Delete, Ellipsis, UserCircleIcon, X } from "lucide-react";
+import { Bookmark, Delete, Ellipsis, UserCheck, UserCircleIcon, UserPlus, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { GoBookmarkSlash } from "react-icons/go";
@@ -44,7 +44,17 @@ const DotButton = ({ post, user }: Props) => {
             {!isOwnPost && (
               <div className="">
                 <Button variant={isFollowing ? "destructive" : "secondary"}>
-                  {isFollowing ? "Unfollow" : "follow"}
+                  {isFollowing ? (
+                    <span className="flex gap-2 items-center justify-center">
+                      {" "}
+                      <UserCheck /> Unfollow{" "}
+                    </span>
+                  ) : (
+                    <span className="flex gap-2 items-center justify-center">
+                      {" "}
+                      <UserPlus /> Follow{" "}
+                    </span>
+                  )}
                 </Button>
               </div>
             )}

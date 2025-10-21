@@ -113,7 +113,7 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
               type="text"
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              className="mt-4 border rounded-md w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-700 p-2"
+              className="mt-4 border rounded-md w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 p-2"
             />
             <div className="flex space-x-4 mt-4">
               <LoadingButton
