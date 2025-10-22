@@ -21,7 +21,7 @@ postRouter.post("/create-post", isAuthenticated, upload.single("image"), createP
 postRouter.get("/all", getAllPosts);
 postRouter.get("/user-post/:id", getUserPost);
 postRouter.post("/save-unsave-post/:postId", isAuthenticated, saveOrUnsavePost);
-postRouter.delete("/detele-post/:id", isAuthenticated, deletePost);
+postRouter.delete("/delete-post/:id", isAuthenticated, deletePost);
 postRouter.post("/like-dislike/:id", isAuthenticated, likeOrDislikePost);
 postRouter.post("/comment/:id", isAuthenticated, addComment);
 postRouter.post("/comment/like/:commentId", isAuthenticated, likeOrDislikeComment);

@@ -46,7 +46,7 @@ const Feed = () => {
     return <div className="text-3xl m-8 text-center capitalize font-black">No post avaliable</div>;
   }
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12 scrollbar-hide">
+    <div className="py-4 bg-transparent flex flex-col gap-4 scrollbar-hide">
       {user && posts.map((post, index) => <PostCard post={post} user={user} key={index} />)}
     </div>
   );

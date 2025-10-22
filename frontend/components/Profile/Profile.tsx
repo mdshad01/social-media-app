@@ -109,7 +109,13 @@ const Profile = ({ id }: Props) => {
       </div>
 
       <div className="hidden xl:flex xl:flex-col gap-6 w-[22%] ">
-        <UserInfoCard setIsEdit={setIsEdit} userProfile={userProfile} id={id} idFollowing={idFollowing} />
+        <UserInfoCard
+          setIsEdit={setIsEdit}
+          userProfile={userProfile}
+          id={id}
+          idFollowing={idFollowing}
+          updateFollowerCount={updateFollowerCount}
+        />
 
         <UserMediaCart userProfile={userProfile} />
       </div>

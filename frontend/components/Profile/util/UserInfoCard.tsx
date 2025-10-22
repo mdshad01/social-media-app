@@ -15,11 +15,11 @@ type Props = {
   id?: string;
   idFollowing?: boolean;
   setIsEdit: Dispatch<SetStateAction<boolean>>;
+  updateFollowerCount?: (isFollowing: boolean) => void; // ✅ Add this
 };
 
-const UserInfoCard = ({ userProfile, id, idFollowing, setIsEdit }: Props) => {
+const UserInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Props) => {
   const { handleFollowUnfollow } = useFollowUnfollow();
-  const router = useRouter();
   const user = useSelector((state: RootState) => state?.auth.user);
   const isOwnProfile = user?._id === id;
   const isFollowing = user?.following?.includes(id!) || false;
@@ -80,7 +80,7 @@ const UserInfoCard = ({ userProfile, id, idFollowing, setIsEdit }: Props) => {
           </div>
         </div>
 
-        <div onClick={() => handleFollowUnfollow(id!)} className="flex flex-col pb-2 gap-2 ">
+        <div onClick={() => handleFollowUnfollow(id!, updateFollowerCount)} className="flex flex-col pb-2 gap-2 ">
           {isOwnProfile ? null : !isFollowing ? (
             <button className="bg-[#1a2254] text-white w-full p-2 font-medium rounded-md cursor-pointer">Follow</button>
           ) : (

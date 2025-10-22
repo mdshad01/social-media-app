@@ -35,9 +35,9 @@ const PostCard = ({ post, user }: Props) => {
     }
   };
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 bg-white py-5 rounded-md">
       {/* USER */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between px-4">
         <div className="flex items-center gap-4">
           <Image
             onClick={() => router.push(`/profile/${post?.user?._id}`)}
@@ -68,20 +68,20 @@ const PostCard = ({ post, user }: Props) => {
       <div className="flex flex-col gap-4">
         {/* Image Container - LinkedIn Style (No side gaps) */}
         {post?.image?.url && (
-          <div className="w-full relative rounded-md overflow-hidden bg-black">
+          <div className="w-full relative  overflow-hidden bg-black">
             <Image
               src={post.image.url}
               alt="Post image"
               width={600}
               height={800}
-              className="w-full h-auto object-cover max-h-[700px] rounded-md"
+              className="w-full h-auto object-cover max-h-[700px] "
             />
           </div>
         )}
-        <p>{post?.caption}</p>
+        <p className="px-4">{post?.caption}</p>
       </div>
       {/* INTERFACE */}
-      <div className="flex items-center justify-between text-sm mb-4 px-2 ">
+      <div className="flex items-center justify-between text-sm mb-2 px-4 ">
         <div className="flex gap-8">
           <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-xl">
             <div onClick={() => handleLikeOrDislike(post!._id)} className="">

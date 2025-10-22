@@ -1,8 +1,11 @@
 "use client";
+import { useFollowUnfollow } from "@/components/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { handleAuthRequest } from "@/components/util/apiRequest";
 import { BASE_API_URL } from "@/server";
 import { setAuthUser } from "@/store/authSlice";
+import { deletePost } from "@/store/postSlice";
 import { Post, User } from "@/type";
 import axios from "axios";
 import { Bookmark, Delete, Ellipsis, UserCheck, UserCircleIcon, UserPlus, X } from "lucide-react";
@@ -18,11 +21,22 @@ type Props = {
   user: User | null;
 };
 const DotButton = ({ post, user }: Props) => {
+  const { handleFollowUnfollow } = useFollowUnfollow();
   const isOwnPost = post?.user?._id == user?._id;
   const isFollowing = post?.user?._id ? user?.following.includes(post.user._id) : false;
 
   const dispatch = useDispatch();
-  const handleDeletePost = async () => {};
+  const handleDeletePost = async () => {
+    const deletePostReq = async () =>
+      await axios.delete(`${BASE_API_URL}/posts/delete-post/${post?._id}`, { withCredentials: true });
+    const result = await handleAuthRequest(deletePostReq);
+    if (result?.data.status === "success") {
+      if (post?._id) {
+        dispatch(deletePost(post?._id));
+        toast.success(result?.data?.message);
+      }
+    }
+  };
   const handleSaveUnsave = async (id: string) => {
     const result = await axios.post(`${BASE_API_URL}/posts/save-unsave-post/${id}`, {}, { withCredentials: true });
 
@@ -43,7 +57,11 @@ const DotButton = ({ post, user }: Props) => {
           <div className="flex flex-col items-center justify-center w-fit space-y-4 mx-auto">
             {!isOwnPost && (
               <div className="">
-                <Button variant={isFollowing ? "destructive" : "secondary"}>
+                <Button
+                  onClick={() => {
+                    if (post?.user?._id) handleFollowUnfollow(post?.user._id);
+                  }}
+                  variant={isFollowing ? "destructive" : "secondary"}>
                   {isFollowing ? (
                     <span className="flex gap-2 items-center justify-center">
                       {" "}
