@@ -1,3 +1,4 @@
+import { useFollowUnfollow } from "@/components/hooks/use-auth";
 import { RootState } from "@/store/store";
 import { User } from "@/type";
 import Link from "next/link";
@@ -17,9 +18,11 @@ type Props = {
 };
 
 const UserInfoCard = ({ userProfile, id, idFollowing, setIsEdit }: Props) => {
+  const { handleFollowUnfollow } = useFollowUnfollow();
   const router = useRouter();
   const user = useSelector((state: RootState) => state?.auth.user);
   const isOwnProfile = user?._id === id;
+  const isFollowing = user?.following?.includes(id!) || false;
   return (
     <div className=" max-w-xs min-w-[19rem] px-4 pt-4  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
       {/* TOP */}
@@ -77,8 +80,8 @@ const UserInfoCard = ({ userProfile, id, idFollowing, setIsEdit }: Props) => {
           </div>
         </div>
 
-        <div className="flex flex-col pb-2 gap-2 ">
-          {isOwnProfile ? null : !idFollowing ? (
+        <div onClick={() => handleFollowUnfollow(id!)} className="flex flex-col pb-2 gap-2 ">
+          {isOwnProfile ? null : !isFollowing ? (
             <button className="bg-[#1a2254] text-white w-full p-2 font-medium rounded-md cursor-pointer">Follow</button>
           ) : (
             <button className="bg-red-600 text-white w-full p-2 font-medium rounded-md cursor-pointer">Unfollow</button>

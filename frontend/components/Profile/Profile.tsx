@@ -4,7 +4,7 @@ import { RootState } from "@/store/store";
 import { User } from "@/type";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { handleAuthRequest } from "../util/apiRequest";
 import { Loader, MenuIcon } from "lucide-react";
@@ -37,18 +37,33 @@ const Profile = ({ id }: Props) => {
   const idFollowing = id ? user?.following.includes(id) : false;
   // const idFollowing = true;
 
-  console.log("User", userProfile);
-  console.log(isProfileOwn);
+  // console.log("User", userProfile);
+  // console.log(isProfileOwn);
+
+  // ✅ Add this function to update userProfile locally
+  const updateFollowerCount = (isFollowing: boolean) => {
+    if (userProfile) {
+      setUserProfile({
+        ...userProfile,
+        followers: isFollowing
+          ? [...userProfile.followers, user!._id] // Add follower
+          : userProfile.followers.filter((f) => f !== user!._id), // Remove follower
+      });
+    }
+  };
 
   useEffect(() => {
     if (!user) router.push("/auth/login");
+  }, [user, router]);
+
+  useEffect(() => {
     const getUser = async () => {
       const getUserReq = async () => await axios.get(`${BASE_API_URL}/users/profile/${id}`);
       const result = await handleAuthRequest(getUserReq, setIsLoading);
       if (result) setUserProfile(result.data.data.user);
     };
     getUser();
-  }, [user, router, id]);
+  }, [router, id]);
   if (isLoading) {
     return (
       <div className="w-full h-screen flex flex-col items-center justify-center bg-slate-100">

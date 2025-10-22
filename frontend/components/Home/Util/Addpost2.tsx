@@ -4,8 +4,10 @@ import React, { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import CreatePostModal from "./CreatePostModal";
 import CreatePostModal2 from "./CreatePostModal2";
+import { useRouter } from "next/navigation";
 
 const Addpost2 = () => {
+  const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeMediaType, setActiveMediaType] = useState<"photo" | "video" | "poll" | "event" | null>(null);
@@ -20,6 +22,7 @@ const Addpost2 = () => {
       <div className="p-4 bg-white shadow-md rounded-lg flex gap-4 justify-between text-sm">
         {/* AVATAR */}
         <Image
+          onClick={() => router.push(`/profile/${user?._id}`)}
           src={user?.profilePicture || "https://images.pexels.com/photos/16654239/pexels-photo-16654239.jpeg"}
           alt=""
           height={48}

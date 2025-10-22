@@ -69,11 +69,21 @@ export const getAllPosts = catchAsync(async (req, res, next) => {
     })
     .populate({
       path: "comments",
-      select: "text user",
-      populate: {
-        path: "user",
-        select: "username profilePicture",
-      },
+      select: "text user likes replies createdAt",
+      populate: [
+        {
+          path: "user",
+          select: "username profilePicture",
+        },
+        {
+          path: "replies",
+          select: "text user likes createdAt",
+          populate: {
+            path: "user",
+            select: "username profilePicture",
+          },
+        },
+      ],
     })
     .sort({ createdAt: -1 });
 
@@ -242,5 +252,100 @@ export const addComment = catchAsync(async (req, res, next) => {
     data: {
       comment,
     },
+  });
+});
+
+// Like/Unlike Comment
+export const likeOrDislikeComment = catchAsync(async (req, res, next) => {
+  const { commentId } = req.params;
+  const userId = req.user._id;
+
+  const comment = await Comment.findById(commentId);
+  if (!comment) return next(new AppError("Comment not found", 404));
+
+  const isLiked = comment.likes.includes(userId);
+
+  if (isLiked) {
+    comment.likes = comment.likes.filter((id) => id.toString() !== userId.toString());
+    await comment.save();
+
+    return res.status(200).json({
+      status: "success",
+      message: "Comment unliked",
+      data: { likes: comment.likes },
+    });
+  } else {
+    comment.likes.push(userId);
+    await comment.save();
+
+    return res.status(200).json({
+      status: "success",
+      message: "Comment liked",
+      data: { likes: comment.likes },
+    });
+  }
+});
+
+// Reply to Comment
+export const replyToComment = catchAsync(async (req, res, next) => {
+  const { commentId } = req.params;
+  const { text } = req.body;
+  const userId = req.user._id;
+
+  if (!text) return next(new AppError("Reply text is required", 400));
+
+  const parentComment = await Comment.findById(commentId);
+  if (!parentComment) return next(new AppError("Comment not found", 404));
+
+  // Create reply
+  const reply = await Comment.create({
+    text,
+    user: userId,
+    post: parentComment.post,
+    parentComment: commentId,
+  });
+
+  // Add reply to parent comment
+  parentComment.replies.push(reply._id);
+  await parentComment.save();
+
+  // Populate user data
+  await reply.populate({
+    path: "user",
+    select: "username profilePicture bio",
+  });
+
+  res.status(200).json({
+    status: "success",
+    message: "Reply added successfully",
+    data: { reply },
+  });
+});
+
+// Delete Comment
+export const deleteComment = catchAsync(async (req, res, next) => {
+  const { commentId } = req.params;
+  const userId = req.user._id;
+
+  const comment = await Comment.findById(commentId);
+  if (!comment) return next(new AppError("Comment not found", 404));
+
+  // Check if user owns the comment
+  if (comment.user.toString() !== userId.toString()) {
+    return next(new AppError("You can only delete your own comments", 403));
+  }
+
+  // Remove comment from post
+  await Post.updateOne({ _id: comment.post }, { $pull: { comments: commentId } });
+
+  // Delete all replies
+  await Comment.deleteMany({ parentComment: commentId });
+
+  // Delete the comment
+  await Comment.findByIdAndDelete(commentId);
+
+  res.status(200).json({
+    status: "success",
+    message: "Comment deleted successfully",
   });
 });

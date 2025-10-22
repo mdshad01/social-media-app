@@ -31,15 +31,15 @@ const ProfileCard = ({ userProfile }: Props) => {
         <span className="text-2xl font-semibold mt-16 mb-2">{userProfile?.username}</span>
         <div className="flex gap-10 items-center justify-center">
           <div className="flex flex-col items-center font-medium text-gray-700">
-            <span>{userProfile?.posts.length || 142}</span>
+            <span>{userProfile?.posts.length}</span>
             <span className="">Posts</span>
           </div>
           <div className="flex flex-col gap-1  items-center font-medium text-gray-700">
-            <span>{userProfile?.followers.length || "1.2K"}</span>
+            <span>{userProfile?.followers.length}</span>
             <span className="">Followers</span>
           </div>
           <div className="flex flex-col gap-1  items-center font-medium text-gray-700">
-            <span>{userProfile?.following.length || "1.4K"}</span>
+            <span>{userProfile?.following.length}</span>
             <span className="">Following</span>
           </div>
         </div>

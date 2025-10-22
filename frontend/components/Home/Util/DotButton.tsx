@@ -61,7 +61,7 @@ const DotButton = ({ post, user }: Props) => {
             <Link href={`/profile/${post?.user?._id}`}>
               <Button variant={"secondary"}>
                 <UserCircleIcon size={20} />
-                User profile
+                {post?.user?._id === user?._id ? "My profile" : "User Profile"}
               </Button>
             </Link>
 

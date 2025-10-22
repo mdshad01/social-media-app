@@ -4,10 +4,13 @@ import upload from "../middleware/multer.js";
 import {
   addComment,
   createPost,
+  deleteComment,
   deletePost,
   getAllPosts,
   getUserPost,
+  likeOrDislikeComment,
   likeOrDislikePost,
+  replyToComment,
   saveOrUnsavePost,
 } from "../controllers/postController.js";
 
@@ -21,5 +24,8 @@ postRouter.post("/save-unsave-post/:postId", isAuthenticated, saveOrUnsavePost);
 postRouter.delete("/detele-post/:id", isAuthenticated, deletePost);
 postRouter.post("/like-dislike/:id", isAuthenticated, likeOrDislikePost);
 postRouter.post("/comment/:id", isAuthenticated, addComment);
+postRouter.post("/comment/like/:commentId", isAuthenticated, likeOrDislikeComment);
+postRouter.post("/comment/reply/:commentId", isAuthenticated, replyToComment);
+postRouter.delete("/comment/:commentId", isAuthenticated, deleteComment);
 
 export default postRouter;

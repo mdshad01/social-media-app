@@ -11,6 +11,7 @@ import { BASE_API_URL } from "@/server";
 import { useDispatch } from "react-redux";
 import { likeOrDislike } from "@/store/postSlice";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type Props = {
   post: Post | null;
@@ -20,6 +21,7 @@ type Props = {
 };
 
 const PostCard = ({ post, user }: Props) => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [commButton, setCommButton] = useState(false);
 
@@ -38,13 +40,16 @@ const PostCard = ({ post, user }: Props) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Image
+            onClick={() => router.push(`/profile/${post?.user?._id}`)}
             src={post?.user?.profilePicture || "https://images.pexels.com/photos/32409117/pexels-photo-32409117.jpeg"}
             alt=""
             width={40}
             height={40}
             className="w-10 h-10 rounded-full object-cover"
           />
-          <span className="font-medium">{post?.user?.username}</span>
+          <span onClick={() => router.push(`/profile/${post?.user?._id}`)} className="font-medium cursor-pointer">
+            {post?.user?.username}
+          </span>
         </div>
         {/* <Image
           onClick={() => setDotButton((prev) => !prev)}

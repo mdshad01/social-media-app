@@ -31,7 +31,7 @@ const ProfileCard = () => {
         />
       </div>
       <div className=" flex flex-col gap-2 items-start px-3">
-        <span className="text-xl font-semibold">Jhon Carter</span>
+        <span className="text-xl font-semibold">{user?.username}</span>
         <div className="flex items-center gap-4">
           <span className="text-sm text-gray-500">{user?.bio || "No bio avaliable"}</span>
         </div>
