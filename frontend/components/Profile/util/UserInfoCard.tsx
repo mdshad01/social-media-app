@@ -24,7 +24,7 @@ const UserInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Props
   const isOwnProfile = user?._id === id;
   const isFollowing = user?.following?.includes(id!) || false;
   return (
-    <div className=" max-w-xs min-w-[19rem] px-4 pt-4  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
+    <div className=" max-w-xs min-w-[19rem] px-4 pt-4 pb-2  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-gray-500">User Information</span>
@@ -86,7 +86,7 @@ const UserInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Props
           ) : (
             <button className="bg-red-600 text-white w-full p-2 font-medium rounded-md cursor-pointer">Unfollow</button>
           )}
-          <button className="text-red-500 opacity-90 text-xs self-end font-medium cursor-pointer">Block User</button>
+          {/* <button className="text-red-500 opacity-90 text-xs self-end font-medium cursor-pointer">Block User</button> */}
         </div>
       </div>
     </div>

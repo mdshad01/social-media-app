@@ -1,16 +1,16 @@
 "use client";
 import { useFollowUnfollow } from "@/components/hooks/use-auth";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { BASE_API_URL } from "@/server";
 import { setAuthUser } from "@/store/authSlice";
 import { deletePost } from "@/store/postSlice";
 import { Post, User } from "@/type";
 import axios from "axios";
-import { Bookmark, Delete, Ellipsis, UserCheck, UserCircleIcon, UserPlus, X } from "lucide-react";
-import Link from "next/link";
-import React from "react";
+import { Bookmark, Ellipsis, UserCheck, UserCircleIcon, UserPlus } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useState, useRef, useEffect } from "react";
 import { GoBookmarkSlash } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
 import { useDispatch } from "react-redux";
@@ -20,12 +20,36 @@ type Props = {
   post: Post | null;
   user: User | null;
 };
+
 const DotButton = ({ post, user }: Props) => {
   const { handleFollowUnfollow } = useFollowUnfollow();
-  const isOwnPost = post?.user?._id == user?._id;
-  const isFollowing = post?.user?._id ? user?.following.includes(post.user._id) : false;
-
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const dispatch = useDispatch();
+
+  const isOwnPost = post?.user?._id === user?._id;
+  const isFollowing = post?.user?._id ? user?.following.includes(post.user._id) : false;
+  // This will recalculate whenever user.savedPosts changes
+  const isPostSaved = user?.savedPosts?.includes(post?._id as string) || false;
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showDropdown]);
+
   const handleDeletePost = async () => {
     const deletePostReq = async () =>
       await axios.delete(`${BASE_API_URL}/posts/delete-post/${post?._id}`, { withCredentials: true });
@@ -34,9 +58,12 @@ const DotButton = ({ post, user }: Props) => {
       if (post?._id) {
         dispatch(deletePost(post?._id));
         toast.success(result?.data?.message);
+        setShowDropdown(false);
+        router.push("/");
       }
     }
   };
+
   const handleSaveUnsave = async (id: string) => {
     const result = await axios.post(`${BASE_API_URL}/posts/save-unsave-post/${id}`, {}, { withCredentials: true });
 
@@ -45,74 +72,103 @@ const DotButton = ({ post, user }: Props) => {
       toast.success(result.data.message);
     }
   };
-  if (post === null) return null;
-  return (
-    <div className="max-w-xs">
-      <Dialog>
-        <DialogTrigger>
-          <Ellipsis className="w-6 h-6 text-gray-900 cursor-pointer" />
-        </DialogTrigger>
-        <DialogContent>
-          <DialogTitle></DialogTitle>
-          <div className="flex flex-col items-center justify-center w-fit space-y-4 mx-auto">
-            {!isOwnPost && (
-              <div className="">
-                <Button
-                  onClick={() => {
-                    if (post?.user?._id) handleFollowUnfollow(post?.user._id);
-                  }}
-                  variant={isFollowing ? "destructive" : "secondary"}>
-                  {isFollowing ? (
-                    <span className="flex gap-2 items-center justify-center">
-                      {" "}
-                      <UserCheck /> Unfollow{" "}
-                    </span>
-                  ) : (
-                    <span className="flex gap-2 items-center justify-center">
-                      {" "}
-                      <UserPlus /> Follow{" "}
-                    </span>
-                  )}
-                </Button>
-              </div>
-            )}
-            <Link href={`/profile/${post?.user?._id}`}>
-              <Button variant={"secondary"}>
-                <UserCircleIcon size={20} />
-                {post?.user?._id === user?._id ? "My profile" : "User Profile"}
-              </Button>
-            </Link>
 
-            {user &&
-            post?._id &&
-            (user?.savedPosts as string[])?.some((savePostId: string) => savePostId === post?._id) ? (
-              <Button onClick={() => handleSaveUnsave(post?._id)} variant={"secondary"}>
-                {" "}
-                <GoBookmarkSlash className="text-xl" />
-                Unsave post
-              </Button>
-            ) : (
-              <Button onClick={() => handleSaveUnsave(post?._id)} variant={"secondary"}>
-                {" "}
-                <Bookmark size={20} />
-                Save post
-              </Button>
-            )}
-            {isOwnPost && (
-              <Button variant={"destructive"} onClick={handleDeletePost}>
-                <MdDeleteOutline className="text-xl" />
-                Delete post
-              </Button>
-            )}
-          </div>
-          <DialogClose>
-            <span className="flex items-center justify-center gap-1 mx-auto">
-              <X size={20} />
-              cancel
-            </span>
-          </DialogClose>
-        </DialogContent>
-      </Dialog>
+  const handleFollowClick = () => {
+    if (post?.user?._id) {
+      handleFollowUnfollow(post.user._id);
+    }
+  };
+
+  const handleViewProfile = () => {
+    setShowDropdown(false);
+    router.push(`/profile/${post?.user?._id}`);
+  };
+
+  if (post === null) return null;
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      {/* <Ellipsis className="w-6 h-6 text-gray-900 cursor-pointer" onClick={() => setShowDropdown(!showDropdown)} />
+       */}
+      <Image
+        src="/more.png"
+        alt="more"
+        width={20}
+        height={20}
+        className="cursor-pointer"
+        onClick={() => setShowDropdown(!showDropdown)}
+      />
+
+      {/* Dropdown Menu */}
+      {showDropdown && (
+        <div className="absolute -right-4 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-300 py-2 z-50">
+          {/* Follow/Unfollow - Only for other users' posts */}
+          {!isOwnPost && (
+            <>
+              <button
+                onClick={handleFollowClick}
+                className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors">
+                {isFollowing ? (
+                  <>
+                    <UserCheck size={18} />
+                    <span>Unfollow</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus size={18} />
+                    <span>Follow</span>
+                  </>
+                )}
+              </button>
+              <div className="border-t border-gray-200 my-1"></div>
+            </>
+          )}
+
+          {/* View Profile */}
+          <button
+            onClick={handleViewProfile}
+            className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors">
+            <UserCircleIcon size={18} />
+            <span>{isOwnPost ? "My Profile" : "User Profile"}</span>
+          </button>
+
+          <div className="border-t border-gray-200 my-1"></div>
+
+          {/* Save/Unsave Post */}
+          {user &&
+          post?._id &&
+          (user?.savedPosts as string[])?.some((savePostId: string) => savePostId === post?._id) ? (
+            <button
+              className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors"
+              onClick={() => handleSaveUnsave(post?._id)}>
+              {" "}
+              <GoBookmarkSlash className="text-xl" />
+              Unsave post
+            </button>
+          ) : (
+            <button
+              className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors"
+              onClick={() => handleSaveUnsave(post?._id)}>
+              {" "}
+              <Bookmark size={20} />
+              Save post
+            </button>
+          )}
+
+          {/* Delete Post - Only for own posts */}
+          {isOwnPost && (
+            <>
+              <div className="border-t border-gray-200 my-1"></div>
+              <button
+                onClick={handleDeletePost}
+                className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-red-600 transition-colors">
+                <MdDeleteOutline size={18} />
+                <span>Delete Post</span>
+              </button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };
