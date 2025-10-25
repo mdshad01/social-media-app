@@ -11,13 +11,17 @@ import {
   likeOrDislikeComment,
   likeOrDislikePost,
   replyToComment,
+  rsvpToEvent,
   saveOrUnsavePost,
+  voteOnPoll,
 } from "../controllers/postController.js";
 
 const postRouter = express.Router();
 
 // routers
 postRouter.post("/create-post", isAuthenticated, upload.single("image"), createPost);
+postRouter.post("/poll/vote", isAuthenticated, voteOnPoll);
+postRouter.post("/event/rsvp/:postId", isAuthenticated, rsvpToEvent);
 postRouter.get("/all", getAllPosts);
 postRouter.get("/user-post/:id", getUserPost);
 postRouter.post("/save-unsave-post/:postId", isAuthenticated, saveOrUnsavePost);

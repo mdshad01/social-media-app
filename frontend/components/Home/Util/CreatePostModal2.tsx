@@ -6,7 +6,7 @@ import { BASE_API_URL } from "@/server";
 import { addPost } from "@/store/postSlice";
 import { User } from "@/type";
 import axios from "axios";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, Video, X } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -16,20 +16,21 @@ import { toast } from "sonner";
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  //   initialMediaType: "photo" | "video" | "poll" | "event" | null;
   user: User;
 }
 
 const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [fileType, setFileType] = useState<"image" | "video" | null>(null);
   const [caption, setCaption] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
   const [showPoll, setShowPoll] = useState(false);
   const [showEvent, setShowEvent] = useState(false);
   const [pollOptions, setPollOptions] = useState(["", ""]);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [eventData, setEventData] = useState({
     title: "",
     date: "",
@@ -40,44 +41,130 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
 
   useEffect(() => {
     if (!isOpen) {
-      setSelectedImage(null);
-      setPreviewImage(null);
-      setCaption("");
+      resetForm();
     }
   }, [isOpen]);
+
+  const resetForm = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setFileType(null);
+    setCaption("");
+    setShowPoll(false);
+    setShowEvent(false);
+    setPollOptions(["", ""]);
+    setEventData({ title: "", date: "", time: "", location: "" });
+  };
 
   const handleButtonClick = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
+
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
-      // validate file type
-      if (!file.type.startsWith("image")) {
-        toast.error("Please select a valid image file!");
+
+      // Validate file type
+      if (!file.type.startsWith("image") && !file.type.startsWith("video")) {
+        toast.error("Please select a valid image or video file!");
         return;
       }
-      // valid image size
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error("File size shound not exceed 10MB!");
+
+      // ✅ Update size limits
+      const maxSize = file.type.startsWith("video") ? 30 * 1024 * 1024 : 10 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error(`File size should not exceed ${file.type.startsWith("video") ? "30MB" : "10MB"}!`);
+        return;
       }
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage(file);
-      setPreviewImage(imageUrl);
+
+      const url = URL.createObjectURL(file);
+      setSelectedFile(file);
+      setPreviewUrl(url);
+      setFileType(file.type.startsWith("image") ? "image" : "video");
     }
   };
+
+  const addPollOption = () => {
+    if (pollOptions.length < 4) {
+      setPollOptions([...pollOptions, ""]);
+    }
+  };
+
+  const updatePollOption = (index: number, value: string) => {
+    const newOptions = [...pollOptions];
+    newOptions[index] = value;
+    setPollOptions(newOptions);
+  };
+
+  const removePollOption = (index: number) => {
+    if (pollOptions.length > 2) {
+      setPollOptions(pollOptions.filter((_, i) => i !== index));
+    }
+  };
+
   const handleCreatePost = async () => {
-    if (!selectedImage) toast.error("Please select an image to create a post!");
+    // Validation
+    if (!caption.trim() && !selectedFile && !showPoll && !showEvent) {
+      toast.error("Please add some content to your post!");
+      return;
+    }
+
+    if (showPoll) {
+      const validOptions = pollOptions.filter((opt) => opt.trim());
+      if (validOptions.length < 2) {
+        toast.error("Poll must have at least 2 options!");
+        return;
+      }
+    }
+
+    if (showEvent && (!eventData.title || !eventData.date)) {
+      toast.error("Event must have a title and date!");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("caption", caption);
 
-    if (selectedImage) formData.append("image", selectedImage);
+    // Determine post type
+    let postType = "text";
+
+    if (selectedFile) {
+      if (fileType === "image") {
+        postType = "image";
+        formData.append("image", selectedFile);
+      } else if (fileType === "video") {
+        postType = "video";
+        formData.append("image", selectedFile); // Backend uses same field name
+      }
+    }
+
+    if (showPoll) {
+      postType = "poll";
+      const validOptions = pollOptions.filter((opt) => opt.trim());
+      formData.append(
+        "pollData",
+        JSON.stringify({
+          question: caption,
+          options: validOptions,
+        })
+      );
+    }
+
+    if (showEvent) {
+      postType = "event";
+      formData.append("eventData", JSON.stringify(eventData));
+    }
+
+    formData.append("postType", postType);
 
     const createPostReq = async () =>
       await axios.post(`${BASE_API_URL}/posts/create-post`, formData, {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total!);
+          setUploadProgress(percentCompleted);
+        },
       });
 
     const result = await handleAuthRequest(createPostReq, setIsLoading);
@@ -85,49 +172,150 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
     if (result) {
       dispatch(addPost(result.data.data.post));
       toast.success("Post created successfully");
-      setPreviewImage(null);
-      setCaption("");
-      setSelectedImage(null);
+      resetForm();
+      setUploadProgress(0);
       onClose();
-      router.push("/");
       router.refresh();
     }
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
-        {previewImage ? (
-          <div className="flex flex-col items-center justify-center text-center space-y-4">
-            <div className="mt-4">
-              <Image
-                src={previewImage}
-                alt="Image"
-                width={500}
-                height={500}
-                className="overflow-auto object-contain max-h-96 rounded-md w-full"
-              />
-            </div>
-            <input
-              placeholder="What on your mind?"
-              type="text"
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        {previewUrl || showPoll || showEvent ? (
+          <div className="flex flex-col space-y-4">
+            <DialogHeader>
+              <DialogTitle className="text-center">Create Post</DialogTitle>
+            </DialogHeader>
+            {isLoading && fileType === "video" && (
+              <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                <div
+                  className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+                <p className="text-sm text-gray-600 mt-2 text-center">Uploading video... {uploadProgress}%</p>
+              </div>
+            )}
+
+            {/* File Preview */}
+            {previewUrl && (
+              <div className="relative">
+                {fileType === "video" ? (
+                  <video src={previewUrl} controls className="w-full max-h-96 rounded-md object-contain" />
+                ) : (
+                  <Image
+                    src={previewUrl}
+                    alt="Preview"
+                    width={500}
+                    height={500}
+                    className="w-full max-h-96 rounded-md object-contain"
+                  />
+                )}
+                <button
+                  onClick={() => {
+                    setSelectedFile(null);
+                    setPreviewUrl(null);
+                    setFileType(null);
+                  }}
+                  className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100">
+                  <X size={20} />
+                </button>
+              </div>
+            )}
+
+            {/* Poll Options */}
+            {showPoll && (
+              <div className="p-4 border rounded-lg space-y-2">
+                <div className="flex justify-between items-center">
+                  <p className="font-semibold">Poll Options</p>
+                  <button onClick={() => setShowPoll(false)} className="text-red-500 hover:text-red-700 text-sm">
+                    Remove Poll
+                  </button>
+                </div>
+                {pollOptions.map((option, index) => (
+                  <div key={index} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={option}
+                      onChange={(e) => updatePollOption(index, e.target.value)}
+                      placeholder={`Option ${index + 1}`}
+                      className="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {pollOptions.length > 2 && (
+                      <button onClick={() => removePollOption(index)} className="text-red-500 hover:text-red-700 w-8">
+                        <X size={20} />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                {pollOptions.length < 4 && (
+                  <button onClick={addPollOption} className="text-blue-500 hover:text-blue-700 text-sm">
+                    + Add option
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Event Form */}
+            {showEvent && (
+              <div className="p-4 border rounded-lg space-y-3">
+                <div className="flex justify-between items-center">
+                  <p className="font-semibold">Event Details</p>
+                  <button onClick={() => setShowEvent(false)} className="text-red-500 hover:text-red-700 text-sm">
+                    Remove Event
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  value={eventData.title}
+                  onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
+                  placeholder="Event title"
+                  className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="date"
+                    value={eventData.date}
+                    onChange={(e) => setEventData({ ...eventData, date: e.target.value })}
+                    className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="time"
+                    value={eventData.time}
+                    onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
+                    className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <input
+                  type="text"
+                  value={eventData.location}
+                  onChange={(e) => setEventData({ ...eventData, location: e.target.value })}
+                  placeholder="Location"
+                  className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+            )}
+
+            {/* Caption Input */}
+            <textarea
+              placeholder="What's on your mind?"
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              className="mt-4 border rounded-md w-full text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 p-2"
+              className="w-full border rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-none"
             />
-            <div className="flex space-x-4 mt-4">
+
+            {/* Action Buttons */}
+            <div className="flex space-x-4">
               <LoadingButton
-                className="bg-blue-600 text-white hover:bg-blue-700"
+                className="flex-1 bg-blue-600 text-white hover:bg-blue-700"
                 isLoading={isLoading}
                 onClick={handleCreatePost}>
                 Create Post
               </LoadingButton>
               <button
-                className="bg-gray-500 text-white hover:bg-gray-700 px-4 py-1 rounded-md"
+                className="bg-gray-500 text-white hover:bg-gray-700 px-6 py-2 rounded-md"
                 onClick={() => {
-                  setCaption("");
-                  setSelectedImage(null);
-                  setPreviewImage(null);
+                  resetForm();
                   onClose();
                 }}>
                 Cancel
@@ -135,21 +323,66 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
             </div>
           </div>
         ) : (
-          // Shoe the default view
+          // Initial View
           <>
             <DialogHeader>
-              <DialogTitle className="text-center">Upload Image</DialogTitle>
-              <div className="flex flex-col items-center justify-center text-center gap-4 space-x-4">
-                <div className="flex space-x-2 text-gray-600 mt-4">
-                  <ImageIcon size={40} />
-                </div>
-                <p>Select a photo from your computer</p>
-                <Button className="bg-blue-600 text-white hover:bg-blue-700" onClick={handleButtonClick}>
-                  Select from computer
-                </Button>
-                <input type="file" accept="image/*" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
-              </div>
+              <DialogTitle className="text-center">Create Post</DialogTitle>
             </DialogHeader>
+
+            <div className="flex flex-col items-center justify-center text-center gap-4 py-8">
+              {/* Caption Input */}
+              <textarea
+                placeholder="What's on your mind?"
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                className="w-full border rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-none"
+              />
+
+              {/* Add Options */}
+              <div className="w-full border-t pt-4">
+                <p className="text-sm font-semibold mb-3 text-left">Add to your post</p>
+                <div className="grid grid-cols-2 gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={handleButtonClick}
+                    className="flex items-center gap-2 justify-center">
+                    <ImageIcon size={20} />
+                    Photo/Video
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowPoll(true)}
+                    className="flex items-center gap-2 justify-center">
+                    <Image src="/poll.png" alt="" width={20} height={20} />
+                    Poll
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowEvent(true)}
+                    className="flex items-center gap-2 justify-center col-span-2">
+                    <Image src="/addevent.png" alt="" width={20} height={20} />
+                    Event
+                  </Button>
+                </div>
+              </div>
+
+              <input
+                type="file"
+                accept="image/*,video/*"
+                className="hidden"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+              />
+
+              {/* Post Button */}
+              <LoadingButton
+                className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                isLoading={isLoading}
+                onClick={handleCreatePost}
+                disabled={!caption.trim()}>
+                Post
+              </LoadingButton>
+            </div>
           </>
         )}
       </DialogContent>

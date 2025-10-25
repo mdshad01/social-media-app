@@ -34,11 +34,38 @@ export interface Comment {
 
 export interface Post {
   _id: string;
+  postType?: "image" | "video" | "poll" | "event" | "text"; // ✅ Optional for old posts
   caption: string;
+
+  // ✅ KEEP OLD FIELD
   image?: {
     url: string;
     publicId: string;
   };
+
+  // ✅ NEW FIELDS
+  video?: {
+    url: string;
+    publicId: string;
+  };
+
+  poll?: {
+    question: string;
+    options: Array<{
+      text: string;
+      votes: string[];
+    }>;
+    expiresAt?: Date;
+  };
+
+  event?: {
+    title: string;
+    date: Date;
+    time: string;
+    location: string;
+    attendees: string[];
+  };
+
   user: User | undefined;
   likes: string[];
   comments: Comment[];

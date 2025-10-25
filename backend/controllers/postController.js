@@ -1,46 +1,126 @@
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import sharp from "sharp";
-import { uploadToCloudinary } from "../utils/cloudinary.js";
+import { uploadToCloudinary, uploadVideoToCloudinary } from "../utils/cloudinary.js";
 import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import cloudinary from "cloudinary";
 import Comment from "../models/commentModel.js";
 
 export const createPost = catchAsync(async (req, res, next) => {
-  const { caption } = req.body;
-  const image = req.file;
+  const { caption, postType, pollData, eventData } = req.body;
+  const file = req.file;
   const userId = req.user._id;
 
   if (!req.user || !req.user._id) {
     return next(new AppError("User not authenticated", 401));
   }
 
-  if (!image) return next(new AppError("Image is required for post", 400));
-
-  // optimize our image
-  const optimizedImageBuffer = await sharp(image.buffer)
-    .resize({ width: 800, height: 800, fit: "inside" })
-    .toFormat("jpeg", { quality: 90 })
-    .toBuffer();
-
-  const fileUri = `data:image/jpeg;base64,${optimizedImageBuffer.toString("base64")}`;
-
-  const cloudResponse = await uploadToCloudinary(fileUri);
-
-  let post = await Post.create({
+  console.log("Received postType:", postType);
+  console.log("File info:", file ? { name: file.originalname, size: file.size, type: file.mimetype } : "No file");
+  let postData = {
     caption,
-    image: {
+    postType: postType || "text",
+    user: userId,
+  };
+
+  // ✅ Handle IMAGE
+  if (postType === "image" || (!postType && file)) {
+    if (!file) return next(new AppError("Image is required", 400));
+
+    const optimizedImageBuffer = await sharp(file.buffer)
+      .resize({ width: 800, height: 800, fit: "inside" })
+      .toFormat("jpeg", { quality: 90 })
+      .toBuffer();
+
+    const fileUri = `data:image/jpeg;base64,${optimizedImageBuffer.toString("base64")}`;
+    const cloudResponse = await uploadToCloudinary(fileUri);
+
+    postData.image = {
       url: cloudResponse.secure_url,
       publicId: cloudResponse.public_id,
-    },
-    user: userId,
-  });
+    };
+    postData.postType = "image";
+  }
 
-  //   add post to users posts
+  // ✅ Handle VIDEO - OPTIMIZED VERSION
+  if (postType === "video") {
+    if (!file) return next(new AppError("Video file is required", 400));
+
+    try {
+      console.log("Uploading video:", file.originalname, "Size:", (file.size / 1024 / 1024).toFixed(2), "MB");
+
+      // Upload using stream (no base64 conversion = faster)
+      const cloudResponse = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.v2.uploader.upload_stream(
+          {
+            resource_type: "video",
+            folder: "posts/videos",
+            timeout: 300000, // 5 minutes
+          },
+          (error, result) => {
+            if (error) {
+              console.error("Cloudinary error:", error);
+              reject(error);
+            } else {
+              console.log("Upload successful:", result.public_id);
+              resolve(result);
+            }
+          }
+        );
+
+        // Write buffer to stream
+        uploadStream.end(file.buffer);
+      });
+
+      postData.video = {
+        url: cloudResponse.secure_url,
+        publicId: cloudResponse.public_id,
+      };
+      postData.postType = "video";
+    } catch (error) {
+      console.error("Video upload failed:", error);
+      return next(new AppError("Failed to upload video. Please try again.", 500));
+    }
+  }
+
+  // ✅ Handle POLL
+  if (postType === "poll") {
+    const parsedPollData = typeof pollData === "string" ? JSON.parse(pollData) : pollData;
+
+    if (!parsedPollData || !parsedPollData.options || parsedPollData.options.length < 2) {
+      return next(new AppError("Poll must have at least 2 options", 400));
+    }
+
+    postData.poll = {
+      question: parsedPollData.question || caption,
+      options: parsedPollData.options.map((opt) => ({ text: opt, votes: [] })),
+      expiresAt: parsedPollData.expiresAt || null,
+    };
+    postData.postType = "poll";
+  }
+
+  // ✅ Handle EVENT
+  if (postType === "event") {
+    const parsedEventData = typeof eventData === "string" ? JSON.parse(eventData) : eventData;
+
+    if (!parsedEventData || !parsedEventData.title || !parsedEventData.date) {
+      return next(new AppError("Event must have title and date", 400));
+    }
+
+    postData.event = {
+      title: parsedEventData.title,
+      date: new Date(parsedEventData.date),
+      time: parsedEventData.time,
+      location: parsedEventData.location,
+      attendees: [],
+    };
+    postData.postType = "event";
+  }
+
+  let post = await Post.create(postData);
+
   const user = req.user;
-  //   const user = await User.findById(userId);
-
   if (user) {
     user.posts.push(post._id);
     await user.save({ validateBeforeSave: false });
@@ -48,17 +128,71 @@ export const createPost = catchAsync(async (req, res, next) => {
 
   post = await post.populate({
     path: "user",
-    // select: "username bio email profilePicture backgroundImage city school work website",
-    select: "username bio email profilePicture ",
+    select: "username bio email profilePicture",
   });
 
   return res.status(200).json({
     status: "success",
     message: "Post Created",
-    data: {
-      post,
-    },
+    data: { post },
   });
+});
+
+// Vote on poll
+export const voteOnPoll = catchAsync(async (req, res, next) => {
+  const { postId, optionIndex } = req.body;
+  const userId = req.user._id;
+
+  const post = await Post.findById(postId);
+  if (!post || post.postType !== "poll") {
+    return next(new AppError("Poll not found", 404));
+  }
+
+  // Remove previous vote if exists
+  post.poll.options.forEach((option) => {
+    option.votes = option.votes.filter((id) => id.toString() !== userId.toString());
+  });
+
+  // Add new vote
+  post.poll.options[optionIndex].votes.push(userId);
+  await post.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "Vote recorded",
+    data: { poll: post.poll },
+  });
+});
+
+// RSVP to event
+export const rsvpToEvent = catchAsync(async (req, res, next) => {
+  const { postId } = req.params;
+  const userId = req.user._id;
+
+  const post = await Post.findById(postId);
+  if (!post || post.postType !== "event") {
+    return next(new AppError("Event not found", 404));
+  }
+
+  const isAttending = post.event.attendees.includes(userId);
+
+  if (isAttending) {
+    post.event.attendees = post.event.attendees.filter((id) => id.toString() !== userId.toString());
+    await post.save();
+    return res.status(200).json({
+      status: "success",
+      message: "RSVP cancelled",
+      data: { attendees: post.event.attendees },
+    });
+  } else {
+    post.event.attendees.push(userId);
+    await post.save();
+    return res.status(200).json({
+      status: "success",
+      message: "RSVP confirmed",
+      data: { attendees: post.event.attendees },
+    });
+  }
 });
 
 export const getAllPosts = catchAsync(async (req, res, next) => {
@@ -171,22 +305,19 @@ export const deletePost = catchAsync(async (req, res, next) => {
     return next(new AppError("You are not authorized to delete this post", 403));
   }
 
-  // remove the post from posts
   await User.updateOne({ _id: userId }, { $pull: { posts: id } });
-
-  // delete this post from user save list
   await User.updateMany({ savedPosts: id }, { $pull: { savedPosts: id } });
-
-  // remove the comment of this post
   await Comment.deleteMany({ post: id });
 
-  //remove image from cloudinary
-
-  if (post.image.publicId) {
+  // ✅ Delete image from cloudinary
+  if (post.image?.publicId) {
     await cloudinary.uploader.destroy(post.image.publicId);
   }
 
-  // remover the post
+  // ✅ Delete video from cloudinary
+  if (post.video?.publicId) {
+    await cloudinary.uploader.destroy(post.video.publicId, { resource_type: "video" });
+  }
 
   await Post.findByIdAndDelete(id);
 
