@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import ClientProvider from "@/HOC/ClientProvider";
 import Navbar from "@/components/Home/Navbar";
+import NavbarWrapper from "@/components/NavbarWrapper";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -43,10 +44,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.className} ${lobster.variable} font-sans`}>
         <ClientProvider>
-          <div className="w-full bg-white px-4 md:px-8 lg:px-16 xl:px-24 2xl:px-48 h-[12vh] ">
-            <Navbar />
+          <div className="w-full h-[8vh] bg-white sm:px-0 md:px-8 lg:px-16 xl:px-24 2xl:px-48 lg:h-[12vh] ">
+            <NavbarWrapper />
           </div>
-          <div className="bg-slate-100  px-4 md:px-8 lg:px-16 xl:px-28 2xl:px-64">
+          <div className="bg-slate-100 sm:px-0 md:px-8 lg:px-16 xl:px-28 2xl:px-64">
             {children}
             <Toaster />
           </div>

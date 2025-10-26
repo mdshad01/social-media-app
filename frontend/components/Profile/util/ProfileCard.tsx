@@ -11,8 +11,8 @@ type Props = {
 
 const ProfileCard = ({ userProfile }: Props) => {
   return (
-    <div className=" flex flex-col items-center justify-center gap-4 ">
-      <div className="relative h-60 w-full shadow">
+    <div className=" flex flex-col items-center justify-center gap-4 px-2 md:px-0">
+      <div className="relative md:h-60 h-40 w-full shadow">
         <Image
           src={userProfile?.backgroundImage || "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"}
           alt=""

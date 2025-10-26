@@ -305,20 +305,38 @@ export const deletePost = catchAsync(async (req, res, next) => {
     return next(new AppError("You are not authorized to delete this post", 403));
   }
 
+  // Remove post from user's posts array
   await User.updateOne({ _id: userId }, { $pull: { posts: id } });
+
+  // Remove post from all users' saved posts
   await User.updateMany({ savedPosts: id }, { $pull: { savedPosts: id } });
+
+  // Delete all comments associated with this post
   await Comment.deleteMany({ post: id });
 
-  // ✅ Delete image from cloudinary
+  // ✅ Delete image from Cloudinary
   if (post.image?.publicId) {
-    await cloudinary.uploader.destroy(post.image.publicId);
+    try {
+      await cloudinary.v2.uploader.destroy(post.image.publicId);
+      console.log("Image deleted from Cloudinary:", post.image.publicId);
+    } catch (error) {
+      console.error("Failed to delete image from Cloudinary:", error);
+      // Continue with post deletion even if Cloudinary fails
+    }
   }
 
-  // ✅ Delete video from cloudinary
+  // ✅ Delete video from Cloudinary
   if (post.video?.publicId) {
-    await cloudinary.uploader.destroy(post.video.publicId, { resource_type: "video" });
+    try {
+      await cloudinary.v2.uploader.destroy(post.video.publicId, { resource_type: "video" });
+      console.log("Video deleted from Cloudinary:", post.video.publicId);
+    } catch (error) {
+      console.error("Failed to delete video from Cloudinary:", error);
+      // Continue with post deletion even if Cloudinary fails
+    }
   }
 
+  // Delete the post from database
   await Post.findByIdAndDelete(id);
 
   res.status(200).json({

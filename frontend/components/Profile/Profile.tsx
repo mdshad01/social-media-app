@@ -20,6 +20,7 @@ import UserMediaCart from "./util/UserMediaCart";
 import Edit from "./util/Edit";
 import PostOrSaveBtn from "./util/PostOrSaveBtn";
 import SaveFeed from "./util/SaveFeed";
+import MobileInfoCard from "./util/MobileInfoCard";
 
 type Props = {
   id: string;
@@ -78,29 +79,19 @@ const Profile = ({ id }: Props) => {
         {/* <LeftSidebar /> */}
         <LeftMenu type="profile" />
       </div>
-
-      <div className="md:hidden p-2">
-        <Sheet>
-          <SheetTrigger>
-            <MenuIcon />
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[250px] sm:w-[320px] pl-4">
-            <SheetTitle></SheetTitle>
-            <SheetDescription></SheetDescription>
-            <div className="text-[#1b2356] flex items-center gap-2 justify-start">
-              <BiAperture className="w-10 h-10" />
-              <span className="text-2xl sm:text-3xl font-bold" onClick={() => router.push("/")}>
-                Shadsocial.
-              </span>
-            </div>
-            <LeftSidebar />
-          </SheetContent>
-        </Sheet>
-      </div>
       <div className="  w-full lg:w-[70%] xl:w-[60%] ">
-        <div className=" px-5 flex flex-col ">
+        <div className=" md:px-5 flex flex-col ">
           <ProfileCard userProfile={userProfile} />
-          <div className="px-8 py-2">
+          <div className="md:hidden flex items-center justify-center mt-12">
+            <MobileInfoCard
+              setIsEdit={setIsEdit}
+              userProfile={userProfile}
+              id={id}
+              idFollowing={idFollowing}
+              updateFollowerCount={updateFollowerCount}
+            />
+          </div>
+          <div className="md:px-8 py-2">
             <PostOrSaveBtn postOrSave={postOrSave} isProfileOwn={isProfileOwn} setPostOrSave={setPostOrSave} />
             {postOrSave === "POST" && <Feed userProfile={userProfile} />}
             {postOrSave === "SAVE" && <SaveFeed userProfile={userProfile} />}

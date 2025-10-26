@@ -19,20 +19,20 @@ const Addpost2 = () => {
 
   return (
     <>
-      <div className="p-4 bg-white shadow-md rounded-lg flex gap-4 justify-between text-sm">
-        {/* AVATAR */}
-        <Image
-          onClick={() => router.push(`/profile/${user?._id}`)}
-          src={user?.profilePicture || "https://images.pexels.com/photos/16654239/pexels-photo-16654239.jpeg"}
-          alt=""
-          height={48}
-          width={48}
-          className="w-12 h-12 object-cover rounded-full"
-        />
+      <div className="p-4 bg-white shadow rounded-lg flex gap-4 justify-between text-sm">
         {/* POST */}
         <div className="flex-1">
-          {/*  TEXT INPUT*/}
           <div className="flex gap-4">
+            {/* AVATAR */}
+            <Image
+              onClick={() => router.push(`/profile/${user?._id}`)}
+              src={user?.profilePicture || "https://images.pexels.com/photos/16654239/pexels-photo-16654239.jpeg"}
+              alt=""
+              height={48}
+              width={48}
+              className="w-12 h-12 object-cover rounded-full"
+            />
+            {/*  TEXT INPUT*/}
             <div
               onClick={() => handleOpenModal()}
               className="bg-slate-100 rounded-xl flex-1 p-3 cursor-pointer hover:bg-slate-200 transition-colors">
@@ -41,7 +41,7 @@ const Addpost2 = () => {
             <Image src="/emoji.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" />
           </div>
           {/* POST OPTIONS */}
-          <div className="flex items-center gap-6 mt-4 text-black flex-wrap">
+          <div className="flex items-center justify-between sm:justify-start md:pl-16 md:justify-start sm:gap-6 mt-4 text-black flex-wrap">
             <div
               onClick={() => handleOpenModal("photo")}
               className="flex gap-1 items-center cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors">
