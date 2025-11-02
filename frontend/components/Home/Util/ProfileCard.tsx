@@ -27,7 +27,7 @@ const ProfileCard = () => {
           alt=""
           width={48}
           height={48}
-          className="rounded-full object-cover w-18 h-18 absolute left-0 right-28 m-auto -bottom-6 ring-1 ring-white z-10 "
+          className="rounded-full object-cover w-16 h-16 absolute left-0 right-28 m-auto -bottom-6 ring-1 ring-white z-10 "
         />
       </div>
       <div className=" flex flex-col gap-2 items-start px-3">

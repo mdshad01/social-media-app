@@ -104,7 +104,7 @@ const Comments = ({ user, post }: Props) => {
   };
 
   return (
-    <div>
+    <div className="px-3">
       {/* WRITE */}
       <div className="flex items-center gap-4">
         <Image

@@ -1,17 +1,23 @@
-import React from "react";
+"use client";
+import React, { Dispatch, SetStateAction } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
 import ProfileCard from "./Util/ProfileCard";
 import Ad from "./Util/Ad";
 import LeftSidebar from "./LeftSidebar";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { BASE_API_URL } from "@/server";
 
-const LeftMenu = ({ type }: { type: "home" | "profile" }) => {
+const LeftMenu = ({type}: {type: "home" | "profile"}) => {
+  const user = useSelector((state: RootState) => state.auth.user);
+
   return (
     <div className="flex flex-col gap-6">
       {type === "home" && <ProfileCard />}
       <div className="p-4 bg-white rounded-lg shadow-md text-gray-500 flex flex-col gap-4 text-sm">
-        <Link href="/" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
+        <Link href={`/profile/${user?._id}/my-posts`} className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
           <Image src="/posts.png" alt="" height={24} width={24} className="w-5 h-5" />
           <span className="font-medium">My Posts</span>
         </Link>
@@ -21,15 +27,17 @@ const LeftMenu = ({ type }: { type: "home" | "profile" }) => {
         </Link>
         <Link href="/" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
           <Image src="/market.png" alt="" height={24} width={24} className="w-5 h-5" />
-          <span className="font-medium">Morketplace</span>
+          <span className="font-medium">Marketplace</span>
         </Link>
         <Link href="/" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
           <Image src="/events.png" alt="" height={24} width={24} className="w-5 h-5" />
           <span className="font-medium">Events</span>
         </Link>
-        <Link href="/" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
+        <Link
+          href={`/profile/${user?._id}/saved-posts`}
+          className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
           <Image src="/albums.png" alt="" height={24} width={24} className="w-5 h-5" />
-          <span className="font-medium">Albums</span>
+          <span className="font-medium">Saved Posts</span>
         </Link>
         <Link href="/" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
           <Image src="/videos.png" alt="" height={24} width={24} className="w-5 h-5" />

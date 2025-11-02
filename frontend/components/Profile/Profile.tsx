@@ -33,6 +33,7 @@ const Profile = ({ id }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [userProfile, setUserProfile] = useState<User>();
   const [isEdit, setIsEdit] = useState(false);
+  const [savePost, setSavePost] = useState<boolean>(false);
 
   const isProfileOwn = user?._id === id;
   const idFollowing = id ? user?.following.includes(id) : false;
@@ -77,12 +78,12 @@ const Profile = ({ id }: Props) => {
     <div className="flex pt-6 bg-slate-100">
       <div className="lg:w-[20%] xl:w-[18%] hidden md:block  h-full ">
         {/* <LeftSidebar /> */}
-        <LeftMenu type="profile" />
+        <LeftMenu setSavePost={setSavePost} type="profile" />
       </div>
       <div className="  w-full lg:w-[70%] xl:w-[60%] ">
-        <div className=" md:px-5 flex flex-col ">
+        <div className=" px-0 md:px-5 flex flex-col ">
           <ProfileCard userProfile={userProfile} />
-          <div className="md:hidden flex items-center justify-center mt-12">
+          <div className="md:hidden w-full flex items-center justify-center mt-12">
             <MobileInfoCard
               setIsEdit={setIsEdit}
               userProfile={userProfile}

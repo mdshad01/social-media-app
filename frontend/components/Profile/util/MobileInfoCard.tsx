@@ -24,9 +24,9 @@ const MobileInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Pro
   const isOwnProfile = user?._id === id;
   const isFollowing = user?.following?.includes(id!) || false;
   return (
-    <div className="w-[96%] px-4 pt-4 pb-2  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
+    <div className="w-full pt-4 pb-2 px-5 bg-white rounded  text-sm flex flex-col gap-2">
       {/* TOP */}
-      <div className="flex items-center justify-between font-medium">
+      <div className="flex  items-center justify-between font-medium">
         <span className="text-gray-500">User Information</span>
         {isOwnProfile ? (
           <span className="text-[#1a2254] cursor-pointer" onClick={() => setIsEdit((prev) => !prev)}>
@@ -39,7 +39,7 @@ const MobileInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Pro
         )}
       </div>
       {/* BOTTOM */}
-      <div className="flex gap-2 items-center mt-2">
+      <div className="flex gap-2 items-center mt-2 ">
         <span className="text-xl font-medium">{userProfile?.username || "Jhon Carter"}</span>
         <span className="text-gray-500 font-medium">@{userProfile?.username.replace(/\s+/g, "").toLowerCase()}</span>
       </div>

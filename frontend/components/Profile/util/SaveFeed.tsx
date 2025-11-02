@@ -24,7 +24,7 @@ const SaveFeed = ({ userProfile }: Props) => {
   }
 
   return (
-    <div className="p-4 bg-white shadow-md rounded-lg flex flex-col gap-12 mt-6 scrollbar-hide">
+    <div className="py-4 bg-white shadow-md rounded-lg flex flex-col gap-12 mt-6 scrollbar-hide">
       {savedPosts.map((post, index) => (
         <PostCard key={post._id || index} post={post} user={user} />
       ))}

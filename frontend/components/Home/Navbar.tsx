@@ -83,7 +83,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="flex md:px-3 px-2 items-center w-full h-full bg-white">
+    <nav className="flex md:px-3 px-2 pt-3 md:pt-0 items-center w-full h-full bg-white">
       {/* Logo */}
       <div
         onClick={() => router.push("/")}
@@ -119,7 +119,7 @@ const Navbar = () => {
         </span>
 
         {/* Avatar with Dropdown */}
-        <div className="relative" ref={dropdownRef}>
+        <div className="relative hidden md:block" ref={dropdownRef}>
           <span
             onClick={handleAvatarClick}
             className="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-[#f3f5f7] hover:bg-[#eff7fe] flex items-center justify-center rounded-full transition-colors">
@@ -167,6 +167,9 @@ const Navbar = () => {
               </span>
             </div>
             <LeftSidebar />
+            <div className=" h-full pb-10 flex items-end justify-center">
+              <p className="text-zinc-700 align-self-bottom">Dev. @mdshad</p>
+            </div>
           </SheetContent>
         </Sheet>
       </div>

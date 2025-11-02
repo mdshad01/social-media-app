@@ -38,7 +38,7 @@ const Addpost2 = () => {
               className="bg-slate-100 rounded-xl flex-1 p-3 cursor-pointer hover:bg-slate-200 transition-colors">
               <span className="text-gray-500">What&apos;s on your mind?</span>
             </div>
-            <Image src="/emoji.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" />
+            {/* <Image src="/emoji.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" /> */}
           </div>
           {/* POST OPTIONS */}
           <div className="flex items-center justify-between sm:justify-start md:pl-16 md:justify-start sm:gap-6 mt-4 text-black flex-wrap">
