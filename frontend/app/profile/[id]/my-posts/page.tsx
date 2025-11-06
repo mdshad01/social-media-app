@@ -5,6 +5,7 @@ import SuggestedUser from '@/components/Home/Util/SuggestedUser';
 import Feed from '@/components/Profile/util/Feed'
 import { handleAuthRequest } from '@/components/util/apiRequest';
 import { BASE_API_URL } from '@/server';
+import { RootState } from '@/store/store';
 import { User } from '@/type';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
@@ -23,6 +24,8 @@ const MyPostPage = () => {
     };
     getUser();
   }, [user?._id]);
+  // console.log(user?.posts);
+  console.log(userProfile);
   return (
    <div className="flex flex-col">
     <div className="flex gap-4 sm:gap-6 pt-4 sm:pt-6 md:px-2 sm:px-4">

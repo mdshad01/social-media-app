@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 import LeftMenu from "./LeftMenu";
 import Addpost2 from "./Util/Addpost2";
 import SavedPost from "./Util/SavedPost";
+import Stories from "./Util/Stories";
 
 const Home = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ const Home = () => {
         {/* ✅ Feed - Full width on mobile */}
         <div className="w-full md:w-[70%] lg:w-[60%] xl:w-[50%]">
           <div className="flex flex-col gap-0 ">
+            {/* <Stories/> */}
             <Addpost2 />
             <Feed />
           </div>

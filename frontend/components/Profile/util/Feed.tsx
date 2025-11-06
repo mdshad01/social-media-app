@@ -30,9 +30,9 @@ const Feed = ({ userProfile }: Props) => {
       }
     };
     if (userProfile?._id) handleGetUserPost(userProfile._id);
-  }, [dispatch]);
+  }, [userProfile]);
 
-  // console.log(user);
+  console.log(posts);
   if (isLoading) {
     return (
       <div className="flex items-center justify-center w-full h-screen">
