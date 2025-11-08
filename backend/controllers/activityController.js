@@ -1,9 +1,9 @@
-import Comment from "../models/commentModel";
-import Post from "../models/postModel";
-import User from "../models/userModel";
-import catchAsync from "../utils/catchAsync";
+import Comment from "../models/commentModel.js";
+import Post from "../models/postModel.js";
+import User from "../models/userModel.js";
+import catchAsync from "../utils/catchAsync.js";
 
-export const getActivity = catchAsync( async (req,res) => {
+export const getActivity = catchAsync( async (req,res,next) => {
     const userId = req.user._id;
 
     // Calculate 30 days ago
@@ -57,21 +57,37 @@ export const getActivity = catchAsync( async (req,res) => {
     const followerActivities = currentUser.followers.slice(-10).map(follower => ({
         type:"follow",
         user:follower,
-        createdAt:follower.createdAt
+
     }));
 
+    // combine all activity
+
+    const allActivities = [
+        ...commentActivities,
+        ...likeActivities,
+        ...followerActivities
+    ];
 
 
+    // 6. Sort by date (newst first)
 
-    const up = await Post.find({user:userId});
+    allActivities.sort((a,b) =>  new Date(b.createdAt) - new Date(a.createdAt));
 
-    const likes = await up.likes(up.likes.length - 1);
+    // 7. Limit to 100 avtivities
+    const limitedActivities = allActivities.slice(0, 100);
 
-    const comment = await up.comments(up.comment.length - 1);
+    const stats = {
+        totalLikes: likeActivities.length,
+        totalComments: commentActivities.length,
+        totalFollowers: currentUser.followers.length
+    };
 
-    const followers = await User.find({user: {$in: .followers(userPosts.followers.length - 1)}})
-
-    const activity = [...likes,...comment,...followers];
-
-    return activity;
+    res.status(200).json({
+    status: "success",
+    results: limitedActivities.length,
+    data: {
+      activities: limitedActivities,
+      stats
+    }
+  });
 });
