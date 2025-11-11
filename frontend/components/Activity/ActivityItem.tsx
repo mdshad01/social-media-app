@@ -55,7 +55,7 @@ const ActivityItem = ({ activity }: Props) => {
 
   const getTimeAgo = () => {
     try {
-    //   return formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true });
+      //   return formatDistanceToNow(new Date(activity.createdAt), { addSuffix: true });
     } catch {
       return "Recently";
     }
