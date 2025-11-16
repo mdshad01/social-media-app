@@ -47,7 +47,7 @@ export default function RootLayout({
           <div className="w-full h-[8vh] bg-white sm:px-0 md:px-8 lg:px-16 xl:px-24 2xl:px-48 lg:h-[12vh] ">
             <NavbarWrapper />
           </div>
-          <div className="bg-slate-100 sm:px-0 md:px-8 lg:px-16 xl:px-28 2xl:px-64">
+          <div className="bg-[#F4F2F2] sm:px-0 md:px-8 lg:px-16 xl:px-28 2xl:px-64">
             {children}
             <Toaster />
           </div>

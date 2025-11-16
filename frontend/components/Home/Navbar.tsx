@@ -87,7 +87,7 @@ const Navbar = () => {
       {/* Logo */}
       <div
         onClick={() => router.push("/")}
-        className="text-[#1b2356] cursor-pointer flex items-center gap-0 md:w-[20%] justify-start md:justify-center">
+        className="text-[#000000] cursor-pointer flex items-center gap-0 md:w-[20%] justify-start md:justify-center">
         <BiAperture className="w-8 h-8 sm:w-10 sm:h-10" />
         <span className="hidden sm:block text-xl sm:text-2xl md:text-3xl font-bold">Shadsocial.</span>
       </div>

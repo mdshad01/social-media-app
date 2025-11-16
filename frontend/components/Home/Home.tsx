@@ -16,16 +16,12 @@ const Home = () => {
   const router = useRouter();
   const [savePost, setSavePost] = useState<boolean>(false);
 
-  return savePost ? (
-    <div>
-      <SavedPost setSavePost={setSavePost} />
-    </div>
-  ) : (
+  return  (
     <div className="flex flex-col">
       <div className="flex gap-4 sm:gap-6 pt-4 sm:pt-6 md:px-2 sm:px-4">
         {/* ✅ Left Sidebar - Hidden on mobile */}
         <div className="hidden md:block md:w-[30%] lg:w-[20%]">
-          <LeftMenu setSavePost={setSavePost} type="home" />
+          <LeftMenu  type="home" />
         </div>
 
         {/* ✅ Feed - Full width on mobile */}

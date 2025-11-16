@@ -1,10 +1,10 @@
-import ActivityPage from '@/components/Activity/ActivityPage'
+import Activity from '@/components/Activity/Activity'
 import React from 'react'
 
-const page = () => {
+const ActivityPage = () => {
   return (
-    <div><ActivityPage/></div>
+    <div><Activity /></div>
   )
 }
 
-export default page
+export default ActivityPage
