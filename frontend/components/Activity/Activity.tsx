@@ -1,15 +1,46 @@
 "use client";
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import LeftMenu from '../Home/LeftMenu';
-import Addpost2 from '../Home/Util/Addpost2';
-import Feed from '../Home/Feed';
-import RightSidebar from '../Home/RightSidebar';
 import SuggestedUser from '../Home/Util/SuggestedUser';
 import Ad from '../Home/Util/Ad';
 import ActivityStats from './ActivityStats';
+import { BASE_API_URL } from "@/server";
+import axios from "axios";
+import { handleAuthRequest } from "../util/apiRequest";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { setActivity, setActivityStats } from "@/store/activitySlice";
+import ActivityType from './ActivityType';
 
 const Activity = () => {
-    const [first, setfirst] = useState();
+    const [type, setType] = useState<string>("all");
+
+     const { activities, stats } = useSelector(
+    (state: RootState) => state.activity
+  );
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // console.log(activities,stats);
+
+  useEffect(() => {
+    const getActivity = async () => {
+      const getActivityReq = async () =>
+        await axios.get(`${BASE_API_URL}/users/activity`, {
+          withCredentials: true,
+        });
+
+      const result = await handleAuthRequest(getActivityReq, setIsLoading);
+
+      if (result) {
+        dispatch(setActivity(result.data.data.activities));
+        dispatch(setActivityStats(result.data.data.stats));
+      }
+    };
+    getActivity();
+  }, [dispatch]);
+
+  console.log(activities);
   return (
     <div className="flex flex-col">
     <div className="flex gap-4 sm:gap-6 pt-4 sm:pt-6 md:px-2 sm:px-4">
@@ -19,9 +50,9 @@ const Activity = () => {
       </div>
 
       {/* ✅ Feed - Full width on mobile */}
-      <div className="w-full md:w-[70%] lg:w-[60%] xl:w-[50%]">
+      <div className="w-full md:w-[70%] lg:w-[60%] xl:w-[50%]  p-5 bg-white">
         <div className="flex flex-col gap-0 -mt-5">
-          <ActivityStats/>
+          <ActivityType activityType={type} setType={setType}/>
         </div>
       </div>
 

@@ -20,7 +20,7 @@ const Feed = () => {
   const [comment, setComment] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("POSTS", posts);
+  // console.log("POSTS", posts);
 
   useEffect(() => {
     const getPosts = async () => {

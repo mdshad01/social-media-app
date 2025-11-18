@@ -73,3 +73,78 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
 }
+
+// Activity interface
+
+// Posts Activities
+
+interface PostActivity {
+  type: "post";
+  post: {
+    _id: string;
+    caption: string;
+    image?: {
+      url: string;
+      publicId: string;
+    };
+  };
+  createdAt: string;
+}
+
+// Comments Activities
+
+interface CommentActivities {
+  type: "comment";
+  comment: string;
+  post: {
+    image?: {
+      url: string;
+      publicId: string;
+    };
+    _id: string;
+    caption: string;
+    user: string;
+  };
+  createdAt: string;
+}
+
+// likes Activities
+
+interface LikeActivities {
+  type: "like";
+  post: {
+    _id: string;
+    caption: string;
+    image?: {
+      url: string;
+      publicId: string;
+    };
+    user: {
+      _id: string;
+      username: string;
+      profilePicture: string;
+    };
+  };
+}
+
+// Follow Activity
+
+interface FollowActivity {
+  type: "follow";
+  user: {
+    _id: string;
+    username: string;
+    profilePicture: string;
+  };
+  createdAt: string;
+}
+
+// Combine all activity types into one
+export type Activity = PostActivity | CommentActivities | LikeActivities | FollowActivity;
+
+export interface ActivityStats {
+  totalPosts: number;
+  totalComments: number;
+  totalLikes: number;
+  totalFollows: number;
+}
