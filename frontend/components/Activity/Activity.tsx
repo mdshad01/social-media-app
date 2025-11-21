@@ -43,7 +43,7 @@ const Activity = () => {
   console.log(activities);
   return (
     <div className="flex flex-col">
-    <div className="flex gap-4 sm:gap-6 pt-4 sm:pt-6 md:px-2 sm:px-4">
+    <div className="flex gap-4 sm:gap-6 pt-4 sm:pt-6 md:px-2 sm:px-0">
       {/* ✅ Left Sidebar - Hidden on mobile */}
       <div className="hidden md:block md:w-[30%] lg:w-[20%]">
         <LeftMenu type="profile" />

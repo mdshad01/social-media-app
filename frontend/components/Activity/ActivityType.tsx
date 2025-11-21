@@ -22,7 +22,7 @@ const ActivityType = ({ activityType, setType }) => {
     <div className="pt-2">
       <h3 className="py-4 text-xl font-semibold text-gray-600 pl-2">All activity</h3>
       <div>
-        <ul className="flex items-center justify-start gap-3  py-1 ">
+        <ul className="flex items-center justify-start gap-3  py-1">
           {tabs.map((item) => (
             <li
               onClick={() => setType(item.value)}

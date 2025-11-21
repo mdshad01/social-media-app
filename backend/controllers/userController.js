@@ -38,7 +38,7 @@ export const editProfile = catchAsync(async (req, res, next) => {
   const userId = req.user.id;
 
   // Destructure all editable fields
-  const { bio, city, school, work, website } = req.body;
+  const { username,bio, city, school, work, website } = req.body;
 
   // Get uploaded images (from multer's req.files)
   const profilePicture = req.files?.profilePicture?.[0];
@@ -66,6 +66,7 @@ export const editProfile = catchAsync(async (req, res, next) => {
   if (!user) return next(new AppError("User not found", 404));
 
   // Update fields conditionally
+  if(username) user.username = username;
   if (bio) user.bio = bio;
   if (city) user.city = city;
   if (school) user.school = school;

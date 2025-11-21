@@ -22,6 +22,7 @@ const Edit = ({ setIsEdit }: Props) => {
   const [profileImage, setProfileImage] = useState<string | null>(user?.profilePicture || null);
   const [banner, setBanner] = useState<string | null>(user?.backgroundImage || null);
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState(user?.username || "");
   const [bio, setBio] = useState(user?.bio || "");
   const [city, setCity] = useState(user?.city || "");
   const [school, setSchool] = useState(user?.school || "");
@@ -47,7 +48,7 @@ const Edit = ({ setIsEdit }: Props) => {
       newPasswordConfirm !== "";
 
     setHasChanges(changed);
-  }, [profileImage, banner, bio, currentPassword, newPassword, newPasswordConfirm, user]);
+  }, [profileImage, banner, username, bio, currentPassword, newPassword, newPasswordConfirm, user]);
 
   const handleProfileClick = () => {
     if (profileInputRef.current) profileInputRef.current.click();
@@ -77,6 +78,7 @@ const Edit = ({ setIsEdit }: Props) => {
 
   const handleUpdateProfile = async () => {
     const formData = new FormData();
+    if(username) formData.append("username", username);
     if (bio) formData.append("bio", bio);
     if (city) formData.append("city", city);
     if (school) formData.append("school", school);
@@ -212,7 +214,19 @@ const Edit = ({ setIsEdit }: Props) => {
               </div>
             </div>
           </div>
-          {/* Bio Section  */}
+         
+          {/* Name */}
+          <div className="space-y-2">
+            <label className="font-semibold text-gray-700 block">Name</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Enter your name"
+              className="w-full px-4 py-3 rounded-lg bg-slate-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+            />
+          </div>
+           {/* Bio Section  */}
           <div className="space-y-2">
             <label htmlFor="bio" className="font-semibold text-gray-700 block">
               Bio
@@ -225,13 +239,13 @@ const Edit = ({ setIsEdit }: Props) => {
               rows={4}
               className="w-[80%] h-42 px-4 py-3 rounded-lg bg-slate-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
             />
-            <LoadingButton
+            {/* <LoadingButton
               className="bg-blue-600 text-white hover:bg-blue-700 block transition-colors font-medium mt-2"
               isLoading={isLoading}
               onClick={handleUpdateProfile}
               size={"lg"}>
               Change Bio
-            </LoadingButton>
+            </LoadingButton> */}
           </div>
 
           {/* City */}

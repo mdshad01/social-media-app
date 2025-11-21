@@ -38,7 +38,7 @@ const ProfileCard = () => {
         <div className="self-center w-full mb-1">
           <button
             onClick={() => router.push(`/profile/${user?._id}`)}
-            className="bg-[#1a2254] text-white text-xs p-2 rounded-md w-full">
+            className="bg-black text-white text-xs p-2 rounded-md font-semibold w-full">
             My Profile
           </button>
         </div>
