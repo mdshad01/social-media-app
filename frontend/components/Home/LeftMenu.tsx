@@ -55,7 +55,7 @@ const LeftMenu = ({type}: {type: "home" | "profile"}) => {
           <Image src="/lists.png" alt="" height={24} width={24} className="w-5 h-5" />
           <span className="font-medium">Lists</span>
         </Link>
-        <Link href="/" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
+        <Link href="/setting" className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100">
           <Image src="/settings.png" alt="" height={24} width={24} className="w-5 h-5" />
           <span className="font-medium">Settings</span>
         </Link>
