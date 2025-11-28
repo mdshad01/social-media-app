@@ -83,7 +83,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="flex md:px-3 px-2 pt-3 md:pt-0 items-center w-full h-full bg-white">
+    <nav className="flex lg:h-[10vh] md:px-3 px-2 pt-3 md:pt-0 items-center w-full h-full bg-white ">
       {/* Logo */}
       <div
         onClick={() => router.push("/")}

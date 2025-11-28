@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
-import { Lobster, Roboto } from "next/font/google";
+import { Inter, Lobster, Roboto } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import ClientProvider from "@/HOC/ClientProvider";
 import Navbar from "@/components/Home/Navbar";
 import NavbarWrapper from "@/components/NavbarWrapper";
+import MainContainer from "@/components/MainContainer";
 
 const roboto = Roboto({
+  weight: ["100", "300", "400", "500", "700", "900"],
+  subsets: ["latin"],
+});
+
+const inter = Inter({
   weight: ["100", "300", "400", "500", "700", "900"],
   subsets: ["latin"],
 });
@@ -42,13 +48,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} ${lobster.variable} font-sans`}>
+      <body className={`${inter.className} ${lobster.variable}`}>
         <ClientProvider>
-          <div className="w-full h-[8vh] bg-white sm:px-0 md:px-8 lg:px-16 xl:px-24 2xl:px-48 lg:h-[12vh] ">
-            <NavbarWrapper />
-          </div>
-          <div className="bg-[#F4F2F2] sm:px-0 md:px-8 lg:px-16 xl:px-28 2xl:px-64">
-            {children}
+          <NavbarWrapper />
+          <div>
+            <MainContainer>{children}</MainContainer>
             <Toaster />
           </div>
         </ClientProvider>
