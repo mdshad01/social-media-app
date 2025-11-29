@@ -3,13 +3,18 @@ import { RootState } from "@/store/store";
 import { Bell, Palette, ShieldAlert, ShieldCheck, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { BiLockAlt } from "react-icons/bi";
 import { FaBell, FaShieldAlt, FaUser } from "react-icons/fa";
 import { FaShield } from "react-icons/fa6";
 import { MdPrivacyTip, MdSecurity } from "react-icons/md";
 import { RiShieldUserLine } from "react-icons/ri";
 import { useSelector } from "react-redux";
+
+type Props = {
+  activeTab: string;
+  setActiveTab: Dispatch<SetStateAction<string>>;
+};
 
 const tabs = [
   { value: "account", label: "Account", icon: <User size={32} /> },
@@ -19,7 +24,7 @@ const tabs = [
   { value: "appearence", label: "Appearence", icon: <Palette size={32} /> },
 ];
 
-const Sidebar = ({activeTab}) => {
+const Sidebar = ({ activeTab, setActiveTab }: Props) => {
   const user = useSelector((state: RootState) => state.auth.user);
   return (
     <div className="flex flex-col gap-3  bg-white ">
@@ -33,12 +38,16 @@ const Sidebar = ({activeTab}) => {
         />
         <h2 className="text-3xl text-gray-900 font-semibold">Settings</h2>
       </div>
-      <ul className="py-3 pl-7 bg-white h-[92vh] lg:h-[92vh] shadow-xs text-gray-700 flex flex-col gap-3 text-sm">
+      <ul className="py-3 pl-0 bg-white h-[92vh] lg:h-[92vh] shadow-xs text-gray-700 flex flex-col gap-3 text-sm">
         {tabs.map((item, index) => (
-          <li key={index} className={`flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100 
-  ${activeTab === "account" ? "bg-blue-100 border-l-4 border-blue-500" : ""}`}>
+          <li
+            onClick={() => setActiveTab(item.value)}
+            key={index}
+            className={`flex items-center gap-4 p-2 py-4  rounded hover:bg-slate-100 
+  ${activeTab === item.value ? "text-blue-600 border-l-4 border-blue-500" : "border-transparent border-l-4"}`}
+          >
             {item.icon}
-            <span className="font-medium text-xl text-gray-600">
+            <span className="font-medium text-xl text-inherit">
               {item.label}
             </span>
           </li>
@@ -49,7 +58,8 @@ const Sidebar = ({activeTab}) => {
   );
 };
 
-{/* <li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
+{
+  /* <li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
   <User size={32} />
 
   <span className="font-medium text-xl text-gray-600">Account</span>
@@ -72,5 +82,6 @@ const Sidebar = ({activeTab}) => {
 <li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
   <Palette size={32} />
   <span className="font-medium text-xl text-gray-600">Appearence</span>
-</li> */}
+</li> */
+}
 export default Sidebar;
