@@ -1,3 +1,5 @@
+import cloudinary from "cloudinary";
+import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
@@ -150,3 +152,65 @@ export const getMe = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+export const deactivateAccount  = catchAsync(async (req,res,next) => {
+  const userId = req.user._id
+
+  const user = await User.findById(userId);
+
+  if(!user) return next(new AppError("User not found",404));
+
+  // mark as delete
+  user.isDeleted = true;
+  user.deletionType = "soft";
+  user.deletionScheduledAt = new Date();
+  user.deletionExecuteAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+  await user.save({validateBeforeSave:true});
+
+  res.status(200).json({
+    status:"success",
+    message:"Account deactivated. You have 30 days to reactivate.",
+    data:{
+      deletionExecuteAt:user.deletionExecuteAt,
+    }
+  })
+});
+
+export const deleteAccountPermanently = catchAsync(async (req,res,next) => {
+  const userId = req.user._id;
+  const {password} = req.body;
+
+  const user = await User.findById(userId);
+  if(!user) return next(new AppError("User not found",404));
+
+  const isPasswordCorrect = await user.correctPassword(password, user.password);
+
+  if(!isPasswordCorrect) {
+    return next(new AppError("Incorrect passowrd"));
+  }
+
+  const userPosts = await Post.find({user:userId});
+
+  
+  for(const post of userPosts) {
+    
+    // delete image from cloudinary
+
+    if(post.image?.publicId) {
+      try {
+        await cloudinary.v2.uploader.destroy(post.image.publicId);
+      } catch (e) {
+        console.error("Failed to delete image",e);
+      }
+    }
+    
+    // delete videos from cloudinary
+    
+    if(post.video?.publicId){
+      
+    }
+  }
+
+
+})

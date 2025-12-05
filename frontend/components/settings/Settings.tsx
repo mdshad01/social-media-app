@@ -9,10 +9,10 @@ const Settings = () => {
   return (
     <div className="flex flex-col ">
       <div className="flex">
-        <div className="hidden md:block md:w-[30%] lg:w-[20%]">
+        <div className="hidden md:block md:w-[30%] lg:w-[25%]">
           <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
-        <div className="">
+        <div className="w-full">
           <SettingContext activeTab={activeTab} />
         </div>
       </div>

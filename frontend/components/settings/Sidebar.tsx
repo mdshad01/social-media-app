@@ -27,7 +27,7 @@ const tabs = [
 const Sidebar = ({ activeTab, setActiveTab }: Props) => {
   const user = useSelector((state: RootState) => state.auth.user);
   return (
-    <div className="flex flex-col gap-3  bg-white ">
+    <div className="flex flex-col gap-3 bg-white h-[92vh] border-l-[1px] border-black/10">
       <div className="flex mt-6 pl-7 gap-4">
         <Image
           src={user?.profilePicture || "/noAvatar.png"}
@@ -38,17 +38,24 @@ const Sidebar = ({ activeTab, setActiveTab }: Props) => {
         />
         <h2 className="text-3xl text-gray-900 font-semibold">Settings</h2>
       </div>
-      <ul className="py-3 pl-0 bg-white h-[92vh] lg:h-[92vh] shadow-xs text-gray-700 flex flex-col gap-3 text-sm">
+      <ul className="py-3 pl-0 bg-white text-gray-700 flex flex-col gap-3 text-sm">
         {tabs.map((item, index) => (
           <li
             onClick={() => setActiveTab(item.value)}
             key={index}
             className={`flex items-center gap-4 p-2 py-4  rounded hover:bg-slate-100 
-  ${activeTab === item.value ? "text-blue-600 border-l-4 border-blue-500" : "border-transparent border-l-4"}`}
+  ${
+    activeTab === item.value
+      ? "text-blue-600 border-l-4 border-blue-500"
+      : "border-transparent border-l-4"
+  }`}
           >
-            {item.icon}
-            <span className="font-medium text-xl text-inherit">
-              {item.label}
+            <span className="flex gap-4 pl-4">
+              {item.icon}
+
+              <span className="font-medium text-xl text-inherit">
+                {item.label}
+              </span>
             </span>
           </li>
         ))}

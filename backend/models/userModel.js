@@ -106,6 +106,23 @@ const UserSchema = new Schema(
       type: Date,
       default: null,
     },
+    isDeleted:{
+      type:Boolean,
+      default:false
+    },
+    deletionType:{
+      type:String,
+      enum:["soft","hard"],
+      default:null,
+    },
+    deletionScheduledAt: {
+      type: Date,
+      default: null,
+    },
+    deletionExecuteAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

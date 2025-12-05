@@ -78,7 +78,7 @@ const Edit = ({ setIsEdit }: Props) => {
 
   const handleUpdateProfile = async () => {
     const formData = new FormData();
-    if(username) formData.append("username", username);
+    if (username) formData.append("username", username);
     if (bio) formData.append("bio", bio);
     if (city) formData.append("city", city);
     if (school) formData.append("school", school);
@@ -214,7 +214,7 @@ const Edit = ({ setIsEdit }: Props) => {
               </div>
             </div>
           </div>
-         
+
           {/* Name */}
           <div className="space-y-2">
             <label className="font-semibold text-gray-700 block">Name</label>
@@ -226,7 +226,7 @@ const Edit = ({ setIsEdit }: Props) => {
               className="w-full px-4 py-3 rounded-lg bg-slate-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
-           {/* Bio Section  */}
+          {/* Bio Section  */}
           <div className="space-y-2">
             <label htmlFor="bio" className="font-semibold text-gray-700 block">
               Bio
