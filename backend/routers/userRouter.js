@@ -10,7 +10,7 @@ import {
   verifyAccount,
 } from "../controllers/authController.js";
 import isAuthenticated from "../middleware/isAuthenticated.js";
-import { editProfile, followUnfollow, getMe, getProfile, suggestedUser } from "../controllers/userController.js";
+import { deactivateAccount, deleteAccountPermanently, editProfile, followUnfollow, getMe, getProfile, reactivateAccount, suggestedUser } from "../controllers/userController.js";
 import upload from "../middleware/multer.js";
 import { getActivity } from "../controllers/activityController.js";
 
@@ -42,5 +42,8 @@ userRouter.get("/suggested-user", isAuthenticated, suggestedUser);
 userRouter.post("/follow-unfollow/:id", isAuthenticated, followUnfollow);
 userRouter.get("/me", isAuthenticated, getMe);
 userRouter.get("/activity",isAuthenticated,getActivity);
+userRouter.post("/deactivate-account",isAuthenticated,deactivateAccount);
+userRouter.delete("/delete-account",isAuthenticated,deleteAccountPermanently);
+userRouter.post("/reactive-account",isAuthenticated,reactivateAccount);
 
 export default userRouter;

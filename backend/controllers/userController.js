@@ -5,6 +5,7 @@ import AppError from "../utils/appError.js";
 import catchAsync from "../utils/catchAsync.js";
 import { uploadToCloudinary } from "../utils/cloudinary.js";
 import getDataUri from "../utils/datauri.js";
+import Comment from "../models/commentModel.js";
 
 export const getProfile = catchAsync(async (req, res, next) => {
   const { id } = req.params;
@@ -208,9 +209,109 @@ export const deleteAccountPermanently = catchAsync(async (req,res,next) => {
     // delete videos from cloudinary
     
     if(post.video?.publicId){
-      
+      try {
+        await cloudinary.v2.uploader.destroy(post.video.publicId,{resource_type:"video"});
+        
+      } catch (error) {
+        console.error("Failed to delete video", error);
+      }
     }
   }
 
+  // Delete all post
+  await Post.deleteMany({user:userId});
+
+  // Delete all user's comments
+  await Comment.deleteMany({user:userId});
+
+  // remove user from all post likes
+  await Post.updateMany(
+    {likes:{user:userId}},
+    {$pull:{likes:userId}}
+  );
+
+  // remove user from all comments likes
+  await Comment.updateMany(
+    {likes:{user:userId}},
+    {$pull:{likes:userId}}
+  );
+
+  // Remove user from followers/following relationships
+
+  await User.updateMany(
+    {followers:userId},
+    {$pull:{followers:userId}}
+  );
+
+  await User.updateMany(
+    {following:userId},
+    {$pull:{following:userId}}
+  );
+
+  // Remove user from saved posts
+
+  await User.updateMany(
+    {savedPosts:{$in:user.posts}},
+    {$pull:{savedPosts:{$in:user.posts}}}
+  );
+
+  // Delete User's profile and background image from cloudinary
+  if(user.profilePicture) {
+   try {
+      // Extract publicId from URL if needed
+      const publicId = user.profilePicture.split("/").pop().split(".")[0];
+      await cloudinary.v2.uploader.destroy(publicId);
+    } catch (error) {
+      console.error("Failed to delete profile picture:", error);
+    }
+  }
+  
+  if (user.backgroundImage) {
+    try {
+      const publicId = user.backgroundImage.split("/").pop().split(".")[0];
+      await cloudinary.v2.uploader.destroy(publicId);
+    } catch (error) {
+      console.error("Failed to delete background image:", error);
+    }
+  }
+
+  // Finally, delete the user
+  await User.findByIdAndDelete(userId);
+
+  res.status(200).json({
+    status: "success",
+    message: "Account permanently deleted",
+  });
 
 })
+
+
+export const reactivateAccount = catchAsync(async (req,res,next) => {
+  const userId = req.user._id;
+
+  const user = await User.findById(userId);
+  if(!user) return next(new AppError("User not found", 404));
+
+  if(!user.isDeleted || user.deletionType !== "soft") {
+    return next(new AppError("Account is not deactivated",400));
+  }
+
+  // check if 30 days have passed
+
+  if(new Date() > user.deletionExecuteAt) return next(new AppError("Recovery period has expired",400));
+
+  // Reactivate account
+  user.isDeleted = false;
+  user.deletionType = null;
+  user.deletionScheduledAt = null;
+  user.deletionExecuteAt = null;
+
+  await User.save({validateBeforeSave:false});
+
+    res.status(200).json({
+    status: "success",
+    message: "Account reactivated successfully",
+    data: { user },
+  });
+
+});
