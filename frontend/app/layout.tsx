@@ -1,62 +1,28 @@
-import type { Metadata } from "next";
-import { Inter, Lobster, Roboto } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import ClientProvider from "@/HOC/ClientProvider";
-import Navbar from "@/components/Home/Navbar";
-import NavbarWrapper from "@/components/NavbarWrapper";
-import MainContainer from "@/components/MainContainer";
+import Sidebar from "@/components/settings/Sidebar";
+import SettingsNavbar from "@/components/settings/SettingsNavbar";
 
-const roboto = Roboto({
-  weight: ["100", "300", "400", "500", "700", "900"],
-  subsets: ["latin"],
-});
-
-const inter = Inter({
-  weight: ["100", "300", "400", "500", "700", "900"],
-  subsets: ["latin"],
-});
-
-const lobster = Lobster({
-  weight: ["400"],
-  variable: "--font-lobster",
-  subsets: ["latin"],
-});
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
-export const metadata: Metadata = {
-  title: "ShadSocial - A social media webapp",
-  description: "A social media webapp built with Next.js",
-  icons: {
-    icon: "/logo.svg",
-  },
-};
-
-export default function RootLayout({
+export default function SettingsLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} ${lobster.variable}`}>
-        <ClientProvider>
-          <NavbarWrapper />
-          <div>
-            <MainContainer>{children}</MainContainer>
-            <Toaster />
-          </div>
-        </ClientProvider>
-      </body>
-    </html>
+    <div className="w-full h-screen bg-[#F4F2F2]">
+      {/* Settings Navbar */}
+      <div className="w-full bg-white border-b-[1px] border-black/10 px-8">
+        <SettingsNavbar />
+      </div>
+
+      {/* Main Content with Sidebar */}
+      <div className="flex h-[calc(100vh-80px)]">
+        {/* ✅ Sidebar - No props needed! */}
+        <div className="hidden md:block md:w-[30%] lg:w-[25%]">
+          <Sidebar />
+        </div>
+
+        {/* Content Area */}
+        <div className="w-full overflow-y-auto">{children}</div>
+      </div>
+    </div>
   );
 }

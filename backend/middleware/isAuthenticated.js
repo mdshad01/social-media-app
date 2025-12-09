@@ -16,7 +16,7 @@ const isAuthenticated = catchAsync(async (req, res, next) => {
     next(new AppError("The user belonging to this token does not exist.", 401));
   }
 
-  if (currentUser.isDeleted) {
+  if (currentUser.isDeleted && !req.path.includes('/reactivate-account')) {
     return next(new AppError("This account has been deactivated", 403));
   }
   req.user = currentUser;

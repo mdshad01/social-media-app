@@ -182,7 +182,7 @@ export const deleteAccountPermanently = catchAsync(async (req,res,next) => {
   const userId = req.user._id;
   const {password} = req.body;
 
-  const user = await User.findById(userId);
+  const user = await User.findById(userId).select("+password");
   if(!user) return next(new AppError("User not found",404));
 
   const isPasswordCorrect = await user.correctPassword(password, user.password);
@@ -226,13 +226,13 @@ export const deleteAccountPermanently = catchAsync(async (req,res,next) => {
 
   // remove user from all post likes
   await Post.updateMany(
-    {likes:{user:userId}},
-    {$pull:{likes:userId}}
+    { likes: userId },  // Find posts where userId is in likes array
+    { $pull: { likes: userId } }  // Remove userId from likes array
   );
 
   // remove user from all comments likes
   await Comment.updateMany(
-    {likes:{user:userId}},
+    {likes:userId},
     {$pull:{likes:userId}}
   );
 
@@ -278,6 +278,13 @@ export const deleteAccountPermanently = catchAsync(async (req,res,next) => {
   // Finally, delete the user
   await User.findByIdAndDelete(userId);
 
+  res.cookie("jwt","",{
+    expires:new Date(Date.now() + 10 * 1000),
+    httpOnly:true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+  });
+
   res.status(200).json({
     status: "success",
     message: "Account permanently deleted",
@@ -306,7 +313,7 @@ export const reactivateAccount = catchAsync(async (req,res,next) => {
   user.deletionScheduledAt = null;
   user.deletionExecuteAt = null;
 
-  await User.save({validateBeforeSave:false});
+  await user.save({validateBeforeSave:false});
 
     res.status(200).json({
     status: "success",

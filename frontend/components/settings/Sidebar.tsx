@@ -3,35 +3,53 @@ import { RootState } from "@/store/store";
 import { Bell, Palette, ShieldAlert, ShieldCheck, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Dispatch, SetStateAction } from "react";
-import { BiLockAlt } from "react-icons/bi";
-import { FaBell, FaShieldAlt, FaUser } from "react-icons/fa";
-import { FaShield } from "react-icons/fa6";
-import { MdPrivacyTip, MdSecurity } from "react-icons/md";
-import { RiShieldUserLine } from "react-icons/ri";
+import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
 
-type Props = {
-  activeTab: string;
-  setActiveTab: Dispatch<SetStateAction<string>>;
-};
-
 const tabs = [
-  { value: "account", label: "Account", icon: <User size={32} /> },
-  { value: "privacy", label: "Privacy", icon: <ShieldAlert size={32} /> },
-  { value: "security", label: "Security", icon: <ShieldCheck size={32} /> },
-  { value: "notifications", label: "Notifications", icon: <Bell size={32} /> },
-  { value: "appearence", label: "Appearence", icon: <Palette size={32} /> },
+  {
+    value: "account",
+    label: "Account",
+    icon: <User size={32} />,
+    href: "/settings/account",
+  },
+  {
+    value: "privacy",
+    label: "Privacy",
+    icon: <ShieldAlert size={32} />,
+    href: "/settings/privacy",
+  },
+  {
+    value: "security",
+    label: "Security",
+    icon: <ShieldCheck size={32} />,
+    href: "/settings/security",
+  },
+  {
+    value: "notifications",
+    label: "Notifications",
+    icon: <Bell size={32} />,
+    href: "/settings/notifications",
+  },
+  {
+    value: "appearance",
+    label: "Appearance",
+    icon: <Palette size={32} />,
+    href: "/settings/appearance",
+  },
 ];
 
-const Sidebar = ({ activeTab, setActiveTab }: Props) => {
+const Sidebar = () => {
+  // ✅ No props needed!
   const user = useSelector((state: RootState) => state.auth.user);
+  const pathname = usePathname(); // ✅ Get current route
+
   return (
-    <div className="flex flex-col gap-3 bg-white h-[92vh] border-l-[1px] border-black/10">
+    <div className="flex flex-col gap-3 bg-white h-[92vh] border-r-[1px] border-black/10">
       <div className="flex mt-6 pl-7 gap-4">
         <Image
           src={user?.profilePicture || "/noAvatar.png"}
-          alt=""
+          alt="Profile"
           height={40}
           width={40}
           className="rounded-full w-10 h-10"
@@ -39,56 +57,33 @@ const Sidebar = ({ activeTab, setActiveTab }: Props) => {
         <h2 className="text-3xl text-gray-900 font-semibold">Settings</h2>
       </div>
       <ul className="py-3 pl-0 bg-white text-gray-700 flex flex-col gap-3 text-sm">
-        {tabs.map((item, index) => (
-          <li
-            onClick={() => setActiveTab(item.value)}
-            key={index}
-            className={`flex items-center gap-4 p-2 py-4  rounded hover:bg-slate-100 
-  ${
-    activeTab === item.value
-      ? "text-blue-600 border-l-4 border-blue-500"
-      : "border-transparent border-l-4"
-  }`}
-          >
-            <span className="flex gap-4 pl-4">
-              {item.icon}
+        {tabs.map((item, index) => {
+          // ✅ Check if current route matches this tab
+          const isActive = pathname.startsWith(item.href);
 
-              <span className="font-medium text-xl text-inherit">
-                {item.label}
-              </span>
-            </span>
-          </li>
-        ))}
+          return (
+            <Link href={item.href} key={index}>
+              <li
+                className={`flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100 cursor-pointer
+                  ${
+                    isActive
+                      ? "text-blue-600 border-l-4 border-blue-500"
+                      : "border-transparent border-l-4"
+                  }`}
+              >
+                <span className="flex gap-4 pl-4">
+                  {item.icon}
+                  <span className="font-medium text-xl text-inherit">
+                    {item.label}
+                  </span>
+                </span>
+              </li>
+            </Link>
+          );
+        })}
       </ul>
-      {/* <LeftSidebar /> */}
     </div>
   );
 };
 
-{
-  /* <li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
-  <User size={32} />
-
-  <span className="font-medium text-xl text-gray-600">Account</span>
-</li>
-<li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
-  <ShieldAlert size={32} />
-  <span className="font-medium text-xl text-gray-600">Privacy</span>
-</li>
-<li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
-  <ShieldCheck size={32} />
-
-  <span className="font-medium text-xl text-gray-600">Security</span>
-</li>
-<li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
-  <Bell size={32} />
-  <span className="font-medium text-xl text-gray-600">
-    Notifications
-  </span>
-</li>
-<li className="flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100">
-  <Palette size={32} />
-  <span className="font-medium text-xl text-gray-600">Appearence</span>
-</li> */
-}
 export default Sidebar;

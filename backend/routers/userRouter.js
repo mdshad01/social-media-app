@@ -44,6 +44,6 @@ userRouter.get("/me", isAuthenticated, getMe);
 userRouter.get("/activity",isAuthenticated,getActivity);
 userRouter.post("/deactivate-account",isAuthenticated,deactivateAccount);
 userRouter.delete("/delete-account",isAuthenticated,deleteAccountPermanently);
-userRouter.post("/reactive-account",isAuthenticated,reactivateAccount);
+userRouter.post("/reactivate-account",isAuthenticated,reactivateAccount);
 
 export default userRouter;
