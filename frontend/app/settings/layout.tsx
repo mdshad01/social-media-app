@@ -1,15 +1,23 @@
-import React from "react";
+import Sidebar from "@/components/settings/Sidebar";
+import SettingsNavbar from "@/components/settings/SettingsNavbar";
 
-const layout = ({
+export default function SettingsLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) => {
-  return <div>
-    <div className="w-full">
-    {children}
-    </div>
-    </div>;
-};
+}) {
+  return (
+    <div className="w-full h-screen bg-[#F4F2F2]">
+      {/* Main Content with Sidebar */}
+      <div className="flex h-[calc(100vh-80px)]">
+        {/* ✅ Sidebar - No props needed! */}
+        <div className="hidden md:block md:w-[30%] lg:w-[25%]">
+          <Sidebar />
+        </div>
 
-export default layout;
+        {/* Content Area */}
+        <div className="w-full overflow-y-auto">{children}</div>
+      </div>
+    </div>
+  );
+}

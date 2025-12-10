@@ -1,3 +1,4 @@
+"use client";
 import PasswordInput from "@/components/Auth/PasswordInput";
 import LoadingButton from "@/components/Helper/LoadingButton";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,7 +9,15 @@ import { RootState } from "@/store/store";
 import axios from "axios";
 import { Camera, X } from "lucide-react";
 import Image from "next/image";
-import React, { ChangeEvent, Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
@@ -19,8 +28,12 @@ type Props = {
 const Edit = ({ setIsEdit }: Props) => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
-  const [profileImage, setProfileImage] = useState<string | null>(user?.profilePicture || null);
-  const [banner, setBanner] = useState<string | null>(user?.backgroundImage || null);
+  const [profileImage, setProfileImage] = useState<string | null>(
+    user?.profilePicture || null
+  );
+  const [banner, setBanner] = useState<string | null>(
+    user?.backgroundImage || null
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState(user?.username || "");
   const [bio, setBio] = useState(user?.bio || "");
@@ -48,7 +61,16 @@ const Edit = ({ setIsEdit }: Props) => {
       newPasswordConfirm !== "";
 
     setHasChanges(changed);
-  }, [profileImage, banner, username, bio, currentPassword, newPassword, newPasswordConfirm, user]);
+  }, [
+    profileImage,
+    banner,
+    username,
+    bio,
+    currentPassword,
+    newPassword,
+    newPasswordConfirm,
+    user,
+  ]);
 
   const handleProfileClick = () => {
     if (profileInputRef.current) profileInputRef.current.click();
@@ -93,7 +115,9 @@ const Edit = ({ setIsEdit }: Props) => {
     }
 
     const updateProfileReq = async () =>
-      await axios.post(`${BASE_API_URL}/users/edit-profile`, formData, { withCredentials: true });
+      await axios.post(`${BASE_API_URL}/users/edit-profile`, formData, {
+        withCredentials: true,
+      });
 
     const result = await handleAuthRequest(updateProfileReq, setIsLoading);
     if (result) {
@@ -112,7 +136,9 @@ const Edit = ({ setIsEdit }: Props) => {
     };
 
     const updatePassReq = async () =>
-      await axios.post(`${BASE_API_URL}/users/change-password`, data, { withCredentials: true });
+      await axios.post(`${BASE_API_URL}/users/change-password`, data, {
+        withCredentials: true,
+      });
 
     const result = await handleAuthRequest(updatePassReq, setIsLoading);
 
@@ -123,7 +149,9 @@ const Edit = ({ setIsEdit }: Props) => {
   };
   const handleDiscard = () => {
     if (hasChanges) {
-      const confirm = window.confirm("You have unsaved changes. Are you sure you want to discard them?");
+      const confirm = window.confirm(
+        "You have unsaved changes. Are you sure you want to discard them?"
+      );
       if (!confirm) return;
     }
     // Reset all fields to original values
@@ -150,7 +178,8 @@ const Edit = ({ setIsEdit }: Props) => {
           <button
             onClick={() => setIsEdit((prev) => !prev)}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            disabled={isLoading}>
+            disabled={isLoading}
+          >
             <X className="w-6 h-6 text-gray-600" />
           </button>
         </div>
@@ -161,10 +190,17 @@ const Edit = ({ setIsEdit }: Props) => {
         <div className="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
           {/* BG image */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">Background Image</label>
+            <label className="font-semibold text-gray-700 block">
+              Background Image
+            </label>
             <div className="relative w-[80%] h-60 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg overflow-hidden group">
               {banner ? (
-                <Image src={banner} alt="Background" fill className=" object-cover" />
+                <Image
+                  src={banner}
+                  alt="Background"
+                  fill
+                  className=" object-cover"
+                />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white text-lg">
                   No background image
@@ -172,7 +208,8 @@ const Edit = ({ setIsEdit }: Props) => {
               )}
               <button
                 onClick={handleBannerClick}
-                className="absolute inset-0 bg-black/30 bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                className="absolute inset-0 bg-black/30 bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+              >
                 <div className="flex flex-col items-center text-white">
                   <Camera className="w-12 h-12 mb-2" />
                   <span className="text-sm font-medium">Change Background</span>
@@ -190,12 +227,15 @@ const Edit = ({ setIsEdit }: Props) => {
 
           {/* Profile Picture Section */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">Profile Picture</label>
+            <label className="font-semibold text-gray-700 block">
+              Profile Picture
+            </label>
             <div className="flex items-center gap-6">
               <div className="">
                 <div
                   onClick={handleProfileClick}
-                  className="relative w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-lg group">
+                  className="relative w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-lg group"
+                >
                   <Avatar className="w-36 h-36">
                     <AvatarImage src={profileImage || ""} />
                     <AvatarFallback>
@@ -298,7 +338,9 @@ const Edit = ({ setIsEdit }: Props) => {
 
           {/* Password Change Section */}
           <div className="pt-6 border-t border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Change Password</h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Change Password
+            </h3>
             <form action="" className="" onSubmit={handlePasswordChange}>
               <div className="space-y-4">
                 <div className="w-[90%] md:w-[80%] lg:w-[55%]">
@@ -335,7 +377,8 @@ const Edit = ({ setIsEdit }: Props) => {
                   <LoadingButton
                     isLoading={isLoading}
                     type="submit"
-                    className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium">
+                    className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium"
+                  >
                     Change Password
                   </LoadingButton>
                 </div>
@@ -348,14 +391,16 @@ const Edit = ({ setIsEdit }: Props) => {
           <button
             onClick={handleDiscard}
             disabled={isLoading}
-            className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+            className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
             Cancel
           </button>
           <LoadingButton
             isLoading={isLoading}
             size={"lg"}
             onClick={handleUpdateProfile}
-            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium">
+            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium"
+          >
             Save Changes
           </LoadingButton>
         </div>

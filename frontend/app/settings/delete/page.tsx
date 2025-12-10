@@ -1,9 +1,12 @@
-import React from 'react'
+import DeleteAccountModal from "@/components/settings/Content/util/DeleteAccountModal";
+import React from "react";
 
 const DeletePage = () => {
-    return (
-        <div>DeletePage</div>
-    )
-}
+  return (
+    <div>
+      <DeleteAccountModal />
+    </div>
+  );
+};
 
-export default DeletePage
+export default DeletePage;
