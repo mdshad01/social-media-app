@@ -23,7 +23,11 @@ const PostCard = ({ post, user }: Props) => {
   const [commButton, setCommButton] = useState(false);
 
   const handleLikeOrDislike = async (id: string) => {
-    const result = await axios.post(`${BASE_API_URL}/posts/like-dislike/${id}`, {}, { withCredentials: true });
+    const result = await axios.post(
+      `${BASE_API_URL}/posts/like-dislike/${id}`,
+      {},
+      { withCredentials: true }
+    );
     if (result.data.status == "success") {
       if (user?._id) {
         dispatch(likeOrDislike({ postId: id, userId: user?._id }));
@@ -50,7 +54,11 @@ const PostCard = ({ post, user }: Props) => {
 
   const handleRSVP = async (postId: string) => {
     try {
-      const result = await axios.post(`${BASE_API_URL}/posts/event/rsvp/${postId}`, {}, { withCredentials: true });
+      const result = await axios.post(
+        `${BASE_API_URL}/posts/event/rsvp/${postId}`,
+        {},
+        { withCredentials: true }
+      );
       if (result.data.status === "success") {
         toast.success(result.data.message);
         router.refresh();
@@ -63,19 +71,25 @@ const PostCard = ({ post, user }: Props) => {
   if (!post) return null;
 
   return (
-    <div className="flex flex-col gap-4 bg-white py-5 rounded-md">
+    <div className="flex flex-col gap-4 bg-card py-5 rounded-md">
       {/* USER */}
       <div className="flex items-center justify-between px-4">
         <div className="flex items-center gap-4">
           <Image
             onClick={() => router.push(`/profile/${post?.user?._id}`)}
-            src={post?.user?.profilePicture || "https://images.pexels.com/photos/32409117/pexels-photo-32409117.jpeg"}
+            src={
+              post?.user?.profilePicture ||
+              "https://images.pexels.com/photos/32409117/pexels-photo-32409117.jpeg"
+            }
             alt=""
             width={40}
             height={40}
             className="w-10 h-10 rounded-full object-cover cursor-pointer"
           />
-          <span onClick={() => router.push(`/profile/${post?.user?._id}`)} className="font-medium cursor-pointer">
+          <span
+            onClick={() => router.push(`/profile/${post?.user?._id}`)}
+            className="font-medium cursor-pointer"
+          >
             {post?.user?.username}
           </span>
         </div>
@@ -103,7 +117,11 @@ const PostCard = ({ post, user }: Props) => {
         {/* VIDEO POST */}
         {post?.video?.url && (
           <div className="w-full relative overflow-hidden bg-black">
-            <video src={post.video.url} controls className="w-full h-auto max-h-[700px]" />
+            <video
+              src={post.video.url}
+              controls
+              className="w-full h-auto max-h-[700px]"
+            />
           </div>
         )}
 
@@ -112,8 +130,12 @@ const PostCard = ({ post, user }: Props) => {
           <div className="px-4 space-y-2">
             <p className="font-semibold mb-3">{post.poll.question}</p>
             {post.poll.options.map((option, index) => {
-              const totalVotes = post.poll!.options.reduce((sum, opt) => sum + opt.votes.length, 0);
-              const percentage = totalVotes > 0 ? (option.votes.length / totalVotes) * 100 : 0;
+              const totalVotes = post.poll!.options.reduce(
+                (sum, opt) => sum + opt.votes.length,
+                0
+              );
+              const percentage =
+                totalVotes > 0 ? (option.votes.length / totalVotes) * 100 : 0;
               const hasVoted = user?._id && option.votes.includes(user._id);
 
               return (
@@ -122,7 +144,8 @@ const PostCard = ({ post, user }: Props) => {
                   onClick={() => handleVoteOnPoll(post._id, index)}
                   className={`w-full p-3 border rounded-lg hover:bg-gray-50 transition-colors ${
                     hasVoted ? "bg-blue-50 border-blue-500" : ""
-                  }`}>
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-medium text-left">{option.text}</span>
                     <span className="text-sm text-gray-500">
@@ -132,7 +155,9 @@ const PostCard = ({ post, user }: Props) => {
                   {totalVotes > 0 && (
                     <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                       <div
-                        className={`h-full transition-all ${hasVoted ? "bg-blue-500" : "bg-gray-400"}`}
+                        className={`h-full transition-all ${
+                          hasVoted ? "bg-blue-500" : "bg-gray-400"
+                        }`}
                         style={{ width: `${percentage}%` }}
                       />
                     </div>
@@ -140,7 +165,9 @@ const PostCard = ({ post, user }: Props) => {
                 </button>
               );
             })}
-            <p className="text-sm text-gray-500 mt-2">Total votes: {totalVotes}</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Total votes: {totalVotes}
+            </p>
           </div>
         )}
 
@@ -178,9 +205,12 @@ const PostCard = ({ post, user }: Props) => {
                   user?._id && post.event.attendees.includes(user._id)
                     ? "bg-green-500 text-white hover:bg-green-600"
                     : "bg-blue-500 text-white hover:bg-blue-600"
-                }`}>
-                {user?._id && post.event.attendees.includes(user._id) ? "✓ Going" : "RSVP"} (
-                {post.event.attendees.length})
+                }`}
+              >
+                {user?._id && post.event.attendees.includes(user._id)
+                  ? "✓ Going"
+                  : "RSVP"}{" "}
+                ({post.event.attendees.length})
               </button>
             </div>
           </div>
@@ -190,8 +220,11 @@ const PostCard = ({ post, user }: Props) => {
       {/* INTERACTIONS */}
       <div className="flex items-center justify-between text-sm mb-2 px-4">
         <div className="flex gap-8">
-          <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-xl">
-            <div onClick={() => handleLikeOrDislike(post._id)} className="cursor-pointer">
+          <div className="flex items-center gap-3 bg-background p-2 rounded-xl">
+            <div
+              onClick={() => handleLikeOrDislike(post._id)}
+              className="cursor-pointer"
+            >
               {user?._id && post?.likes && post?.likes.includes(user._id) ? (
                 <Image src="/liked.png" alt="" width={20} height={20} />
               ) : (
@@ -200,26 +233,36 @@ const PostCard = ({ post, user }: Props) => {
             </div>
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              {post?.likes?.length} <span className="hidden md:inline">Likes</span>
+              {post?.likes?.length}{" "}
+              <span className="hidden md:inline">Likes</span>
             </span>
           </div>
 
           <div
             onClick={() => setCommButton((prev) => !prev)}
-            className="flex items-center gap-3 bg-slate-50 p-2 rounded-xl transition-all cursor-pointer">
+            className="flex items-center gap-3 bg-background p-2 rounded-xl transition-all cursor-pointer"
+          >
             <Image src="/comment.png" alt="" width={20} height={20} />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
-              {post?.comments?.length} <span className="hidden md:inline">Comments</span>
+              {post?.comments?.length}{" "}
+              <span className="hidden md:inline">Comments</span>
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-slate-50 p-2 rounded-xl">
-          <Image src="/share.png" alt="" width={20} height={20} className="cursor-pointer" />
+        <div className="flex items-center gap-3 bg-background p-2 rounded-xl">
+          <Image
+            src="/share.png"
+            alt=""
+            width={20}
+            height={20}
+            className="cursor-pointer"
+          />
           <span className="text-gray-300">|</span>
           <span className="text-gray-500">
-            {post?.share?.length} <span className="hidden md:inline">Shares</span>
+            {post?.share?.length}{" "}
+            <span className="hidden md:inline">Shares</span>
           </span>
         </div>
       </div>

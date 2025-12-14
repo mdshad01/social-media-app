@@ -11,14 +11,15 @@ type Props = {
 
 const PostOrSaveBtn = ({ postOrSave, setPostOrSave, isProfileOwn }: Props) => {
   return (
-    <div className="mt-10 flex gap-10 items-center justify-center bg-white h-[8vh] rounded-lg">
+    <div className="mt-10 flex gap-10 items-center justify-center bg-card h-[8vh] rounded-lg">
       <div className="flex items-center justify-center space-x-12">
         <div
           className={cn(
-            "flex items-center space-x-2 cursor-pointer text-gray-600",
-            postOrSave === "POST" && "text-black"
+            "flex items-center space-x-2 cursor-pointer text-muted-foreground",
+            postOrSave === "POST" && "text-foreground"
           )}
-          onClick={() => setPostOrSave("POST")}>
+          onClick={() => setPostOrSave("POST")}
+        >
           <IoGridOutline size={20} />
           <span className="font-medium">Post</span>
         </div>
@@ -27,10 +28,11 @@ const PostOrSaveBtn = ({ postOrSave, setPostOrSave, isProfileOwn }: Props) => {
         <div className="flex items-center justify-center space-x-12">
           <div
             className={cn(
-              "flex items-center space-x-2 cursor-pointer text-gray-600",
-              postOrSave === "SAVE" && "text-black"
+              "flex items-center space-x-2 cursor-pointer text-muted-foreground",
+              postOrSave === "SAVE" && "text-foreground"
             )}
-            onClick={() => setPostOrSave("SAVE")}>
+            onClick={() => setPostOrSave("SAVE")}
+          >
             <Bookmark size={20} />
             <span className="font-medium">Save</span>
           </div>

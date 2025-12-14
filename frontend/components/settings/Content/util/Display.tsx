@@ -1,27 +1,20 @@
 "use client";
-import { ArrowRight } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
+import ThemeToggle from "./ThemeToggle";
 
 const Display = () => {
-  const [toggle, setToggle] = useState<boolean>(false);
   return (
-    <div className="w-full h-full flex flex-col items-center p-4">
-      <div className="w-[64%] bg-white rounded-md shadow-sm">
-        <div className="p-4">
-          <h2 className="text-[20px] font-medium text-black/90">Dark mode</h2>
+    <div className="w-full h-full bg-background flex flex-col items-center p-4">
+      <div className="w-[64%] bg-card rounded-md shadow-sm border border-border">
+        <div className="p-4 border-b border-border">
+          <h2 className="text-[20px] font-medium text-foreground">Dark Mode</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            Choose your preferred theme
+          </p>
         </div>
-        <div className="px-4 pb-3">
-          <div className="w-full items-center ">
-            <p
-              onClick={() => setToggle(!toggle)}
-              className="text-gray-700 flex justify-between w-full"
-            >
-              Dark mode{" "}
-              <span className="text-black/40 font-medium">
-                <ArrowRight size={20} />
-              </span>
-            </p>
-          </div>
+
+        <div className="p-6">
+          <ThemeToggle />
         </div>
       </div>
     </div>

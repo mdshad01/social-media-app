@@ -7,16 +7,16 @@ export default function SettingsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="w-full h-screen bg-[#F4F2F2]">
+    <div className="w-full bg-background">
       {/* Main Content with Sidebar */}
-      <div className="flex h-[calc(100vh-80px)]">
+      <div className="flex">
         {/* ✅ Sidebar - No props needed! */}
-        <div className="hidden md:block md:w-[30%] lg:w-[25%]">
+        <div className="hidden bg-card md:block md:w-[30%] lg:w-[25%]">
           <Sidebar />
         </div>
 
         {/* Content Area */}
-        <div className="w-full overflow-y-auto">{children}</div>
+        <div className="w-full bg-background overflow-y-auto">{children}</div>
       </div>
     </div>
   );

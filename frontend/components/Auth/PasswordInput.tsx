@@ -29,7 +29,13 @@ const PasswordInput = ({
   };
   return (
     <>
-      {label && <label className={`font-semibold mb-2 block ${labelClassName}`}>{label}</label>}
+      {label && (
+        <label
+          className={`font-semibold mb-2 block text-foreground ${labelClassName}`}
+        >
+          {label}
+        </label>
+      )}
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
@@ -37,13 +43,18 @@ const PasswordInput = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`px-4 py-4 w-full rounded-lg bg-slate-100 block outline-none ${inputClassName}`}
+          className={`px-4 py-4 w-full rounded-lg bg-muted text-foreground placeholder:text-muted-foreground block outline-none focus:ring-2 focus:ring-blue-500 ${inputClassName}`}
         />
         <button
           type="button"
           onClick={togglePasswordVisibility}
-          className={`absolute outline-none right-4 top-4 p-0 ${iconClassName}`}>
-          {showPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+          className={`absolute outline-none right-4 top-4 p-0 text-muted-foreground hover:text-foreground ${iconClassName}`}
+        >
+          {showPassword ? (
+            <Eye className="h-5 w-5" />
+          ) : (
+            <EyeOff className="h-5 w-5" />
+          )}
         </button>
       </div>
     </>

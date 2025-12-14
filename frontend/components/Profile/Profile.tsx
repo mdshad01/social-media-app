@@ -8,7 +8,13 @@ import React, { use, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { handleAuthRequest } from "../util/apiRequest";
 import { Loader, MenuIcon } from "lucide-react";
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "../ui/sheet";
 import LeftSidebar from "../Home/LeftSidebar";
 import { BiAperture } from "react-icons/bi";
 import Navbar from "../Home/Navbar";
@@ -60,7 +66,8 @@ const Profile = ({ id }: Props) => {
 
   useEffect(() => {
     const getUser = async () => {
-      const getUserReq = async () => await axios.get(`${BASE_API_URL}/users/profile/${id}`);
+      const getUserReq = async () =>
+        await axios.get(`${BASE_API_URL}/users/profile/${id}`);
       const result = await handleAuthRequest(getUserReq, setIsLoading);
       if (result) setUserProfile(result.data.data.user);
     };
@@ -68,14 +75,14 @@ const Profile = ({ id }: Props) => {
   }, [router, id]);
   if (isLoading) {
     return (
-      <div className="w-full h-screen flex flex-col items-center justify-center bg-slate-100">
+      <div className="w-full h-screen flex flex-col items-center justify-center bg-background">
         <Loader className="animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="flex pt-6 bg-slate-100">
+    <div className="flex pt-6 bg-background">
       <div className="lg:w-[20%] xl:w-[18%] hidden md:block  h-full ">
         {/* <LeftSidebar /> */}
         <LeftMenu setSavePost={setSavePost} type="profile" />
@@ -93,7 +100,11 @@ const Profile = ({ id }: Props) => {
             />
           </div>
           <div className="md:px-8 py-2">
-            <PostOrSaveBtn postOrSave={postOrSave} isProfileOwn={isProfileOwn} setPostOrSave={setPostOrSave} />
+            <PostOrSaveBtn
+              postOrSave={postOrSave}
+              isProfileOwn={isProfileOwn}
+              setPostOrSave={setPostOrSave}
+            />
             {postOrSave === "POST" && <Feed userProfile={userProfile} />}
             {postOrSave === "SAVE" && <SaveFeed userProfile={userProfile} />}
           </div>

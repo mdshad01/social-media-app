@@ -11,7 +11,7 @@ const UserMediaCart = ({ userProfile }: Props) => {
   console.log(userProfile?.savedPosts);
   const savedPosts = userProfile?.savedPosts as Post[] | undefined;
   return (
-    <div className="p-4 bg-white rounded-lg shadow-md text-sm min-w-[19rem]">
+    <div className="p-4 bg-card rounded-lg shadow-md text-sm min-w-[19rem]">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-gray-500">Saved Posts</span>
@@ -25,7 +25,14 @@ const UserMediaCart = ({ userProfile }: Props) => {
           savedPosts.length > 0 &&
           savedPosts?.map((post) => (
             <div key={post?._id} className="relative w-1/5 h-24">
-              {post?.image?.url && <Image src={post?.image?.url} alt="" fill className="object-cover rounded-md" />}
+              {post?.image?.url && (
+                <Image
+                  src={post?.image?.url}
+                  alt=""
+                  fill
+                  className="object-cover rounded-md"
+                />
+              )}
             </div>
           ))}
       </div>

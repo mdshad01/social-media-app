@@ -10,23 +10,30 @@ const Addpost2 = () => {
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeMediaType, setActiveMediaType] = useState<"photo" | "video" | "poll" | "event" | null>(null);
+  const [activeMediaType, setActiveMediaType] = useState<
+    "photo" | "video" | "poll" | "event" | null
+  >(null);
 
-  const handleOpenModal = (mediaType?: "photo" | "video" | "poll" | "event") => {
+  const handleOpenModal = (
+    mediaType?: "photo" | "video" | "poll" | "event"
+  ) => {
     setActiveMediaType(mediaType || null);
     setIsModalOpen(true);
   };
 
   return (
     <>
-      <div className="p-4 bg-white shadow rounded-lg flex gap-4 justify-between text-sm">
+      <div className="p-4 bg-card shadow rounded-lg flex gap-4 justify-between text-sm">
         {/* POST */}
         <div className="flex-1">
           <div className="flex gap-4">
             {/* AVATAR */}
             <Image
               onClick={() => router.push(`/profile/${user?._id}`)}
-              src={user?.profilePicture || "https://images.pexels.com/photos/16654239/pexels-photo-16654239.jpeg"}
+              src={
+                user?.profilePicture ||
+                "https://images.pexels.com/photos/16654239/pexels-photo-16654239.jpeg"
+              }
               alt=""
               height={48}
               width={48}
@@ -35,35 +42,66 @@ const Addpost2 = () => {
             {/*  TEXT INPUT*/}
             <div
               onClick={() => handleOpenModal()}
-              className="bg-slate-100 rounded-xl flex-1 p-3 cursor-pointer hover:bg-slate-200 transition-colors">
-              <span className="text-gray-500">What&apos;s on your mind?</span>
+              className="bg-background rounded-xl flex-1 p-3 cursor-pointer  hover:bg-accent transition-colors"
+            >
+              <span className="text-muted-foreground">
+                What&apos;s on your mind?
+              </span>
             </div>
             {/* <Image src="/emoji.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" /> */}
           </div>
           {/* POST OPTIONS */}
-          <div className="flex items-center justify-between sm:justify-start md:pl-16 md:justify-start sm:gap-6 mt-4 text-black flex-wrap">
+          <div className="flex items-center justify-between sm:justify-start md:pl-16 md:justify-start sm:gap-6 mt-4 text-foreground  flex-wrap">
             <div
               onClick={() => handleOpenModal("photo")}
-              className="flex gap-1 items-center cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors">
-              <Image src="/addimage.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" />
+              className="flex gap-1 items-center cursor-pointer hover:bg-accent  p-2 rounded-lg transition-colors"
+            >
+              <Image
+                src="/addimage.png"
+                alt=""
+                height={20}
+                width={20}
+                className="w-5 h-5 cursor-pointer self-end"
+              />
               Photo
             </div>
             <div
               onClick={() => handleOpenModal("video")}
-              className="flex gap-1 items-center cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors">
-              <Image src="/addvideo.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" />
+              className="flex gap-1 items-center cursor-pointer hover:bg-accent  p-2 rounded-lg transition-colors"
+            >
+              <Image
+                src="/addvideo.png"
+                alt=""
+                height={20}
+                width={20}
+                className="w-5 h-5 cursor-pointer self-end"
+              />
               Video
             </div>
             <div
               onClick={() => handleOpenModal("poll")}
-              className="flex gap-1 items-center cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors">
-              <Image src="/poll.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" />
+              className="flex gap-1 items-center cursor-pointer hover:bg-accent  p-2 rounded-lg transition-colors"
+            >
+              <Image
+                src="/poll.png"
+                alt=""
+                height={20}
+                width={20}
+                className="w-5 h-5 cursor-pointer self-end"
+              />
               Poll
             </div>
             <div
               onClick={() => handleOpenModal("event")}
-              className="flex gap-1 items-center cursor-pointer hover:bg-slate-100 p-2 rounded-lg transition-colors">
-              <Image src="/addevent.png" alt="" height={20} width={20} className="w-5 h-5 cursor-pointer self-end" />
+              className="flex gap-1 items-center cursor-pointer hover:bg-accent  p-2 rounded-lg transition-colors"
+            >
+              <Image
+                src="/addevent.png"
+                alt=""
+                height={20}
+                width={20}
+                className="w-5 h-5 cursor-pointer self-end"
+              />
               Event
             </div>
           </div>
@@ -72,7 +110,11 @@ const Addpost2 = () => {
 
       {/* Modal */}
       {isModalOpen && user && (
-        <CreatePostModal2 isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} user={user} />
+        <CreatePostModal2
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          user={user}
+        />
         // <CreatePostModal
         //   isOpen={isModalOpen}
         //   initialMediaType={activeMediaType}

@@ -18,51 +18,63 @@ type Props = {
   updateFollowerCount?: (isFollowing: boolean) => void; // ✅ Add this
 };
 
-const UserInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Props) => {
+const UserInfoCard = ({
+  userProfile,
+  id,
+  setIsEdit,
+  updateFollowerCount,
+}: Props) => {
   const { handleFollowUnfollow } = useFollowUnfollow();
   const user = useSelector((state: RootState) => state?.auth.user);
   const isOwnProfile = user?._id === id;
   const isFollowing = user?.following?.includes(id!) || false;
   return (
-    <div className=" max-w-xs min-w-[19rem] px-4 pt-4 pb-2  bg-white rounded-lg shadow text-sm flex flex-col gap-2">
+    <div className=" max-w-xs min-w-[19rem] px-4 pt-4 pb-2 text-muted-foreground bg-card rounded-lg shadow text-sm flex flex-col gap-2">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-gray-500">User Information</span>
         {isOwnProfile ? (
-          <span className="text-[#1a2254] cursor-pointer" onClick={() => setIsEdit((prev) => !prev)}>
+          <span
+            className="cursor-pointer"
+            onClick={() => setIsEdit((prev) => !prev)}
+          >
             edit
           </span>
         ) : (
-          <Link href="/" className="text-[#1a2254] text-xs">
+          <Link href="/" className="text-muted-foreground text-xs">
             See all
           </Link>
         )}
       </div>
       {/* BOTTOM */}
       <div className="flex gap-2 items-center mt-2">
-        <span className="text-xl font-medium">{userProfile?.username || "Jhon Carter"}</span>
-        <span className="text-gray-500 font-medium">@{userProfile?.username.replace(/\s+/g, "").toLowerCase()}</span>
+        <span className="text-xl font-medium">
+          {userProfile?.username || "Jhon Carter"}
+        </span>
+        <span className="text-gray-500 font-medium">
+          @{userProfile?.username.replace(/\s+/g, "").toLowerCase()}
+        </span>
       </div>
-      <p className="text-gray-700">
+      <p className="text-muted-foreground">
         {userProfile?.bio ||
           "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aliquid atque, dolore libero quisquam."}
       </p>
       <div className="flex flex-col gap-4">
         <div className="flex gap-2 items-center">
           <FaLocationDot className="w-4 h-4 opacity-65" />
-          <span className="text-gray-600">
+          <span className="">
             Liveing in <b>{userProfile?.city || "Denver"}</b>
           </span>
         </div>
         <div className="flex gap-2 items-center">
           <IoSchool className="w-4 h-4 opacity-65" />
-          <span className="text-gray-600">
+          <span className="">
             Went to <b>{userProfile?.school || "Edgar High School"}</b>
           </span>
         </div>
         <div className="flex gap-2 items-center">
           <MdOutlineWork className="w-4 h-4 opacity-65" />
-          <span className="text-gray-600">
+          <span className="">
             Work at <b>{userProfile?.work || "Apple inc"}</b>.
           </span>
         </div>
@@ -70,8 +82,10 @@ const UserInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Props
           <div className="flex gap-1 items-center">
             {/* <FaCalendarAlt className="w-4 h-4" /> */}
             <IoCalendar className="w-4 h-4 opacity-65" />
-            <span className="text-gray-600 font-medium">
-              {userProfile?.joined ? userProfile.joined.toLocaleDateString() : "Joined November 2024"}{" "}
+            <span className=" font-medium">
+              {userProfile?.joined
+                ? userProfile.joined.toLocaleDateString()
+                : "Joined November 2024"}{" "}
             </span>
           </div>
           <div className="flex gap-1 items-center cursor-pointer">
@@ -80,11 +94,18 @@ const UserInfoCard = ({ userProfile, id, setIsEdit, updateFollowerCount }: Props
           </div>
         </div>
 
-        <div onClick={() => handleFollowUnfollow(id!, updateFollowerCount)} className="flex flex-col pb-2 gap-2 ">
+        <div
+          onClick={() => handleFollowUnfollow(id!, updateFollowerCount)}
+          className="flex flex-col pb-2 gap-2 "
+        >
           {isOwnProfile ? null : !isFollowing ? (
-            <button className="bg-[#1a2254] text-white w-full p-2 font-medium rounded-md cursor-pointer">Follow</button>
+            <button className="bg-[#1a2254] text-white w-full p-2 font-medium rounded-md cursor-pointer">
+              Follow
+            </button>
           ) : (
-            <button className="bg-red-600 text-white w-full p-2 font-medium rounded-md cursor-pointer">Unfollow</button>
+            <button className="bg-red-600 text-white w-full p-2 font-medium rounded-md cursor-pointer">
+              Unfollow
+            </button>
           )}
           {/* <button className="text-red-500 opacity-90 text-xs self-end font-medium cursor-pointer">Block User</button> */}
         </div>

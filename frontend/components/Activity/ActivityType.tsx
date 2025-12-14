@@ -20,7 +20,9 @@ const ActivityType = ({ activityType, setType }) => {
 
   return (
     <div className="pt-2">
-      <h3 className="py-4 text-xl font-semibold text-gray-600 pl-2">All activity</h3>
+      <h3 className="py-4 text-xl font-semibold text-foreground pl-2">
+        All activity
+      </h3>
       <div>
         <ul className="flex items-center justify-start gap-3  py-1">
           {tabs.map((item) => (
@@ -29,8 +31,8 @@ const ActivityType = ({ activityType, setType }) => {
               key={item.value}
               className={`px-4 py-1 font-medium rounded-2xl cursor-pointer transition-all border-[2.2px] border-gray-300  ${
                 activityType === item.value
-                  ? "bg-black/90 text-white border-black shadow-none"
-                  : "text-gray-800 bg-white hover:shadow hover:border-gray-700 hover:bg-gray-100"
+                  ? "bg-popover-foreground text-background border-black shadow-none"
+                  : "text-foreground bg-popover hover:shadow hover:border-gray-700 hover:bg-gray-100"
               }`}
             >
               {item.label}

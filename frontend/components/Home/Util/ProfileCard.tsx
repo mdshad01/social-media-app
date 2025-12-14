@@ -14,31 +14,43 @@ const ProfileCard = () => {
   return (
     <div
       onClick={() => router.push(`/profile/${user?._id}`)}
-      className="p-2 bg-white rounded-lg shadow-md flex flex-col gap-6">
+      className="p-2 bg-card rounded-lg shadow-md border border-border flex flex-col gap-6 cursor-pointer hover:shadow-lg transition-shadow"
+    >
       <div className="relative h-24">
         <Image
-          src={user?.backgroundImage || "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"}
+          src={
+            user?.backgroundImage ||
+            "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"
+          }
           alt=""
           fill
           className="rounded-md object-cover"
         />
         <Image
-          src={user?.profilePicture || "https://images.pexels.com/photos/2811089/pexels-photo-2811089.jpeg"}
+          src={
+            user?.profilePicture ||
+            "https://images.pexels.com/photos/2811089/pexels-photo-2811089.jpeg"
+          }
           alt=""
           width={48}
           height={48}
-          className="rounded-full object-cover w-16 h-16 absolute left-0 right-28 m-auto -bottom-6 ring-1 ring-white z-10 "
+          className="rounded-full object-cover w-16 h-16 absolute left-0 right-28 m-auto -bottom-6 ring-2 ring-background z-10"
         />
       </div>
-      <div className=" flex flex-col gap-2 items-start px-3">
-        <span className="text-xl font-semibold">{user?.username}</span>
+      <div className="flex flex-col gap-2 items-start px-3">
+        <span className="text-xl font-semibold text-foreground">
+          {user?.username}
+        </span>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-gray-500">{user?.bio || "No bio avaliable"}</span>
+          <span className="text-sm text-muted-foreground">
+            {user?.bio || "No bio available"}
+          </span>
         </div>
         <div className="self-center w-full mb-1">
           <button
             onClick={() => router.push(`/profile/${user?._id}`)}
-            className="bg-black text-white text-xs p-2 rounded-md font-semibold w-full">
+            className="bg-primary text-primary-foreground text-xs p-2 rounded-md font-semibold w-full hover:opacity-90 transition-opacity"
+          >
             My Profile
           </button>
         </div>

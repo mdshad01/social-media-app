@@ -1,6 +1,12 @@
 "use client";
 import { Loader, MailCheck } from "lucide-react";
-import React, { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import LoadingButton from "../Helper/LoadingButton";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
@@ -30,7 +36,10 @@ const Verify = () => {
   }, [user, router]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   // console.log(otp);
-  const handleChanges = (index: number, event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChanges = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>
+  ): void => {
     const { value } = event.target;
     if (/^\d*$/.test(value) && value.length <= 1) {
       const newOpt = [...otp];
@@ -41,8 +50,15 @@ const Verify = () => {
       inputRefs.current[index + 1]?.focus();
     }
   };
-  const handleKeyDown = (index: number, event: KeyboardEvent<HTMLInputElement>): void => {
-    if (event.key === "Backspace" && !inputRefs.current[index]?.value && inputRefs.current[index - 1]) {
+  const handleKeyDown = (
+    index: number,
+    event: KeyboardEvent<HTMLInputElement>
+  ): void => {
+    if (
+      event.key === "Backspace" &&
+      !inputRefs.current[index]?.value &&
+      inputRefs.current[index - 1]
+    ) {
       inputRefs.current[index - 1]?.focus();
     }
   };
@@ -50,7 +66,11 @@ const Verify = () => {
   const handleSubmit = async () => {
     const otpValue = otp.join("");
     const verifyReq = async () =>
-      await axios.post(`${BASE_API_URL}/users/verify`, { otp: otpValue }, { withCredentials: true });
+      await axios.post(
+        `${BASE_API_URL}/users/verify`,
+        { otp: otpValue },
+        { withCredentials: true }
+      );
 
     const result = await handleAuthRequest(verifyReq, setIsLoading);
     console.log(result);
@@ -64,7 +84,9 @@ const Verify = () => {
 
   const handleResendOtp = async () => {
     const resendOtpReq = async () =>
-      await axios.post(`${BASE_API_URL}/users/resend-otp`, null, { withCredentials: true });
+      await axios.post(`${BASE_API_URL}/users/resend-otp`, null, {
+        withCredentials: true,
+      });
     const result = await handleAuthRequest(resendOtpReq, setIsLoading);
     console.log(result);
     if (result) {
@@ -74,17 +96,21 @@ const Verify = () => {
 
   if (isPageLoading) {
     return (
-      <div className="h-screen flex justify-center items-center">
-        <Loader className="w-20 h-20 animate-spin" />
+      <div className="h-screen flex justify-center items-center bg-background">
+        <Loader className="w-20 h-20 animate-spin text-foreground" />
       </div>
     );
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center">
+    <div className="h-screen flex flex-col justify-center items-center bg-background">
       <MailCheck className="w-20 h-20 sm:h-32 sm:w-32 text-blue-500 mb-12" />
-      <h1 className="text-2xl  sm:text-3xl font-bold mb-3">OTP Verification</h1>
-      <p className="text-sm mb-6 sm:text-base font-medium text-gray-600">We have sent a code to {user?.email}</p>
+      <h1 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">
+        OTP Verification
+      </h1>
+      <p className="text-sm mb-6 sm:text-base font-medium text-muted-foreground">
+        We have sent a code to {user?.email}
+      </p>
       <div className="flex space-x-4">
         {[0, 1, 2, 3, 4, 5].map((index) => {
           return (
@@ -92,7 +118,7 @@ const Verify = () => {
               type="number"
               maxLength={1}
               key={index}
-              className="w-10 h-10 sm:h-24 sm:w-24 bg-gray-200 text-center rounded-lg text-lg sm:text-4xl font-bold outline-gray-500 no-spinner"
+              className="w-10 h-10 sm:h-24 sm:w-24 bg-muted text-foreground text-center rounded-lg text-lg sm:text-4xl font-bold outline-none focus:ring-2 focus:ring-blue-500 no-spinner"
               value={otp[index] || ""}
               ref={(el) => {
                 inputRefs.current[index] = el;
@@ -104,12 +130,22 @@ const Verify = () => {
         })}
       </div>
       <div className="flex items-center mt-4 space-x-2">
-        <h3 className="text-sm sm:text-lg font-medium text-gray-700">Didn&apos;t get the otp?</h3>
-        <button onClick={handleResendOtp} className="text-sm sm:text-lg font-medium text-blue-900 underline">
+        <h3 className="text-sm sm:text-lg font-medium text-muted-foreground">
+          Didn&apos;t get the otp?
+        </h3>
+        <button
+          onClick={handleResendOtp}
+          className="text-sm sm:text-lg font-medium text-blue-600 hover:text-blue-700 underline"
+        >
           Resend code
         </button>
       </div>
-      <LoadingButton onClick={handleSubmit} isLoading={isLoading} size={"lg"} className="mt-6 w-52">
+      <LoadingButton
+        onClick={handleSubmit}
+        isLoading={isLoading}
+        size={"lg"}
+        className="mt-6 w-52"
+      >
         Verify
       </LoadingButton>
     </div>

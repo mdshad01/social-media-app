@@ -1,7 +1,12 @@
 "use client";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { BASE_API_URL } from "@/server";
-import { addComment, addReply, deleteComment, likeComment } from "@/store/postSlice";
+import {
+  addComment,
+  addReply,
+  deleteComment,
+  likeComment,
+} from "@/store/postSlice";
 import { Post, User } from "@/type";
 import axios from "axios";
 import Image from "next/image";
@@ -25,7 +30,10 @@ const Comments = ({ user, post }: Props) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setOpenDropdown(null);
       }
     };
@@ -42,7 +50,11 @@ const Comments = ({ user, post }: Props) => {
   const handleComment = async (id: string) => {
     if (!comment) return;
     const addCommentReq = async () =>
-      await axios.post(`${BASE_API_URL}/posts/comment/${id}`, { text: comment }, { withCredentials: true });
+      await axios.post(
+        `${BASE_API_URL}/posts/comment/${id}`,
+        { text: comment },
+        { withCredentials: true }
+      );
 
     const result = await handleAuthRequest(addCommentReq);
     if (result?.data.status == "success") {
@@ -54,7 +66,11 @@ const Comments = ({ user, post }: Props) => {
 
   const handleLikeComment = async (commentId: string) => {
     const likeCommentReq = async () =>
-      await axios.post(`${BASE_API_URL}/posts/comment/like/${commentId}`, {}, { withCredentials: true });
+      await axios.post(
+        `${BASE_API_URL}/posts/comment/like/${commentId}`,
+        {},
+        { withCredentials: true }
+      );
 
     const result = await handleAuthRequest(likeCommentReq);
     if (result?.data.status == "success" && user) {
@@ -74,7 +90,13 @@ const Comments = ({ user, post }: Props) => {
 
     const result = await handleAuthRequest(replyReq);
     if (result?.data.status == "success") {
-      dispatch(addReply({ postId: post!._id, commentId, reply: result.data.data.reply }));
+      dispatch(
+        addReply({
+          postId: post!._id,
+          commentId,
+          reply: result.data.data.reply,
+        })
+      );
       toast.success("Reply Posted.");
       setReplyText("");
       // Keep reply section open - don't set replyTo to null
@@ -85,7 +107,9 @@ const Comments = ({ user, post }: Props) => {
     // if (!confirm("Are you sure you want to delete this comment?")) return;
 
     const deleteCommentReq = async () =>
-      await axios.delete(`${BASE_API_URL}/posts/comment/${commentId}`, { withCredentials: true });
+      await axios.delete(`${BASE_API_URL}/posts/comment/${commentId}`, {
+        withCredentials: true,
+      });
 
     const result = await handleAuthRequest(deleteCommentReq);
     if (result?.data.status == "success") {
@@ -114,7 +138,7 @@ const Comments = ({ user, post }: Props) => {
           height={32}
           className="rounded-full w-8 h-8 cursor-pointer "
         />
-        <div className="flex items-center justify-between bg-slate-100 rounded-xl text-sm px-4 py-2 w-[90%]">
+        <div className="flex items-center justify-between bg-accent rounded-xl text-sm px-4 py-2 w-[90%]">
           <input
             value={comment}
             onChange={(e) => setComment(e.target.value)}
@@ -124,7 +148,8 @@ const Comments = ({ user, post }: Props) => {
           />
           <button
             onClick={() => handleComment(post!._id)}
-            className="cursor-pointer rounded-lg px-3 py-1 bg-blue-500 text-gray-50">
+            className="cursor-pointer rounded-lg px-3 py-1 bg-blue-500 text-gray-50"
+          >
             post
           </button>
         </div>
@@ -152,17 +177,37 @@ const Comments = ({ user, post }: Props) => {
                   <p>{item?.text}</p>
                   <div className="flex items-center gap-8 text-sm text-gray-500 mt-2">
                     <div className="flex items-center gap-4">
-                      <div onClick={() => handleLikeComment(item._id)} className="cursor-pointer">
+                      <div
+                        onClick={() => handleLikeComment(item._id)}
+                        className="cursor-pointer"
+                      >
                         {isLiked ? (
-                          <Image src="/liked.png" alt="" width={12} height={12} className="w-3 h-3" />
+                          <Image
+                            src="/liked.png"
+                            alt=""
+                            width={12}
+                            height={12}
+                            className="w-3 h-3"
+                          />
                         ) : (
-                          <Image src="/like.png" alt="" width={12} height={12} className="w-3 h-3" />
+                          <Image
+                            src="/like.png"
+                            alt=""
+                            width={12}
+                            height={12}
+                            className="w-3 h-3"
+                          />
                         )}
                       </div>
                       <span className="text-gray-300">|</span>
-                      <span className="text-gray-500">{item.likes?.length || 0} Likes</span>
+                      <span className="text-gray-500">
+                        {item.likes?.length || 0} Likes
+                      </span>
                     </div>
-                    <div onClick={() => toggleReply(item._id)} className="cursor-pointer">
+                    <div
+                      onClick={() => toggleReply(item._id)}
+                      className="cursor-pointer"
+                    >
                       Reply {replyCount > 0 && `(${replyCount})`}
                     </div>
                   </div>
@@ -176,15 +221,21 @@ const Comments = ({ user, post }: Props) => {
                           {item.replies.map((reply) => (
                             <div key={reply._id} className="flex gap-3">
                               <Image
-                                src={reply?.user?.profilePicture || "/noAvatar.png"}
+                                src={
+                                  reply?.user?.profilePicture || "/noAvatar.png"
+                                }
                                 alt=""
                                 width={32}
                                 height={32}
                                 className="rounded-full w-8 h-8 cursor-pointer"
                               />
                               <div className="flex flex-col gap-1 flex-1">
-                                <span className="font-medium text-sm">{reply?.user?.username}</span>
-                                <p className="text-sm text-gray-700">{reply?.text}</p>
+                                <span className="font-medium text-sm">
+                                  {reply?.user?.username}
+                                </span>
+                                <p className="text-sm text-gray-700">
+                                  {reply?.text}
+                                </p>
                               </div>
                             </div>
                           ))}
@@ -210,7 +261,8 @@ const Comments = ({ user, post }: Props) => {
                           />
                           <button
                             onClick={() => handlePostReply(item._id)}
-                            className="cursor-pointer rounded-lg px-2 py-1 bg-blue-500 text-gray-50">
+                            className="cursor-pointer rounded-lg px-2 py-1 bg-blue-500 text-gray-50"
+                          >
                             post
                           </button>
                         </div>
@@ -220,14 +272,21 @@ const Comments = ({ user, post }: Props) => {
                 </div>
                 {/* MORE - Only show for own comments */}
                 {user?._id === item.user._id && (
-                  <div className="relative" ref={openDropdown === item._id ? dropdownRef : null}>
+                  <div
+                    className="relative"
+                    ref={openDropdown === item._id ? dropdownRef : null}
+                  >
                     <Image
                       src="/more.png"
                       alt=""
                       width={16}
                       height={16}
                       className="w-4 h-4 cursor-pointer"
-                      onClick={() => setOpenDropdown(openDropdown === item._id ? null : item._id)}
+                      onClick={() =>
+                        setOpenDropdown(
+                          openDropdown === item._id ? null : item._id
+                        )
+                      }
                     />
 
                     {/* Dropdown Menu */}
@@ -235,7 +294,8 @@ const Comments = ({ user, post }: Props) => {
                       <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
                         <button
                           onClick={() => handleDeleteComment(item._id)}
-                          className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-red-600 transition-colors">
+                          className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-red-600 transition-colors"
+                        >
                           <MdDeleteOutline className="text-lg" />
                           <span>Delete</span>
                         </button>

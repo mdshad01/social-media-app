@@ -7,6 +7,7 @@ import Navbar from "@/components/Home/Navbar";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import MainContainer from "@/components/MainContainer";
 import Sidebar from "@/components/settings/Sidebar";
+import { ThemeProvider } from "next-themes";
 
 const roboto = Roboto({
   weight: ["100", "300", "400", "500", "700", "900"],
@@ -48,15 +49,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} ${lobster.variable}`}>
-        <ClientProvider>
-          <NavbarWrapper />
-          <div>
-            <MainContainer>{children}</MainContainer>
-            <Toaster />
-          </div>
-        </ClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ClientProvider>
+            <NavbarWrapper />
+            <div>
+              <MainContainer>{children}</MainContainer>
+              <Toaster />
+            </div>
+          </ClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

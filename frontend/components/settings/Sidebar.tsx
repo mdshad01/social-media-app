@@ -46,7 +46,7 @@ const Sidebar = () => {
   const pathname = usePathname(); // ✅ Get current route
 
   return (
-    <div className="flex flex-col gap-3 bg-white h-[92vh] border-r-[1px] border-black/10">
+    <div className="flex flex-col gap-3 bg-card h-[93vh] border-r border-border">
       <div className="flex mt-6 pl-7 gap-4">
         <Image
           src={user?.profilePicture || "/noAvatar.png"}
@@ -55,9 +55,9 @@ const Sidebar = () => {
           width={40}
           className="rounded-full w-10 h-10"
         />
-        <h2 className="text-3xl text-gray-900 font-semibold">Settings</h2>
+        <h2 className="text-3xl text-foreground font-semibold">Settings</h2>
       </div>
-      <ul className="py-3 pl-0 bg-white text-gray-700 flex flex-col gap-3 text-sm">
+      <ul className="py-3 pl-0 bg-card text-secondary-foreground flex flex-col gap-3 text-sm">
         {tabs.map((item, index) => {
           // ✅ Check if current route matches this tab
           const isActive = pathname.startsWith(item.href);
@@ -65,7 +65,7 @@ const Sidebar = () => {
           return (
             <Link href={item.href} key={index}>
               <li
-                className={`flex items-center gap-4 p-2 py-4 rounded hover:bg-slate-100 cursor-pointer
+                className={`flex items-center gap-4 p-2 py-4 rounded hover:bg-accent cursor-pointer
                   ${
                     isActive
                       ? "text-blue-600 border-l-4 border-blue-500"

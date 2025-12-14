@@ -123,8 +123,8 @@ const Login = () => {
     : 0;
 
   return (
-    <div className="w-full h-[100vh] overflow-hidden bg-white">
-      <div className="flex flex-col lg:flex-row ">
+    <div className="w-full h-[100vh] overflow-hidden bg-background">
+      <div className="flex flex-col lg:flex-row">
         {/* Banner */}
         <div className="lg:w-[55%] h-screen hidden lg:block relative">
           <Image
@@ -166,11 +166,11 @@ const Login = () => {
         </div>
 
         {/* Form */}
-        <div className="lg:w-[45%]  h-screen p-8 ">
-          <div className=" h-full w-full flex flex-col items-center justify-center bg-blue-100 rounded-lg relative overflow-hidden z-10 ">
-            <div className="bg-blue-200 rounded-full absolute h-70 w-70 top-10 left-15 -translate-x-1/2 -translate-y-1/2 -z-10"></div>
-            <div className="bg-[#b8d4ff] rounded-full absolute h-84 w-84 -bottom-30 -right-35 -translate-x-1/5 -translate-y-1/5 -z-10"></div>
-            <h1 className="font-bold text-xl sm:text-2xl uppercase mb-8">
+        <div className="lg:w-[45%] h-screen p-8">
+          <div className="h-full w-full flex flex-col items-center justify-center bg-blue-100 dark:bg-gray-900 rounded-lg relative overflow-hidden z-10">
+            <div className="bg-blue-200 dark:bg-blue-900/30 rounded-full absolute h-70 w-70 top-10 left-15 -translate-x-1/2 -translate-y-1/2 -z-10"></div>
+            <div className="bg-[#b8d4ff] dark:bg-blue-800/20 rounded-full absolute h-84 w-84 -bottom-30 -right-35 -translate-x-1/5 -translate-y-1/5 -z-10"></div>
+            <h1 className="font-bold text-xl sm:text-2xl text-foreground uppercase mb-8">
               Login with <span className="text-blue-500">ShadSocial</span>
             </h1>
             <form
@@ -178,7 +178,10 @@ const Login = () => {
               className="block w-[90%] sm:w-[80%] md:w-[60%] lg:w-[90%] xl:w-[80%]"
             >
               <div className="mb-4">
-                <label htmlFor="name" className="font-semibold mb-2 block">
+                <label
+                  htmlFor="name"
+                  className="font-semibold mb-2 block text-foreground"
+                >
                   Email
                 </label>
                 <input
@@ -186,7 +189,7 @@ const Login = () => {
                   type="email"
                   id="email"
                   placeholder="email address"
-                  className="px-4 py-4 w-full rounded-lg bg-gray-100 block outline-none"
+                  className="px-4 py-4 w-full rounded-lg bg-muted text-foreground placeholder:text-muted-foreground block outline-none focus:ring-2 focus:ring-blue-500"
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -201,7 +204,7 @@ const Login = () => {
                 />
                 <Link
                   href="/auth/forget-password"
-                  className="text-blue-500 mt-2 font-semibold text-base cursor-pointer text-right block"
+                  className="text-blue-500 hover:text-blue-600 mt-2 font-semibold text-base cursor-pointer text-right block"
                 >
                   Forget Password?
                 </Link>
@@ -215,11 +218,11 @@ const Login = () => {
                 Login Now
               </LoadingButton>
             </form>
-            <h1 className="mt-4 text-lg text-gray-800">
+            <h1 className="mt-4 text-lg text-foreground">
               Don&apos;t have an account?{" "}
               <Link href="/auth/signup">
                 {" "}
-                <span className="text-blue-800 font-semibold underline">
+                <span className="text-blue-600 hover:text-blue-700 font-semibold underline">
                   Signup Here
                 </span>
               </Link>
@@ -231,25 +234,30 @@ const Login = () => {
       {/* Reactivate Account Modal */}
       {showReactivateModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-[500px] max-w-[90%]">
+          <div className="bg-card border border-border rounded-lg p-6 w-[500px] max-w-[90%]">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Account Deactivated</h2>
-              <button onClick={() => setShowReactivateModal(false)}>
+              <h2 className="text-xl font-semibold text-foreground">
+                Account Deactivated
+              </h2>
+              <button
+                onClick={() => setShowReactivateModal(false)}
+                className="text-muted-foreground hover:text-foreground"
+              >
                 <span className="text-2xl">&times;</span>
               </button>
             </div>
 
             <div className="space-y-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex gap-3">
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3">
                 <AlertCircle
-                  className="text-blue-600 flex-shrink-0"
+                  className="text-blue-600 dark:text-blue-400 flex-shrink-0"
                   size={24}
                 />
                 <div>
-                  <p className="text-blue-800 font-medium mb-1">
+                  <p className="text-blue-800 dark:text-blue-300 font-medium mb-1">
                     Your account is deactivated
                   </p>
-                  <p className="text-sm text-blue-700">
+                  <p className="text-sm text-blue-700 dark:text-blue-400">
                     You have{" "}
                     <span className="font-semibold">{daysRemaining} days</span>{" "}
                     remaining to reactivate your account. After that, your
@@ -258,7 +266,7 @@ const Login = () => {
                 </div>
               </div>
 
-              <p className="text-gray-700">
+              <p className="text-foreground">
                 Would you like to reactivate your account now? All your posts,
                 followers, and data will be restored.
               </p>
@@ -266,7 +274,7 @@ const Login = () => {
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => setShowReactivateModal(false)}
-                  className="px-4 py-2 border rounded-md hover:bg-gray-100"
+                  className="px-4 py-2 border border-border rounded-md hover:bg-accent text-foreground"
                 >
                   Cancel
                 </button>
