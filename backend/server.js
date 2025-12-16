@@ -3,23 +3,17 @@
 import "./config/env.js";
 import mongoose from "mongoose";
 import app from "./app.js";
+import connectDB from "./config/db.js";
 
 process.on("uncaughtException", (err) => {
   console.log("UNCATCH EXCEPTION! Shutting down");
   console.log(err.name, err.message);
   process.exit(1);
 });
-
-mongoose
-  .connect(process.env.DB)
-  .then(() => {
-    console.log("Database connected successfully");
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-
 const port = process.env.PORT || 5000;
+
+await connectDB();
+
 
 const server = app.listen(port, "0.0.0.0", () => {
   console.log(`Server running at ${port}`);
