@@ -4,8 +4,8 @@ import React from "react";
 
 const Appearance = () => {
   return (
-    <div className="w-full h-full bg-background flex flex-col items-center p-4">
-      <div className="w-[64%] bg-card rounded-md shadow-sm border border-border">
+    <div className="w-full h-full bg-background flex flex-col items-center p-4 mt-2">
+      <div className="w-full md:w-[64%] bg-card rounded-md shadow-sm border border-border">
         <div className="p-4">
           <h2 className="text-[20px] font-medium text-foreground">Display</h2>
         </div>

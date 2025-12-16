@@ -72,7 +72,7 @@ const LeftSidebar = () => {
       icon: <FaGear className="text-gray-600 w-5 h-5" />,
       label: "Settings",
       bg: "bg-gray-300 group-hover:bg-gray-400 dark:bg-gray-700 dark:group-hover:bg-gray-600 transition-all duration-100",
-      href: "/",
+      href: "/settings",
     },
     {
       icon: <MdLogout className="text-red-600 w-5 h-5" />,

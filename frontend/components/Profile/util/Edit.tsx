@@ -171,16 +171,16 @@ const Edit = ({ setIsEdit }: Props) => {
 
   return (
     <div className="fixed bg-black/20 bg-opacity-20 z-50 flex items-center justify-center p-4 overflow-y-auto inset-0">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl my-8 relative">
+      <div className="bg-card rounded-lg shadow-xl w-full max-w-4xl my-8 relative">
         {/* Header */}
-        <div className="stickey top-0 bg-white border-b border-gray-200 px-6 py-4 rounded-t-lg flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-gray-800">Edit Profile</h2>
+        <div className="stickey top-0 bg-card border-b border-gray-200 px-6 py-4 rounded-t-lg flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-primary">Edit Profile</h2>
           <button
             onClick={() => setIsEdit((prev) => !prev)}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 hover:bg-primary rounded-full transition-colors"
             disabled={isLoading}
           >
-            <X className="w-6 h-6 text-gray-600" />
+            <X className="w-6 h-6 text-primary" />
           </button>
         </div>
 
@@ -190,7 +190,7 @@ const Edit = ({ setIsEdit }: Props) => {
         <div className="p-6 space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto">
           {/* BG image */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">
+            <label className="font-semibold text-primary block">
               Background Image
             </label>
             <div className="relative w-[80%] h-60 bg-gradient-to-r from-blue-400 to-purple-500 rounded-lg overflow-hidden group">
@@ -227,14 +227,14 @@ const Edit = ({ setIsEdit }: Props) => {
 
           {/* Profile Picture Section */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">
+            <label className="font-semibold text-primary block">
               Profile Picture
             </label>
             <div className="flex items-center gap-6">
               <div className="">
                 <div
                   onClick={handleProfileClick}
-                  className="relative w-36 h-36 rounded-full overflow-hidden border-4 border-white shadow-lg group"
+                  className="relative w-36 h-36 rounded-full flex items-center justify-center overflow-hidden border-4 border-ring shadow-lg group"
                 >
                   <Avatar className="w-36 h-36">
                     <AvatarImage src={profileImage || ""} />
@@ -257,18 +257,18 @@ const Edit = ({ setIsEdit }: Props) => {
 
           {/* Name */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">Name</label>
+            <label className="font-semibold text-primary block">Name</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your name"
-              className="w-full px-4 py-3 rounded-lg bg-slate-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
           {/* Bio Section  */}
           <div className="space-y-2">
-            <label htmlFor="bio" className="font-semibold text-gray-700 block">
+            <label htmlFor="bio" className="font-semibold text-primary block">
               Bio
             </label>
             <textarea
@@ -277,7 +277,7 @@ const Edit = ({ setIsEdit }: Props) => {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Write a short bio about yourself..."
               rows={4}
-              className="w-[80%] h-42 px-4 py-3 rounded-lg bg-slate-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+              className="w-[80%] h-42 px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
             />
             {/* <LoadingButton
               className="bg-blue-600 text-white hover:bg-blue-700 block transition-colors font-medium mt-2"
@@ -290,49 +290,49 @@ const Edit = ({ setIsEdit }: Props) => {
 
           {/* City */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">City</label>
+            <label className="font-semibold text-primary block">City</label>
             <input
               type="text"
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="Enter your city"
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
 
           {/* School */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">School</label>
+            <label className="font-semibold text-primary block">School</label>
             <input
               type="text"
               value={school}
               onChange={(e) => setSchool(e.target.value)}
               placeholder="Enter your school or university"
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
 
           {/* Work */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">Work</label>
+            <label className="font-semibold text-primary block">Work</label>
             <input
               type="text"
               value={work}
               onChange={(e) => setWork(e.target.value)}
               placeholder="Enter your current work or company"
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
 
           {/* Website */}
           <div className="space-y-2">
-            <label className="font-semibold text-gray-700 block">Website</label>
+            <label className="font-semibold text-primary block">Website</label>
             <input
               type="url"
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
               placeholder="https://yourwebsite.com"
-              className="w-full px-4 py-3 rounded-lg bg-gray-100 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
           </div>
 
@@ -377,7 +377,7 @@ const Edit = ({ setIsEdit }: Props) => {
                   <LoadingButton
                     isLoading={isLoading}
                     type="submit"
-                    className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium"
+                    className="bg-chart-1 text-white hover:bg-chart-11 transition-colors font-medium"
                   >
                     Change Password
                   </LoadingButton>
@@ -387,11 +387,11 @@ const Edit = ({ setIsEdit }: Props) => {
           </div>
         </div>
         {/* Footer */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 rounded-b-lg flex items-center justify-end gap-3">
+        <div className="sticky bottom-0 bg-card border-t border-gray-200 px-6 py-4 rounded-b-lg flex items-center justify-end gap-3">
           <button
             onClick={handleDiscard}
             disabled={isLoading}
-            className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 rounded-lg border  border-gray-300 text-primary hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>
@@ -399,7 +399,7 @@ const Edit = ({ setIsEdit }: Props) => {
             isLoading={isLoading}
             size={"lg"}
             onClick={handleUpdateProfile}
-            className="bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium"
+            className="bg-chart-1 text-white hover:bg-chart-11  transition-colors font-medium"
           >
             Save Changes
           </LoadingButton>

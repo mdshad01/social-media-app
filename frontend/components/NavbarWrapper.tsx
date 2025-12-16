@@ -16,7 +16,7 @@ export default function NavbarWrapper() {
 
   if (isSettingPage)
     return (
-      <div className="w-full bg-card border-b border-border sm:px-0 md:px-8">
+      <div className="w-full bg-card border-b border-border sm:px-0 md:px-6">
         <SettingsNavbae />
       </div>
     );

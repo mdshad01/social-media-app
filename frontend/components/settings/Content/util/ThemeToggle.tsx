@@ -28,18 +28,18 @@ export default function ThemeToggle() {
         onClick={() => setTheme("light")}
         className={`flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-lg border-2 transition-all ${
           theme === "light"
-            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+            ? "border-chart-1 bg-blue-50 dark:bg-blue-900/20"
             : "border-border bg-background hover:bg-accent"
         }`}
       >
         <Sun
           className={`w-6 h-6 ${
-            theme === "light" ? "text-blue-600" : "text-foreground"
+            theme === "light" ? "text-chart-1" : "text-foreground"
           }`}
         />
         <span
           className={`text-sm font-medium ${
-            theme === "light" ? "text-blue-600" : "text-foreground"
+            theme === "light" ? "text-chart-1" : "text-foreground"
           }`}
         >
           Light
@@ -50,18 +50,18 @@ export default function ThemeToggle() {
         onClick={() => setTheme("dark")}
         className={`flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-lg border-2 transition-all ${
           theme === "dark"
-            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+            ? "border-chart-1 bg-blue-50 dark:bg-background"
             : "border-border bg-background hover:bg-accent"
         }`}
       >
         <Moon
           className={`w-6 h-6 ${
-            theme === "dark" ? "text-blue-600" : "text-foreground"
+            theme === "dark" ? "text-chart-1" : "text-foreground"
           }`}
         />
         <span
           className={`text-sm font-medium ${
-            theme === "dark" ? "text-blue-600" : "text-foreground"
+            theme === "dark" ? "text-chart-1" : "text-foreground"
           }`}
         >
           Dark
@@ -72,18 +72,18 @@ export default function ThemeToggle() {
         onClick={() => setTheme("system")}
         className={`flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-lg border-2 transition-all ${
           theme === "system"
-            ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+            ? "border-chart-1 bg-blue-50 dark:bg-background"
             : "border-border bg-background hover:bg-accent"
         }`}
       >
         <Monitor
           className={`w-6 h-6 ${
-            theme === "system" ? "text-blue-600" : "text-foreground"
+            theme === "system" ? "text-chart-1" : "text-foreground"
           }`}
         />
         <span
           className={`text-sm font-medium ${
-            theme === "system" ? "text-blue-600" : "text-foreground"
+            theme === "system" ? "text-chart-1" : "text-foreground"
           }`}
         >
           System

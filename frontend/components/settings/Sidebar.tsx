@@ -43,7 +43,7 @@ const tabs = [
 const Sidebar = () => {
   // ✅ No props needed!
   const user = useSelector((state: RootState) => state.auth.user);
-  const pathname = usePathname(); // ✅ Get current route
+  const pathname = usePathname();
 
   return (
     <div className="flex flex-col gap-3 bg-card h-[93vh] border-r border-border">
@@ -68,7 +68,7 @@ const Sidebar = () => {
                 className={`flex items-center gap-4 p-2 py-4 rounded hover:bg-accent cursor-pointer
                   ${
                     isActive
-                      ? "text-blue-600 border-l-4 border-blue-500"
+                      ? "text-chart-1 border-l-4 border-chart-1"
                       : "border-transparent border-l-4"
                   }`}
               >

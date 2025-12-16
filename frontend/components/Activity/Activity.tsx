@@ -50,11 +50,20 @@ const Activity = () => {
         </div>
 
         {/* ✅ Feed - Full width on mobile */}
-        <div className="w-full md:w-[70%] lg:w-[60%] xl:w-[50%]  p-5 bg-card">
-          <div className="flex flex-col gap-0 -mt-5">
-            <ActivityType activityType={type} setType={setType} />
+
+        {activities.length === 0 ? (
+          <div className="w-full h-[30vh] md:w-[70%] lg:w-[60%] xl:w-[50%]  p-5 bg-card">
+            <div className="py-4 text-xl font-semibold text-foreground pl-2 text-center">
+              No current activity
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="w-full md:w-[70%] lg:w-[60%] xl:w-[50%]  p-5 bg-card">
+            <div className="flex flex-col gap-0 -mt-5">
+              <ActivityType activityType={type} setType={setType} />
+            </div>
+          </div>
+        )}
 
         <div className="hidden lg:block lg:w-[28%] mt-1 space-y-6">
           {/* <RightSidebar /> */}

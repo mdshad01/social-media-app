@@ -1,6 +1,11 @@
 import LoadingButton from "@/components/Helper/LoadingButton";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { BASE_API_URL } from "@/server";
 import { addPost } from "@/store/postSlice";
@@ -71,9 +76,15 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
       }
 
       // ✅ Update size limits
-      const maxSize = file.type.startsWith("video") ? 30 * 1024 * 1024 : 10 * 1024 * 1024;
+      const maxSize = file.type.startsWith("video")
+        ? 30 * 1024 * 1024
+        : 10 * 1024 * 1024;
       if (file.size > maxSize) {
-        toast.error(`File size should not exceed ${file.type.startsWith("video") ? "30MB" : "10MB"}!`);
+        toast.error(
+          `File size should not exceed ${
+            file.type.startsWith("video") ? "30MB" : "10MB"
+          }!`
+        );
         return;
       }
 
@@ -162,7 +173,9 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total!);
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total!
+          );
           setUploadProgress(percentCompleted);
         },
       });
@@ -190,10 +203,12 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
             {isLoading && fileType === "video" && (
               <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
                 <div
-                  className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                  className="bg-chart-1 h-2.5 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
-                <p className="text-sm text-gray-600 mt-2 text-center">Uploading video... {uploadProgress}%</p>
+                <p className="text-sm text-gray-600 mt-2 text-center">
+                  Uploading video... {uploadProgress}%
+                </p>
               </div>
             )}
 
@@ -201,7 +216,11 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
             {previewUrl && (
               <div className="relative">
                 {fileType === "video" ? (
-                  <video src={previewUrl} controls className="w-full max-h-96 rounded-md object-contain" />
+                  <video
+                    src={previewUrl}
+                    controls
+                    className="w-full max-h-96 rounded-md object-contain"
+                  />
                 ) : (
                   <Image
                     src={previewUrl}
@@ -217,7 +236,8 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
                     setPreviewUrl(null);
                     setFileType(null);
                   }}
-                  className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100">
+                  className="absolute top-2 right-2 bg-foreground rounded-full p-1 shadow-md hover:bg-gray-100"
+                >
                   <X size={20} />
                 </button>
               </div>
@@ -228,7 +248,10 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
               <div className="p-4 border rounded-lg space-y-2">
                 <div className="flex justify-between items-center">
                   <p className="font-semibold">Poll Options</p>
-                  <button onClick={() => setShowPoll(false)} className="text-red-500 hover:text-red-700 text-sm">
+                  <button
+                    onClick={() => setShowPoll(false)}
+                    className="text-red-500 hover:text-red-700 text-sm"
+                  >
                     Remove Poll
                   </button>
                 </div>
@@ -242,14 +265,20 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
                       className="flex-1 border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {pollOptions.length > 2 && (
-                      <button onClick={() => removePollOption(index)} className="text-red-500 hover:text-red-700 w-8">
+                      <button
+                        onClick={() => removePollOption(index)}
+                        className="text-red-500 hover:text-red-700 w-8"
+                      >
                         <X size={20} />
                       </button>
                     )}
                   </div>
                 ))}
                 {pollOptions.length < 4 && (
-                  <button onClick={addPollOption} className="text-blue-500 hover:text-blue-700 text-sm">
+                  <button
+                    onClick={addPollOption}
+                    className="text-blue-500 hover:text-blue-700 text-sm"
+                  >
                     + Add option
                   </button>
                 )}
@@ -261,14 +290,19 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
               <div className="p-4 border rounded-lg space-y-3">
                 <div className="flex justify-between items-center">
                   <p className="font-semibold">Event Details</p>
-                  <button onClick={() => setShowEvent(false)} className="text-red-500 hover:text-red-700 text-sm">
+                  <button
+                    onClick={() => setShowEvent(false)}
+                    className="text-red-500 hover:text-red-700 text-sm"
+                  >
                     Remove Event
                   </button>
                 </div>
                 <input
                   type="text"
                   value={eventData.title}
-                  onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
+                  onChange={(e) =>
+                    setEventData({ ...eventData, title: e.target.value })
+                  }
                   placeholder="Event title"
                   className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -276,20 +310,26 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
                   <input
                     type="date"
                     value={eventData.date}
-                    onChange={(e) => setEventData({ ...eventData, date: e.target.value })}
+                    onChange={(e) =>
+                      setEventData({ ...eventData, date: e.target.value })
+                    }
                     className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                   <input
                     type="time"
                     value={eventData.time}
-                    onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
+                    onChange={(e) =>
+                      setEventData({ ...eventData, time: e.target.value })
+                    }
                     className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
                 <input
                   type="text"
                   value={eventData.location}
-                  onChange={(e) => setEventData({ ...eventData, location: e.target.value })}
+                  onChange={(e) =>
+                    setEventData({ ...eventData, location: e.target.value })
+                  }
                   placeholder="Location"
                   className="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
@@ -301,23 +341,25 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
               placeholder="What's on your mind?"
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              className="w-full border rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-none"
+              className="w-full border rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-chart-1 min-h-[100px] resize-none"
             />
 
             {/* Action Buttons */}
             <div className="flex space-x-4">
               <LoadingButton
-                className="flex-1 bg-blue-600 text-white hover:bg-blue-700"
+                className="flex-1 bg-chart-3 text-white hover:bg-chart-3"
                 isLoading={isLoading}
-                onClick={handleCreatePost}>
+                onClick={handleCreatePost}
+              >
                 Create Post
               </LoadingButton>
               <button
-                className="bg-gray-500 text-white hover:bg-gray-700 px-6 py-2 rounded-md"
+                className="bg-gray-600 text-white hover:bg-gray-700 px-6 py-2 rounded-md"
                 onClick={() => {
                   resetForm();
                   onClose();
-                }}>
+                }}
+              >
                 Cancel
               </button>
             </div>
@@ -335,31 +377,36 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
                 placeholder="What's on your mind?"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                className="w-full border rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-none"
+                className="w-full border rounded-md p-3 text-primary focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-none"
               />
 
               {/* Add Options */}
               <div className="w-full border-t pt-4">
-                <p className="text-sm font-semibold mb-3 text-left">Add to your post</p>
+                <p className="text-sm font-semibold mb-3 text-left">
+                  Add to your post
+                </p>
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     variant="outline"
                     onClick={handleButtonClick}
-                    className="flex items-center gap-2 justify-center">
+                    className="flex items-center gap-2 justify-center"
+                  >
                     <ImageIcon size={20} />
                     Photo/Video
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => setShowPoll(true)}
-                    className="flex items-center gap-2 justify-center">
+                    className="flex items-center gap-2 justify-center"
+                  >
                     <Image src="/poll.png" alt="" width={20} height={20} />
                     Poll
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => setShowEvent(true)}
-                    className="flex items-center gap-2 justify-center col-span-2">
+                    className="flex items-center gap-2 justify-center col-span-2"
+                  >
                     <Image src="/addevent.png" alt="" width={20} height={20} />
                     Event
                   </Button>
@@ -376,10 +423,11 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
 
               {/* Post Button */}
               <LoadingButton
-                className="w-full bg-blue-600 text-white hover:bg-blue-700"
+                className="w-full bg-chart-3 text-white hover:bg-blue-700"
                 isLoading={isLoading}
                 onClick={handleCreatePost}
-                disabled={!caption.trim()}>
+                disabled={!caption.trim()}
+              >
                 Post
               </LoadingButton>
             </div>

@@ -8,8 +8,8 @@ const Account = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   return (
-    <div className="w-full h-full flex flex-col items-center p-4">
-      <div className="w-[64%] bg-card rounded-md shadow-sm border border-border">
+    <div className="w-full h-full flex flex-col items-center p-4 mt-2">
+      <div className="w-full md:w-[64%] bg-card rounded-md shadow-sm border border-border">
         <div className="p-4">
           <h2 className="text-[20px] font-medium text-foreground">
             Profile settings
@@ -31,7 +31,7 @@ const Account = () => {
         <div className="h-[1px] w-full bg-border"></div>
       </div>
       {/* Danger Zone */}
-      <div className="bg-card border border-border w-[64%] mt-4 rounded-md">
+      <div className="bg-card border border-border w-full  md:w-[64%] mt-4 rounded-md">
         <div className="pl-4 py-4">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle size={20} className="text-red-600" />

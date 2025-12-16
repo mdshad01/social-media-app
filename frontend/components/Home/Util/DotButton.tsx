@@ -7,7 +7,13 @@ import { setAuthUser } from "@/store/authSlice";
 import { deletePost } from "@/store/postSlice";
 import { Post, User } from "@/type";
 import axios from "axios";
-import { Bookmark, Ellipsis, UserCheck, UserCircleIcon, UserPlus } from "lucide-react";
+import {
+  Bookmark,
+  Ellipsis,
+  UserCheck,
+  UserCircleIcon,
+  UserPlus,
+} from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState, useRef, useEffect } from "react";
@@ -29,14 +35,19 @@ const DotButton = ({ post, user }: Props) => {
   const dispatch = useDispatch();
 
   const isOwnPost = post?.user?._id === user?._id;
-  const isFollowing = post?.user?._id ? user?.following.includes(post.user._id) : false;
+  const isFollowing = post?.user?._id
+    ? user?.following.includes(post.user._id)
+    : false;
   // This will recalculate whenever user.savedPosts changes
   const isPostSaved = user?.savedPosts?.includes(post?._id as string) || false;
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -52,7 +63,9 @@ const DotButton = ({ post, user }: Props) => {
 
   const handleDeletePost = async () => {
     const deletePostReq = async () =>
-      await axios.delete(`${BASE_API_URL}/posts/delete-post/${post?._id}`, { withCredentials: true });
+      await axios.delete(`${BASE_API_URL}/posts/delete-post/${post?._id}`, {
+        withCredentials: true,
+      });
     const result = await handleAuthRequest(deletePostReq);
     if (result?.data.status === "success") {
       if (post?._id) {
@@ -65,7 +78,11 @@ const DotButton = ({ post, user }: Props) => {
   };
 
   const handleSaveUnsave = async (id: string) => {
-    const result = await axios.post(`${BASE_API_URL}/posts/save-unsave-post/${id}`, {}, { withCredentials: true });
+    const result = await axios.post(
+      `${BASE_API_URL}/posts/save-unsave-post/${id}`,
+      {},
+      { withCredentials: true }
+    );
 
     if (result.data.status == "success") {
       dispatch(setAuthUser(result.data.data.user));
@@ -101,13 +118,14 @@ const DotButton = ({ post, user }: Props) => {
 
       {/* Dropdown Menu */}
       {showDropdown && (
-        <div className="absolute -right-4 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-300 py-2 z-50">
+        <div className="absolute -right-4 mt-2 w-48 bg-card rounded-lg shadow-lg border border-gray-300 py-2 z-50">
           {/* Follow/Unfollow - Only for other users' posts */}
           {!isOwnPost && (
             <>
               <button
                 onClick={handleFollowClick}
-                className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors">
+                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors"
+              >
                 {isFollowing ? (
                   <>
                     <UserCheck size={18} />
@@ -127,7 +145,8 @@ const DotButton = ({ post, user }: Props) => {
           {/* View Profile */}
           <button
             onClick={handleViewProfile}
-            className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors">
+            className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors"
+          >
             <UserCircleIcon size={18} />
             <span>{isOwnPost ? "My Profile" : "User Profile"}</span>
           </button>
@@ -137,18 +156,22 @@ const DotButton = ({ post, user }: Props) => {
           {/* Save/Unsave Post */}
           {user &&
           post?._id &&
-          (user?.savedPosts as string[])?.some((savePostId: string) => savePostId === post?._id) ? (
+          (user?.savedPosts as string[])?.some(
+            (savePostId: string) => savePostId === post?._id
+          ) ? (
             <button
-              className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors"
-              onClick={() => handleSaveUnsave(post?._id)}>
+              className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors"
+              onClick={() => handleSaveUnsave(post?._id)}
+            >
               {" "}
               <GoBookmarkSlash className="text-xl" />
               Unsave post
             </button>
           ) : (
             <button
-              className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-gray-700 transition-colors"
-              onClick={() => handleSaveUnsave(post?._id)}>
+              className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors"
+              onClick={() => handleSaveUnsave(post?._id)}
+            >
               {" "}
               <Bookmark size={20} />
               Save post
@@ -161,7 +184,8 @@ const DotButton = ({ post, user }: Props) => {
               <div className="border-t border-gray-200 my-1"></div>
               <button
                 onClick={handleDeletePost}
-                className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-red-600 transition-colors">
+                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-red-600 transition-colors"
+              >
                 <MdDeleteOutline size={18} />
                 <span>Delete Post</span>
               </button>

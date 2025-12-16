@@ -90,7 +90,7 @@ const Profile = ({ id }: Props) => {
       <div className="  w-full lg:w-[70%] xl:w-[60%] ">
         <div className=" px-0 md:px-5 flex flex-col ">
           <ProfileCard userProfile={userProfile} />
-          <div className="md:hidden w-full flex items-center justify-center mt-12">
+          <div className="md:hidden w-full flex items-center justify-center mt-4 md:mt-12">
             <MobileInfoCard
               setIsEdit={setIsEdit}
               userProfile={userProfile}
