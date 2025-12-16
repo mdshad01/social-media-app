@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { X } from "lucide-react";
 import axios from "axios";
@@ -9,11 +10,11 @@ import { handleAuthRequest } from "@/components/util/apiRequest";
 import { toast } from "sonner";
 import { BASE_API_URL } from "@/server";
 
-type Props = {
-  setShowDeleteModal: (show: boolean) => void;
-};
+// type Props = {
+//   setShowDeleteModal: (show: boolean) => void;
+// };
 
-const DeleteAccountModal = ({ setShowDeleteModal }: Props) => {
+const DeleteAccountModal = () => {
   const [step, setStep] = useState<"choose" | "confirm-soft" | "confirm-hard">(
     "choose"
   );
