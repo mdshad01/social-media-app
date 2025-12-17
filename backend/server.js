@@ -1,5 +1,3 @@
-// import dotenv from "dotenv";
-// dotenv.config({ path: "./.env" });
 import "./config/env.js";
 import mongoose from "mongoose";
 import app from "./app.js";
@@ -10,18 +8,35 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-mongoose
-  .connect(process.env.DB)
-  .then(() => {
+// ✅ MongoDB connection with better error handling
+let cachedDb = null;
+
+async function connectToDatabase() {
+  if (cachedDb) {
+    return cachedDb;
+  }
+
+  try {
+    const db = await mongoose.connect(process.env.DB, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+    
+    cachedDb = db;
     console.log("Database connected successfully");
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+    return db;
+  } catch (error) {
+    console.error("Database connection error:", error);
+    throw error;
+  }
+}
+
+// ✅ Connect to database before starting server
+connectToDatabase();
 
 const port = process.env.PORT || 5000;
 
-const server = app.listen(port, "0.0.0.0", () => {
+const server = app.listen(port, () => {
   console.log(`Server running at ${port}`);
 });
 
@@ -32,3 +47,6 @@ process.on("unhandledRejection", (err) => {
     process.exit(1);
   });
 });
+
+// ✅ Export for Vercel serverless
+export default app;
