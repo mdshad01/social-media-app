@@ -236,7 +236,7 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
                     setPreviewUrl(null);
                     setFileType(null);
                   }}
-                  className="absolute top-2 right-2 bg-foreground rounded-full p-1 shadow-md hover:bg-gray-100"
+                  className="absolute top-2 right-2 bg-card rounded-full p-1 shadow-md hover:bg-card"
                 >
                   <X size={20} />
                 </button>
@@ -341,20 +341,20 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
               placeholder="What's on your mind?"
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
-              className="w-full border rounded-md p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-chart-1 min-h-[100px] resize-none"
+              className="w-full border rounded-md p-3 text-foreground focus:outline-none focus:ring-2 focus:ring-chart-1 min-h-[100px] resize-none"
             />
 
             {/* Action Buttons */}
             <div className="flex space-x-4">
               <LoadingButton
-                className="flex-1 bg-chart-3 text-white hover:bg-chart-3"
+                className="flex-1 bg-chart-3 text-foreground hover:bg-chart-3"
                 isLoading={isLoading}
                 onClick={handleCreatePost}
               >
                 Create Post
               </LoadingButton>
               <button
-                className="bg-gray-600 text-white hover:bg-gray-700 px-6 py-2 rounded-md"
+                className="bg-gray-600 text-foreground hover:bg-chart-3 px-6 py-2 rounded-md"
                 onClick={() => {
                   resetForm();
                   onClose();
@@ -377,7 +377,7 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
                 placeholder="What's on your mind?"
                 value={caption}
                 onChange={(e) => setCaption(e.target.value)}
-                className="w-full border rounded-md p-3 text-primary focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px] resize-none"
+                className="w-full border rounded-md p-3 text-primary focus:outline-none focus:ring-2 focus:ring-chart-1 min-h-[100px] resize-none"
               />
 
               {/* Add Options */}
@@ -423,7 +423,7 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
 
               {/* Post Button */}
               <LoadingButton
-                className="w-full bg-chart-3 text-white hover:bg-blue-700"
+                className="w-full bg-chart-3 text-foreground hover:bg-chart-3"
                 isLoading={isLoading}
                 onClick={handleCreatePost}
                 disabled={!caption.trim()}
