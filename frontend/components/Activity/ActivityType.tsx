@@ -33,7 +33,7 @@ const ActivityType: React.FC<ActivityTypeProps> = ({ activityType, setType }) =>
               className={`px-4 py-1 font-medium rounded-2xl cursor-pointer transition-all border-[2.2px] border-gray-300  ${
                 activityType === item.value
                   ? "bg-popover-foreground text-background border-black shadow-none"
-                  : "text-foreground bg-popover hover:shadow hover:border-gray-700 hover:bg-gray-100"
+                  : "text-foreground bg-popover hover:shadow hover:border-gray-700 hover:bg-card"
               }`}
             >
               {item.label}

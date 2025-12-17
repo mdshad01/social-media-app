@@ -13,7 +13,7 @@ const FollowActivity: React.FC<FollowActivityProps> = ({ activity }) => {
   const router = useRouter();
   return (
     <div className="mt-6 rounded-md">
-      <div className="flex items-center gap-4 bg-blue-50 px-2 pr-4 rounded-md py-1 w-[95%] border-[1px] border-black/10">
+      <div className="flex items-center gap-4 bg-background/20 px-2 pr-4 py-2 w-[95%] border-[1px] border-primary/10 rounded-lg text-foreground">
         <Image
           onClick={() => router.push(`/profile/${activity?.user?._id}`)}
           src={

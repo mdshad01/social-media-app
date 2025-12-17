@@ -10,8 +10,8 @@ type PostActivityProps = {
 
 const PostActivity: React.FC<PostActivityProps> = ({ activity }) => {
   return (
-    <div className="border-2 border-gray-100 rounded-md mt-6">
-      <div className="px-4 py-2 bg-blue-50 flex justify-between border-b-1 border-black/10">
+    <div className="border-2 border-primary/10 rounded-md mt-6">
+      <div className="px-4 py-2 bg-upcard flex justify-between border-b-1 border-accent-foreground/20">
         <p className="flex gap-3 items-center">
           <Image
             src="/posts.png"
@@ -22,7 +22,7 @@ const PostActivity: React.FC<PostActivityProps> = ({ activity }) => {
           />{" "}
           You posted this
         </p>
-        <span className="text-sm text-gray-500">
+        <span className="text-sm text-muted-foreground">
           {formatActivityDate(activity.createdAt)}
         </span>
       </div>

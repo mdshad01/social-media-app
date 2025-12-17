@@ -43,7 +43,7 @@ const Feed = ({ userProfile }: Props) => {
     return <div className="text-3xl m-8 text-center capitalize font-black">No post avaliable</div>;
   }
   return (
-    <div className="py-4 bg-white shadow-md rounded-lg flex flex-col gap-12  mt-6 scrollbar-hide">
+    <div className="py-4 bg-background shadow-md rounded-lg flex flex-col gap-12  mt-2 scrollbar-hide">
       {user ? posts.map((post, index) => <PostCard key={index} post={post} user={user} />) : <p>No posts available</p>}
     </div>
   );
