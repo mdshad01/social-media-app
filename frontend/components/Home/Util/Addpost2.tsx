@@ -70,7 +70,7 @@ const Addpost2 = () => {
               className="flex gap-1 items-center cursor-pointer hover:bg-accent  p-2 rounded-lg transition-colors"
             >
               <Image
-                src="/addvideo.png"
+                src="/addVideo.png"
                 alt=""
                 height={20}
                 width={20}
