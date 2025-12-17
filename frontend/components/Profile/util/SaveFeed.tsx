@@ -17,14 +17,14 @@ const SaveFeed = ({ userProfile }: Props) => {
   // No saved posts
   if (!savedPosts || savedPosts.length === 0) {
     return (
-      <div className="p-4 bg-white shadow-md rounded-lg mt-6">
-        <p className="text-center text-gray-500 py-8">No saved posts yet</p>
+      <div className="p-4 bg-card shadow-md rounded-lg mt-6">
+        <p className="text-center text-accent py-8">No saved posts yet</p>
       </div>
     );
   }
 
   return (
-    <div className="py-4 bg-white shadow-md rounded-lg flex flex-col gap-12 mt-6 scrollbar-hide">
+    <div className="py-4 bg-background shadow-md rounded-lg flex flex-col gap-12 mt-6 scrollbar-hide">
       {savedPosts.map((post, index) => (
         <PostCard key={post._id || index} post={post} user={user} />
       ))}
