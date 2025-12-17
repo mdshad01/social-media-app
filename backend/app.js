@@ -28,11 +28,9 @@ app.use(
       "http://localhost:3000",
       "http://10.29.204.203:3000",
       "https://social-media-app-6omb.vercel.app",
-      process.env.FRONTEND_URL // ✅ Use environment variable
-    ].filter(Boolean),
+    ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+  
   })
 );
 
