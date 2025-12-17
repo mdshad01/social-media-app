@@ -27,7 +27,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://10.29.204.203:3000",
-      "https://social-media-app-6omb.vercel.app",
+      "https://social-media-app-6omb.vercel.app/api/v1",
       process.env.FRONTEND_URL // ✅ Use environment variable
     ].filter(Boolean),
     credentials: true,
