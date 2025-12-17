@@ -1,15 +1,16 @@
 import Image from "next/image";
 import React from "react";
 import { formatActivityDate } from "./dateHelpers";
-import PostCard from "@/components/Home/Util/PostCard";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import ActivityPostCard from "./ActivityPostCard";
+import { LikeActivities } from "@/type";  // ✅ Import from type.d.ts
 
-const LikeActivity = ({ activity }) => {
-  const user = useSelector((state: RootState) => state.auth.user);
+type LikeActivityProps = {
+  activity: LikeActivities;
+};
+
+const LikeActivity: React.FC<LikeActivityProps> = ({ activity }) => {
   return (
     <div className="border-2 border-primary/10 rounded-md mt-6">
-      {/* Activity Header */}
       <div className="px-4 py-2 bg-upcard flex justify-between border-b-1 border-accent-foreground/20">
         <p className="flex gap-3 items-center">
           <Image
@@ -19,15 +20,13 @@ const LikeActivity = ({ activity }) => {
             width={24}
             className="w-5 h-5"
           />{" "}
-          You Liked this post
+          You liked this post
         </p>
         <span className="text-sm text-muted-foreground">
-          {formatActivityDate(activity.createdAt)}
+          Recent activity
         </span>
       </div>
-
-      {/* Reuse PostCard */}
-      <PostCard post={activity.post} user={user} />
+      <ActivityPostCard post={activity.post} showUser={true} />
     </div>
   );
 };

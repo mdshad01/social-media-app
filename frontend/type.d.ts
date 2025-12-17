@@ -16,6 +16,10 @@ export interface User {
   posts: Post[];
   savedPosts: string[] | Post[];
   isVerified: boolean;
+  isDeleted:boolean;
+  deletionType:string;
+  deletionScheduledAt:Date;
+  deletionExecuteAt:Date;
 }
 
 export interface Comment {
@@ -78,7 +82,7 @@ export interface Post {
 
 // Posts Activities
 
-interface PostActivity {
+export interface PostActivity {
   type: "post";
   post: {
     _id: string;
@@ -93,7 +97,7 @@ interface PostActivity {
 
 // Comments Activities
 
-interface CommentActivities {
+export interface CommentActivities {
   type: "comment";
   comment: string;
   post: {
@@ -110,7 +114,7 @@ interface CommentActivities {
 
 // likes Activities
 
-interface LikeActivities {
+export interface LikeActivities {
   type: "like";
   post: {
     _id: string;
@@ -125,11 +129,12 @@ interface LikeActivities {
       profilePicture: string;
     };
   };
+  createdAt: string;
 }
 
 // Follow Activity
 
-interface FollowActivity {
+export interface FollowActivity {
   type: "follow";
   user: {
     _id: string;

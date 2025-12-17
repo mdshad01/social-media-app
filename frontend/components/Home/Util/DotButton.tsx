@@ -38,8 +38,11 @@ const DotButton = ({ post, user }: Props) => {
   const isFollowing = post?.user?._id
     ? user?.following.includes(post.user._id)
     : false;
-  // This will recalculate whenever user.savedPosts changes
-  const isPostSaved = user?.savedPosts?.includes(post?._id as string) || false;
+
+  // ✅ Fixed: Check if savedPosts contains the post ID
+  const isPostSaved = user?.savedPosts && post?._id
+    ? (user.savedPosts as string[]).includes(post._id)
+    : false;
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -105,8 +108,6 @@ const DotButton = ({ post, user }: Props) => {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      {/* <Ellipsis className="w-6 h-6 text-gray-900 cursor-pointer" onClick={() => setShowDropdown(!showDropdown)} />
-       */}
       <Image
         src="/more.png"
         alt="more"
@@ -153,26 +154,20 @@ const DotButton = ({ post, user }: Props) => {
 
           <div className="border-t border-gray-200 my-1"></div>
 
-          {/* Save/Unsave Post */}
-          {user &&
-          post?._id &&
-          (user?.savedPosts as string[])?.some(
-            (savePostId: string) => savePostId === post?._id
-          ) ? (
+          {/* Save/Unsave Post - ✅ Simplified logic */}
+          {isPostSaved ? (
             <button
               className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors"
-              onClick={() => handleSaveUnsave(post?._id)}
+              onClick={() => post?._id && handleSaveUnsave(post._id)}
             >
-              {" "}
               <GoBookmarkSlash className="text-xl" />
               Unsave post
             </button>
           ) : (
             <button
               className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors"
-              onClick={() => handleSaveUnsave(post?._id)}
+              onClick={() => post?._id && handleSaveUnsave(post._id)}
             >
-              {" "}
               <Bookmark size={20} />
               Save post
             </button>

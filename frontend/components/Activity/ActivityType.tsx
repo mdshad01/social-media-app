@@ -2,6 +2,7 @@ import { RootState } from "@/store/store";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ActivityItem from "./ActivityItem";
+import { ActivityTypeValue, ActivityTypeProps } from "./types";  // ✅ Import from shared types
 
 const tabs = [
   { value: "all", label: "All" },
@@ -9,9 +10,9 @@ const tabs = [
   { value: "comment", label: "Comments" },
   { value: "like", label: "Likes" },
   { value: "follow", label: "Follows" },
-];
+] as const;  // ✅ Added 'as const' for better type inference
 
-const ActivityType = ({ activityType, setType }) => {
+const ActivityType: React.FC<ActivityTypeProps> = ({ activityType, setType }) => {
   const { activities } = useSelector((state: RootState) => state.activity);
   const filterActivities =
     activityType === "all"
@@ -27,7 +28,7 @@ const ActivityType = ({ activityType, setType }) => {
         <ul className="flex items-center justify-start gap-3  py-1">
           {tabs.map((item) => (
             <li
-              onClick={() => setType(item.value)}
+              onClick={() => setType(item.value as ActivityTypeValue)}
               key={item.value}
               className={`px-4 py-1 font-medium rounded-2xl cursor-pointer transition-all border-[2.2px] border-gray-300  ${
                 activityType === item.value

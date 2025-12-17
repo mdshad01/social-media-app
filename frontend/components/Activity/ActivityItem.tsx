@@ -3,8 +3,13 @@ import PostActivity from "./util/PostActivity";
 import CommentActivity from "./util/CommentActivity";
 import LikeActivity from "./util/LikeActivity";
 import FollowActivity from "./util/FollowActivity";
+import { Activity } from "@/type";
 
-const ActivityItem = ({ activity }) => {
+type Props = {
+  activity: Activity;
+}
+
+const ActivityItem = ({ activity }:Props) => {
   if (activity.type === "post") {
     return <PostActivity activity={activity} />;
   }

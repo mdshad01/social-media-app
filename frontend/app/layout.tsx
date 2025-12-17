@@ -1,18 +1,16 @@
 import type { Metadata } from "next";
-import { Inter, Lobster, Roboto } from "next/font/google";
+import { Inter, Lobster } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import ClientProvider from "@/HOC/ClientProvider";
-import Navbar from "@/components/Home/Navbar";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import MainContainer from "@/components/MainContainer";
-import Sidebar from "@/components/settings/Sidebar";
 import { ThemeProvider } from "next-themes";
 
-const roboto = Roboto({
-  weight: ["100", "300", "400", "500", "700", "900"],
-  subsets: ["latin"],
-});
+// const roboto = Roboto({
+//   weight: ["100", "300", "400", "500", "700", "900"],
+//   subsets: ["latin"],
+// });
 
 const inter = Inter({
   weight: ["100", "300", "400", "500", "700", "900"],

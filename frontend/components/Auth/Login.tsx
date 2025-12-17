@@ -18,6 +18,7 @@ import {
   ShieldCheck,
   AlertCircle,
 } from "lucide-react";
+import { User } from "@/type";
 
 interface FormData {
   email: string;
@@ -29,7 +30,9 @@ const Login = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showReactivateModal, setShowReactivateModal] = useState(false);
-  const [deactivatedUserData, setDeactivatedUserData] = useState<any>(null);
+  const [deactivatedUserData, setDeactivatedUserData] = useState<User | null>(
+    null
+  );
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",

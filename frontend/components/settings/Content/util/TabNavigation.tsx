@@ -51,7 +51,8 @@ const TabNavigation = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const pathname = usePathname();
   const [showMoreDropdown, setShowMoreDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+ const dropdownRef = useRef<HTMLLIElement>(null);
+
   const [visibleCount, setVisibleCount] = useState(2);
 
   useEffect(() => {

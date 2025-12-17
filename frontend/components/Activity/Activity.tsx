@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setActivity, setActivityStats } from "@/store/activitySlice";
 import ActivityType from "./ActivityType";
+import { ActivityTypeValue } from "./types";  // ✅ Import the type
 
 const Activity = () => {
-  const [type, setType] = useState<string>("all");
+  const [type, setType] = useState<ActivityTypeValue>("all");  // ✅ Changed from string to ActivityTypeValue
 
   const { activities, stats } = useSelector(
     (state: RootState) => state.activity

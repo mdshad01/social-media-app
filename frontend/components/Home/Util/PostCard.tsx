@@ -125,49 +125,57 @@ const PostCard = ({ post, user }: Props) => {
           </div>
         )}
 
-        {/* POLL POST */}
+          {/* POLL POST */}
         {post?.postType === "poll" && post?.poll && (
           <div className="px-4 space-y-2">
             <p className="font-semibold mb-3">{post.poll.question}</p>
-            {post.poll.options.map((option, index) => {
+            {(() => {
+              // ✅ Calculate totalVotes once, outside the map
               const totalVotes = post.poll!.options.reduce(
                 (sum, opt) => sum + opt.votes.length,
                 0
               );
-              const percentage =
-                totalVotes > 0 ? (option.votes.length / totalVotes) * 100 : 0;
-              const hasVoted = user?._id && option.votes.includes(user._id);
 
               return (
-                <button
-                  key={index}
-                  onClick={() => handleVoteOnPoll(post._id, index)}
-                  className={`w-full p-3 border rounded-lg hover:bg-gray-50 transition-colors ${
-                    hasVoted ? "bg-blue-50 border-blue-500" : ""
-                  }`}
-                >
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium text-left">{option.text}</span>
-                    <span className="text-sm text-gray-500">
-                      {percentage.toFixed(0)}% ({option.votes.length})
-                    </span>
-                  </div>
-                  {totalVotes > 0 && (
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div
-                        className={`h-full transition-all ${
-                          hasVoted ? "bg-blue-500" : "bg-gray-400"
+                <>
+                  {post.poll!.options.map((option, index) => {
+                    const percentage =
+                      totalVotes > 0 ? (option.votes.length / totalVotes) * 100 : 0;
+                    const hasVoted = user?._id && option.votes.includes(user._id);
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleVoteOnPoll(post._id, index)}
+                        className={`w-full p-3 border rounded-lg hover:bg-gray-50 transition-colors ${
+                          hasVoted ? "bg-blue-50 border-blue-500" : ""
                         }`}
-                        style={{ width: `${percentage}%` }}
-                      />
-                    </div>
-                  )}
-                </button>
+                      >
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-medium text-left">{option.text}</span>
+                          <span className="text-sm text-gray-500">
+                            {percentage.toFixed(0)}% ({option.votes.length})
+                          </span>
+                        </div>
+                        {totalVotes > 0 && (
+                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div
+                              className={`h-full transition-all ${
+                                hasVoted ? "bg-blue-500" : "bg-gray-400"
+                              }`}
+                              style={{ width: `${percentage}%` }}
+                            />
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                  <p className="text-sm text-gray-500 mt-2">
+                    Total votes: {totalVotes}
+                  </p>
+                </>
               );
-            })}
-            <p className="text-sm text-gray-500 mt-2">
-              Total votes: {totalVotes}
-            </p>
+            })()}
           </div>
         )}
 

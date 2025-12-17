@@ -1,16 +1,16 @@
-import PostCard from "@/components/Home/Util/PostCard";
-import { RootState } from "@/store/store";
 import Image from "next/image";
 import React from "react";
-import { useSelector } from "react-redux";
 import { formatActivityDate } from "./dateHelpers";
+import ActivityPostCard from "./ActivityPostCard";
+import { PostActivity as PostActivityType } from "@/type";  // ✅ Import from type.d.ts
 
-const PostActivity = ({ activity }) => {
-  const user = useSelector((state: RootState) => state.auth.user);
-  console.log(activity);
+type PostActivityProps = {
+  activity: PostActivityType;
+};
+
+const PostActivity: React.FC<PostActivityProps> = ({ activity }) => {
   return (
     <div className="border-2 border-gray-100 rounded-md mt-6">
-      {/* Activity Header */}
       <div className="px-4 py-2 bg-blue-50 flex justify-between border-b-1 border-black/10">
         <p className="flex gap-3 items-center">
           <Image
@@ -26,9 +26,7 @@ const PostActivity = ({ activity }) => {
           {formatActivityDate(activity.createdAt)}
         </span>
       </div>
-
-      {/* Reuse PostCard */}
-      <PostCard post={activity.post} user={user} />
+      <ActivityPostCard post={activity.post} showUser={false} />
     </div>
   );
 };

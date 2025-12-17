@@ -4,20 +4,11 @@ import { RootState } from "@/store/store";
 import { User } from "@/type";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { handleAuthRequest } from "../util/apiRequest";
-import { Loader, MenuIcon } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
-import LeftSidebar from "../Home/LeftSidebar";
-import { BiAperture } from "react-icons/bi";
-import Navbar from "../Home/Navbar";
+import { Loader} from "lucide-react";
+
 import ProfileCard from "./util/ProfileCard";
 import UserInfoCard from "./util/UserInfoCard";
 import Feed from "./util/Feed";
@@ -85,7 +76,7 @@ const Profile = ({ id }: Props) => {
     <div className="flex pt-6 bg-background">
       <div className="lg:w-[20%] xl:w-[18%] hidden md:block  h-full ">
         {/* <LeftSidebar /> */}
-        <LeftMenu setSavePost={setSavePost} type="profile" />
+        <LeftMenu type="profile" />
       </div>
       <div className="  w-full lg:w-[70%] xl:w-[60%] ">
         <div className=" px-0 md:px-5 flex flex-col ">

@@ -2,11 +2,15 @@ import React from "react";
 import { formatActivityDate } from "./dateHelpers";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { UserCheck, UserPlus } from "lucide-react";
+import { UserCheck } from "lucide-react";
+import { FollowActivity as FollowActivityType } from "@/type";  // ✅ Import from type.d.ts
 
-const FollowActivity = ({ activity }) => {
+type FollowActivityProps = {
+  activity: FollowActivityType;
+};
+
+const FollowActivity: React.FC<FollowActivityProps> = ({ activity }) => {
   const router = useRouter();
-  console.log(activity);
   return (
     <div className="mt-6 rounded-md">
       <div className="flex items-center gap-4 bg-blue-50 px-2 pr-4 rounded-md py-1 w-[95%] border-[1px] border-black/10">
@@ -22,12 +26,12 @@ const FollowActivity = ({ activity }) => {
           className="w-12 h-12 rounded-full object-cover cursor-pointer"
         />
         <div>
-          <p>You followed  {activity.user.username}</p>
+          <p>You followed {activity.user.username}</p>
           <span className="text-sm text-gray-500">
             {formatActivityDate(activity.createdAt)}
           </span>
         </div>
-         <UserCheck className=" ml-auto" />
+        <UserCheck className="ml-auto" />
       </div>
     </div>
   );

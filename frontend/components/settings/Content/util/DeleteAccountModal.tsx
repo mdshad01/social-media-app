@@ -10,11 +10,11 @@ import { handleAuthRequest } from "@/components/util/apiRequest";
 import { toast } from "sonner";
 import { BASE_API_URL } from "@/server";
 
-// type Props = {
-//   setShowDeleteModal: (show: boolean) => void;
-// };
+type Props = {
+  setShowDeleteModal: (show: boolean) => void;
+};
 
-const DeleteAccountModal = () => {
+const DeleteAccountModal = ({ setShowDeleteModal }: Props) => {
   const [step, setStep] = useState<"choose" | "confirm-soft" | "confirm-hard">(
     "choose"
   );
@@ -112,8 +112,8 @@ const DeleteAccountModal = () => {
         {step === "confirm-soft" && (
           <div className="space-y-4">
             <p className="text-foreground">
-              Are you sure you want to deactivate your account? You'll have 30
-              days to change your mind and reactivate it.
+              Are you sure you want to deactivate your account? You&apos;ll have
+              30 days to change your mind and reactivate it.
             </p>
             <div className="flex gap-3 justify-end">
               <button
