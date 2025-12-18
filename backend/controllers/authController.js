@@ -28,12 +28,13 @@ const signToken = (id) => {
 const createSendToken = (user, statusCode, res, message) => {
   const token = signToken(user._id);
   
-  // ✅ FIXED: Explicit cookie settings for cross-domain production
+  const isProduction = process.env.NODE_ENV === "production";
+  
   const cookieOption = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    secure: true, // ✅ Always HTTPS (Vercel uses HTTPS)
-    sameSite: "none", // ✅ Allow cross-domain cookies
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
   };
 
@@ -49,6 +50,7 @@ const createSendToken = (user, statusCode, res, message) => {
     data: { user },
   });
 };
+
 
 
 export const signup = catchAsync(async (req, res, next) => {
@@ -172,16 +174,19 @@ export const login = catchAsync(async (req, res, next) => {
 });
 
 export const logout = catchAsync(async (req, res, next) => {
+  const isProduction = process.env.NODE_ENV === "production";
+  
   res.cookie("jwt", "", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
-    secure: true, // ✅ Always HTTPS
-    sameSite: "none", // ✅ Allow cross-domain
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
   });
 
   res.status(200).json({ status: "success", message: "Logged out successfully." });
 });
+
 
 export const forgetPassword = catchAsync(async (req, res, next) => {
   const { email } = req.body;

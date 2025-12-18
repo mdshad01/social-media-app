@@ -28,6 +28,7 @@ app.use(
       "http://localhost:3000",
       "http://10.29.204.203:3000",
       "https://social-media-app-6omb.vercel.app",
+      "https://social-media-app-snowy-xi.vercel.app"
     ],
     credentials: true,
   
