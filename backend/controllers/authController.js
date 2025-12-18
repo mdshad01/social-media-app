@@ -28,19 +28,19 @@ const signToken = (id) => {
 const createSendToken = (user, statusCode, res, message) => {
   const token = signToken(user._id);
   
-  // ✅ Improved cookie options for production
+  // ✅ FIXED: Explicit cookie settings for cross-domain production
   const cookieOption = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // HTTPS only in production
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Cross-site for production
-    path: "/", // ✅ Available on all paths
+    secure: true, // ✅ Always HTTPS (Vercel uses HTTPS)
+    sameSite: "none", // ✅ Allow cross-domain cookies
+    path: "/",
   };
 
   res.cookie("jwt", token, cookieOption);
   user.password = undefined;
   user.otp = undefined;
-  user.passwordConfirm = undefined; // ✅ Also hide passwordConfirm
+  user.passwordConfirm = undefined;
   
   res.status(statusCode).json({
     status: "success",
@@ -175,8 +175,9 @@ export const logout = catchAsync(async (req, res, next) => {
   res.cookie("jwt", "", {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: true, // ✅ Always HTTPS
+    sameSite: "none", // ✅ Allow cross-domain
+    path: "/",
   });
 
   res.status(200).json({ status: "success", message: "Logged out successfully." });
