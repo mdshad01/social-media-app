@@ -34,6 +34,7 @@ const createSendToken = (user, statusCode, res, message) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production", // HTTPS only in production
     sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Cross-site for production
+    path: "/", // ✅ Available on all paths
   };
 
   res.cookie("jwt", token, cookieOption);
