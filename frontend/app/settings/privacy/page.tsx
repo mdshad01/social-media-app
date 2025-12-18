@@ -1,7 +1,12 @@
+import VerificationGuard from "@/components/guards/VerificationGuard";
 import React from "react";
 
 const PrivacyPage = () => {
-  return <div>PrivacyPage</div>;
+  return (
+    <VerificationGuard>
+      <div>PrivacyPage</div>
+    </VerificationGuard>
+  );
 };
 
 export default PrivacyPage;

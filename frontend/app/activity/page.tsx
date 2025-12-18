@@ -1,10 +1,15 @@
 
 import Activity from '@/components/Activity/Activity'
+import VerificationGuard from '@/components/guards/VerificationGuard'
 import React from 'react'
 
 const ActivityPage = () => {
   return (
-    <div><Activity /></div>
+    <div>
+      <VerificationGuard>
+      <Activity />
+      </VerificationGuard>
+      </div>
   )
 }
 

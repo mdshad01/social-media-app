@@ -9,17 +9,19 @@ export function middleware(request: NextRequest) {
   const publicRoutes = ["/auth/login", "/auth/signup", "/auth/forgot-password", "/auth/reset-password"];
   const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route));
 
-  // ✅ If user has token and tries to access auth pages, redirect to home
-  if (token && isPublicRoute) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  // ✅ Verification route (needs auth but not verification)
+  const isVerifyRoute = pathname.startsWith("/auth/verify");
 
-  // ✅ If user doesn't have token and tries to access protected pages, redirect to login
-  if (!token && !isPublicRoute) {
+  // ✅ No token - redirect to login (except public routes and verify)
+  if (!token && !isPublicRoute && !isVerifyRoute) {
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 
-  // ✅ Allow the request to proceed
+  // ✅ Has token and trying to access public routes (except verify) - redirect to home
+  if (token && isPublicRoute && !isVerifyRoute) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   return NextResponse.next();
 }
 

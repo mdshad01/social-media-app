@@ -3,6 +3,7 @@ import LeftMenu from "@/components/Home/LeftMenu";
 import Ad from "@/components/Home/Util/Ad";
 import SuggestedUser from "@/components/Home/Util/SuggestedUser";
 import Feed from "@/components/Profile/util/Feed";
+import VerificationGuard from "@/components/guards/VerificationGuard";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { BASE_API_URL } from "@/server";
 import { RootState } from "@/store/store";
@@ -29,6 +30,7 @@ const MyPostPage = () => {
   console.log(userProfile);
   return (
     <div className="flex flex-col">
+      <VerificationGuard>
       <div className="flex gap-4 sm:gap-6 pt-4 sm:pt-6 md:px-2 sm:px-4">
         {/* ✅ Left Sidebar - Hidden on mobile */}
         <div className="hidden md:block md:w-[30%] lg:w-[20%]">
@@ -48,6 +50,7 @@ const MyPostPage = () => {
           <Ad size="md" />
         </div>
       </div>
+      </VerificationGuard>
     </div>
   );
 };

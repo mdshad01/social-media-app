@@ -1,4 +1,5 @@
 import Profile from "@/components/Profile/Profile";
+import VerificationGuard from "@/components/guards/VerificationGuard";
 import React from "react";
 
 type PageProps = {
@@ -10,7 +11,9 @@ const ProfilePage = async ({ params }: PageProps) => {
 
   return (
     <div className="bg-slate-100">
+      <VerificationGuard>
       <Profile id={id} />
+      </VerificationGuard>
     </div>
   );
 };
