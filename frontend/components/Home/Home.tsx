@@ -1,21 +1,14 @@
 "use client";
-import { RootState } from "@/store/store";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import Navbar from "./Navbar";
-import LeftSidebar from "./LeftSidebar";
+
 import Feed from "./Feed";
 import RightSidebar from "./RightSidebar";
 import { useRouter } from "next/navigation";
 import LeftMenu from "./LeftMenu";
 import Addpost2 from "./Util/Addpost2";
-import SavedPost from "./Util/SavedPost";
-import Stories from "./Util/Stories";
+
 
 const Home = () => {
-  const router = useRouter();
-  const [savePost, setSavePost] = useState<boolean>(false);
-
   return  (
     <div className="flex flex-col">
       <div className="flex gap-4 sm:gap-6 pt-4 sm:pt-6 md:px-2 sm:px-4">

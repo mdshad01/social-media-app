@@ -79,7 +79,7 @@ const PostCard = ({ post, user }: Props) => {
             onClick={() => router.push(`/profile/${post?.user?._id}`)}
             src={
               post?.user?.profilePicture ||
-              "https://images.pexels.com/photos/32409117/pexels-photo-32409117.jpeg"
+              "/noAvatar3.svg"
             }
             alt=""
             width={40}

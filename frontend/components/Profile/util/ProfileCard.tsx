@@ -16,7 +16,7 @@ const ProfileCard = ({ userProfile }: Props) => {
         <Image
           src={
             userProfile?.backgroundImage ||
-            "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"
+            "/banner1.svg"
           }
           alt=""
           fill
@@ -25,12 +25,12 @@ const ProfileCard = ({ userProfile }: Props) => {
         <Image
           src={
             userProfile?.profilePicture ||
-            "https://images.pexels.com/photos/2811089/pexels-photo-2811089.jpeg"
+            "/noAvatar3.svg"
           }
           alt=""
           width={128}
           height={128}
-          className="rounded-full object-cover w-34 h-34 absolute left-0 right-0 m-auto -bottom-16 ring-4 ring-accent z-10 shadow "
+          className="rounded-full object-cover w-34 h-34 bg-card absolute left-0 right-0 m-auto -bottom-16 ring-4 ring-accent z-10 shadow "
         />
       </div>
       <div className="px-10 w-full bg-card flex flex-col gap-5 items-center justify-center pb-4 md:rounded-lg shadow">

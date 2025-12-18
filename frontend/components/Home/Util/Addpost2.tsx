@@ -32,7 +32,7 @@ const Addpost2 = () => {
               onClick={() => router.push(`/profile/${user?._id}`)}
               src={
                 user?.profilePicture ||
-                "https://images.pexels.com/photos/16654239/pexels-photo-16654239.jpeg"
+                "/noAvatar3.svg"
               }
               alt=""
               height={48}

@@ -20,7 +20,7 @@ const ProfileCard = () => {
         <Image
           src={
             user?.backgroundImage ||
-            "https://images.pexels.com/photos/6009651/pexels-photo-6009651.jpeg"
+            "/banner1.svg"
           }
           alt=""
           fill
@@ -29,7 +29,7 @@ const ProfileCard = () => {
         <Image
           src={
             user?.profilePicture ||
-            "https://images.pexels.com/photos/2811089/pexels-photo-2811089.jpeg"
+            "/noAvatar3.svg"
           }
           alt=""
           width={48}

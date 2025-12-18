@@ -21,6 +21,7 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import LeftSidebar from "../Home/LeftSidebar";
+import Image from "next/image";
 
 const Navbar = () => {
   const user = useSelector((state: RootState) => state?.auth.user);
@@ -149,7 +150,7 @@ const Navbar = () => {
                 src={user?.profilePicture}
                 className="w-full h-full"
               />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback><Image src="/noAvatar3.svg" alt="image" width={40} height={40} /></AvatarFallback>
             </Avatar>
           </span>
 

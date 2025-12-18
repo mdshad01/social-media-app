@@ -27,16 +27,21 @@ const signToken = (id) => {
 
 const createSendToken = (user, statusCode, res, message) => {
   const token = signToken(user._id);
+  
+  // ✅ Improved cookie options for production
   const cookieOption = {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: process.env.NODE_ENV === "production", // HTTPS only in production
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // Cross-site for production
+    path: "/", // ✅ Available on all paths
   };
 
   res.cookie("jwt", token, cookieOption);
   user.password = undefined;
   user.otp = undefined;
+  user.passwordConfirm = undefined; // ✅ Also hide passwordConfirm
+  
   res.status(statusCode).json({
     status: "success",
     message,
@@ -44,6 +49,7 @@ const createSendToken = (user, statusCode, res, message) => {
     data: { user },
   });
 };
+
 
 export const signup = catchAsync(async (req, res, next) => {
   const { username, email, passwordConfirm, password } = req.body;

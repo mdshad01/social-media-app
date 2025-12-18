@@ -1,5 +1,6 @@
 import express from "express";
 import isAuthenticated from "../middleware/isAuthenticated.js";
+import isVerified from "../middleware/isVerified.js"; // ✅ Import new middleware
 import upload from "../middleware/multer.js";
 import {
   addComment,
@@ -18,18 +19,18 @@ import {
 
 const postRouter = express.Router();
 
-// routers
-postRouter.post("/create-post", isAuthenticated, upload.single("image"), createPost);
-postRouter.post("/poll/vote", isAuthenticated, voteOnPoll);
-postRouter.post("/event/rsvp/:postId", isAuthenticated, rsvpToEvent);
-postRouter.get("/all", getAllPosts);
-postRouter.get("/user-post/:id", getUserPost);
-postRouter.post("/save-unsave-post/:postId", isAuthenticated, saveOrUnsavePost);
-postRouter.delete("/delete-post/:id", isAuthenticated, deletePost);
-postRouter.post("/like-dislike/:id", isAuthenticated, likeOrDislikePost);
-postRouter.post("/comment/:id", isAuthenticated, addComment);
-postRouter.post("/comment/like/:commentId", isAuthenticated, likeOrDislikeComment);
-postRouter.post("/comment/reply/:commentId", isAuthenticated, replyToComment);
-postRouter.delete("/comment/:commentId", isAuthenticated, deleteComment);
+// ✅ All post routes require authentication + verification
+postRouter.post("/create-post", isAuthenticated, isVerified, upload.single("image"), createPost);
+postRouter.post("/poll/vote", isAuthenticated, isVerified, voteOnPoll);
+postRouter.post("/event/rsvp/:postId", isAuthenticated, isVerified, rsvpToEvent);
+postRouter.get("/all", isAuthenticated, isVerified, getAllPosts);
+postRouter.get("/user-post/:id", isAuthenticated, isVerified, getUserPost);
+postRouter.post("/save-unsave-post/:postId", isAuthenticated, isVerified, saveOrUnsavePost);
+postRouter.delete("/delete-post/:id", isAuthenticated, isVerified, deletePost);
+postRouter.post("/like-dislike/:id", isAuthenticated, isVerified, likeOrDislikePost);
+postRouter.post("/comment/:id", isAuthenticated, isVerified, addComment);
+postRouter.post("/comment/like/:commentId", isAuthenticated, isVerified, likeOrDislikeComment);
+postRouter.post("/comment/reply/:commentId", isAuthenticated, isVerified, replyToComment);
+postRouter.delete("/comment/:commentId", isAuthenticated, isVerified, deleteComment);
 
 export default postRouter;
