@@ -51,6 +51,15 @@ app.use(mongoSanitize());
 app.use("/uploads", express.static("uploads")); // User uploads
 app.use(express.static(path.join(__dirname, "public"))); // Static assets
 
+// DEBUG: Remove this after testing
+app.get("/api/v1/debug", (req, res) => {
+  res.json({
+    nodeEnv: process.env.NODE_ENV,
+    isProduction: process.env.NODE_ENV === "production",
+    jwtCookieExpires: process.env.JWT_COOKIE_EXPIRES_IN
+  });
+});
+
 // Routes
 
 app.use("/api/v1/users", userRouter); //postman user => users
