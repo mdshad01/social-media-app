@@ -192,7 +192,7 @@ const Login = () => {
                   type="email"
                   id="email"
                   placeholder="email address"
-                  className="px-4 py-4 w-full rounded-lg bg-muted text-foreground placeholder:text-muted-foreground block outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-4 w-full rounded-lg bg-input text-foreground placeholder:text-muted-foreground block outline-none focus:ring-2 focus:ring-chart-8"
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -214,7 +214,7 @@ const Login = () => {
               </div>
               <LoadingButton
                 size={"lg"}
-                className="w-full mt-3 gradient-btn"
+                className="w-full mt-3 gradient-btn bg-chart-1 text-primary"
                 type="submit"
                 isLoading={isLoading}
               >

@@ -144,7 +144,7 @@ const Signup = () => {
                   type="text"
                   id="username"
                   placeholder="username"
-                  className="px-4 py-4 w-full rounded-lg bg-muted text-foreground placeholder:text-muted-foreground backdrop-blur-3xl block outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-4 w-full rounded-lg bg-input text-foreground placeholder:text-muted-foreground backdrop-blur-3xl block outline-none focus:ring-2 focus:ring-chart-8"
                   value={formData.username}
                   onChange={handleChange}
                 />
@@ -161,7 +161,7 @@ const Signup = () => {
                   type="email"
                   id="email"
                   placeholder="email address"
-                  className="px-4 py-4 w-full rounded-lg bg-muted text-foreground placeholder:text-muted-foreground backdrop-blur-3xl block outline-none focus:ring-2 focus:ring-blue-500"
+                  className="px-4 py-4 w-full rounded-lg bg-input text-foreground placeholder:text-muted-foreground backdrop-blur-3xl block outline-none focus:ring-2 focus:ring-chart-8"
                   value={formData.email}
                   onChange={handleChange}
                 />
@@ -186,7 +186,7 @@ const Signup = () => {
               </div>
               <LoadingButton
                 size={"lg"}
-                className="w-full mt-3 gradient-btn"
+                className="w-full mt-3 gradient-btn text-primary"
                 isLoading={isLoading}
               >
                 Sign Up
