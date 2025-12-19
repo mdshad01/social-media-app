@@ -58,7 +58,7 @@ const Profile = ({ id }: Props) => {
   useEffect(() => {
     const getUser = async () => {
       const getUserReq = async () =>
-        await axios.get(`${BASE_API_URL}/users/profile/${id}`);
+        await axios.get(`${BASE_API_URL}/users/profile/${id}`,{ withCredentials: true });
       const result = await handleAuthRequest(getUserReq, setIsLoading);
       if (result) setUserProfile(result.data.data.user);
     };

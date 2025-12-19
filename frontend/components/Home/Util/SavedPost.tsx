@@ -22,7 +22,7 @@ const SavedPost = ({ setSavePost }: props) => {
 
   useEffect(() => {
     const getUser = async () => {
-      const getUserReq = async () => await axios.get(`${BASE_API_URL}/users/profile/${user?._id}`);
+      const getUserReq = async () => await axios.get(`${BASE_API_URL}/users/profile/${user?._id}`,{ withCredentials: true });
       const result = await handleAuthRequest(getUserReq, setIsLoading);
       if (result) setUserProfile(result.data.data.user);
     };

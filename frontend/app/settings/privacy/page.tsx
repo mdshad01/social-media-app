@@ -1,9 +1,10 @@
 import ProtectedRoute from "@/components/guards/ProtectedRoute";
+import Privacy from "@/components/settings/Content/Privacy";
 
 const PrivacyPage = () => {
   return (
     <ProtectedRoute>
-      <div>PrivacyPage</div>
+      <div><Privacy/></div>
     </ProtectedRoute>
   );
 };
