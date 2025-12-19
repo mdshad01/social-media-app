@@ -13,13 +13,7 @@ import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { setAuthUser } from "@/store/authSlice";
 import { toast } from "sonner";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetTitle,
-  SheetTrigger,
-} from "../ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 import LeftSidebar from "../Home/LeftSidebar";
 import Image from "next/image";
 
@@ -28,15 +22,13 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowDropdown(false);
       }
     };
@@ -52,11 +44,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post(
-        `${BASE_API_URL}/users/logout`,
-        {},
-        { withCredentials: true }
-      );
+      await axios.post(`${BASE_API_URL}/users/logout`, {}, { withCredentials: true });
       dispatch(setAuthUser(null));
       toast.success("Logged out successfully");
       router.push("/auth/login");
@@ -85,9 +73,7 @@ const Navbar = () => {
 
   const navIcons = [
     {
-      icon: (
-        <BiSolidMessageDetail className="text-xl sm:text-2xl text-foreground" />
-      ),
+      icon: <BiSolidMessageDetail className="text-xl sm:text-2xl text-foreground" />,
       label: "messages",
       onClick: () => console.log("Messages clicked"),
     },
@@ -103,12 +89,9 @@ const Navbar = () => {
       {/* Logo */}
       <div
         onClick={() => router.push("/")}
-        className="text-foreground cursor-pointer flex items-center gap-0 md:w-[20%] justify-start md:justify-center"
-      >
+        className="text-foreground cursor-pointer flex items-center gap-0 md:w-[20%] justify-start md:justify-center">
         <BiAperture className="w-8 h-8 sm:w-10 sm:h-10" />
-        <span className="hidden sm:block text-xl sm:text-2xl md:text-3xl font-bold">
-          Shadsocial.
-        </span>
+        <span className="hidden sm:block text-xl sm:text-2xl md:text-3xl font-bold">Shadsocial.</span>
       </div>
 
       {/* Search box - Responsive */}
@@ -126,16 +109,14 @@ const Navbar = () => {
         {/* Messages Icon - Hidden on mobile */}
         <span
           onClick={navIcons[0].onClick}
-          className="hidden md:flex cursor-pointer w-10 h-10 sm:w-12 sm:h-12 bg-muted hover:bg-accent items-center justify-center rounded-full transition-colors"
-        >
+          className="hidden md:flex cursor-pointer w-10 h-10 sm:w-12 sm:h-12 bg-muted hover:bg-accent items-center justify-center rounded-full transition-colors">
           {navIcons[0].icon}
         </span>
 
         {/* Notifications Icon - Always visible */}
         <span
           onClick={navIcons[1].onClick}
-          className="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-muted hover:bg-accent flex items-center justify-center rounded-full transition-colors"
-        >
+          className="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-muted hover:bg-accent flex items-center justify-center rounded-full transition-colors">
           {navIcons[1].icon}
         </span>
 
@@ -143,14 +124,12 @@ const Navbar = () => {
         <div className="relative hidden md:block" ref={dropdownRef}>
           <span
             onClick={handleAvatarClick}
-            className="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-muted hover:bg-accent flex items-center justify-center rounded-full transition-colors"
-          >
+            className="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-muted hover:bg-accent flex items-center justify-center rounded-full transition-colors">
             <Avatar className="w-8 h-8 sm:w-9 sm:h-9 md:w-11 md:h-11">
-              <AvatarImage
-                src={user?.profilePicture}
-                className="w-full h-full"
-              />
-              <AvatarFallback><Image src="/noAvatar3.svg" alt="image" width={40} height={40} /></AvatarFallback>
+              <AvatarImage src={user?.profilePicture} className="w-full h-full" />
+              <AvatarFallback>
+                <Image src="/noAvatar3.svg" alt="image" width={40} height={40} />
+              </AvatarFallback>
             </Avatar>
           </span>
 
@@ -159,16 +138,14 @@ const Navbar = () => {
             <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-card rounded-lg shadow-lg border border-border py-2 z-50">
               <button
                 onClick={handleViewProfile}
-                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors text-sm sm:text-base"
-              >
+                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors text-sm sm:text-base">
                 <FiUser className="text-base sm:text-lg" />
                 <span>View Profile</span>
               </button>
               <div className="border-t border-border my-1"></div>
               <button
                 onClick={handleLogoutClick}
-                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-red-600 transition-colors text-sm sm:text-base"
-              >
+                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-red-600 transition-colors text-sm sm:text-base">
                 <FiLogOut className="text-base sm:text-lg" />
                 <span>Logout</span>
               </button>
@@ -178,7 +155,7 @@ const Navbar = () => {
       </div>
       {/* ✅ MOBILE: Hamburger Menu (Only on mobile) */}
       <div className="md:hidden">
-        <Sheet>
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <button className="p-2 hover:bg-accent rounded-lg">
               <MenuIcon className="w-6 h-6 text-foreground" />
@@ -191,16 +168,16 @@ const Navbar = () => {
               <BiAperture className="w-10 h-10" />
               <span
                 className="text-2xl font-bold"
-                onClick={() => router.push("/")}
-              >
+                onClick={() => {
+                  router.push("/");
+                  setIsSheetOpen(false); // Close sheet
+                }}>
                 Shadsocial.
               </span>
             </div>
-            <LeftSidebar />
+            <LeftSidebar onItemClick={() => setIsSheetOpen(false)} />
             <div className="h-full pb-10 flex items-end justify-center">
-              <p className="text-muted-foreground align-self-bottom">
-                Dev. @mdshad
-              </p>
+              <p className="text-muted-foreground align-self-bottom">Dev. @mdshad</p>
             </div>
           </SheetContent>
         </Sheet>

@@ -8,22 +8,15 @@ import React from "react";
 import { AiFillHome } from "react-icons/ai";
 import {
   FaBookmark,
-  FaFlag,
-  FaHome,
-  FaImage,
   FaPoll,
-  FaShoppingCart,
-  FaStar,
   FaUser,
-  FaUserFriends,
-  FaUsers,
 } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 
-const LeftSidebar = () => {
+const LeftSidebar = ({ onItemClick }: { onItemClick?: () => void }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
   const dispatch = useDispatch();
@@ -42,6 +35,7 @@ const LeftSidebar = () => {
   const handleSidebar = (label: string) => {
     if (label === "Home") router.push("/");
     if (label == "Logout") handleLogout();
+    onItemClick?.();
   };
   const sideBarLinks = [
     {
@@ -60,7 +54,7 @@ const LeftSidebar = () => {
       icon: <FaPoll className="text-purple-500 w-5 h-5" />,
       label: "Activity",
       bg: "bg-purple-200 group-hover:bg-purple-300 dark:bg-purple-900/30 dark:group-hover:bg-purple-800/40 transition-all duration-100",
-      href: "/",
+      href: "/activity",
     },
     {
       icon: <FaBookmark className="text-rose-500 w-5 h-5" />,

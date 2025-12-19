@@ -2,12 +2,17 @@
 import { RootState } from "@/store/store";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React,{useState} from "react";
 import { BiAperture } from "react-icons/bi";
 import { useSelector } from "react-redux";
+import LeftSidebar from "../Home/LeftSidebar";
+import { MenuIcon, Sheet } from "lucide-react";
+import { SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 
 const SettingsNavbae = () => {
   const user = useSelector((state: RootState) => state.auth.user);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
   const router = useRouter();
   return (
     <nav className="w-full flex items-center justify-between h-[6vh] md:h-[7vh] bg-card border-b-1">
@@ -29,6 +34,37 @@ const SettingsNavbae = () => {
           className="rounded-full w-7 h-7 md:w-8 md:h-8"
         />
       </div>
+      <div className="md:hidden">
+  <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+    <SheetTrigger asChild>
+      <button className="p-2 hover:bg-accent rounded-lg">
+        <MenuIcon className="w-6 h-6 text-foreground" />
+      </button>
+    </SheetTrigger>
+    <SheetContent side="right" className="w-[280px] pl-4 bg-background">
+      <SheetTitle></SheetTitle>
+      <SheetDescription></SheetDescription>
+      <div className="text-foreground flex items-center gap-2 justify-start mb-4">
+        <BiAperture className="w-10 h-10" />
+        <span
+          className="text-2xl font-bold"
+          onClick={() => {
+            router.push("/");
+            setIsSheetOpen(false); // Close sheet
+          }}
+        >
+          Shadsocial.
+        </span>
+      </div>
+      <LeftSidebar onItemClick={() => setIsSheetOpen(false)} />
+      <div className="h-full pb-10 flex items-end justify-center">
+        <p className="text-muted-foreground align-self-bottom">
+          Dev. @mdshad
+        </p>
+      </div>
+    </SheetContent>
+  </Sheet>
+</div>
     </nav>
   );
 };
