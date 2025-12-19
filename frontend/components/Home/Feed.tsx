@@ -24,7 +24,7 @@ const Feed = () => {
 
   useEffect(() => {
     const getPosts = async () => {
-      const getAllPostReq = async () => await axios.get(`${BASE_API_URL}/posts/all`);
+      const getAllPostReq = async () => await axios.get(`${BASE_API_URL}/posts/all`,{ withCredentials: true });
 
       const result = await handleAuthRequest(getAllPostReq, setIsLoading);
 
