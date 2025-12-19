@@ -1,14 +1,11 @@
-import VerificationGuard from "@/components/guards/VerificationGuard";
+import ProtectedRoute from "@/components/guards/ProtectedRoute";
 import Appearance from "@/components/settings/Content/Appearance";
-import React from "react";
 
 const AppearencePage = () => {
   return (
-    <div>
-      <VerificationGuard>
+    <ProtectedRoute>
       <Appearance />
-      </VerificationGuard>
-    </div>
+    </ProtectedRoute>
   );
 };
 

@@ -1,12 +1,11 @@
 import Notification from "@/components/settings/Content/Notification";
-import VerificationGuard from "@/components/guards/VerificationGuard";
-import React from "react";
+import ProtectedRoute from "@/components/guards/ProtectedRoute";
 
 const NotificationsPage = () => {
   return (
-    <VerificationGuard>
+    <ProtectedRoute>
       <Notification />
-    </VerificationGuard>
+    </ProtectedRoute>
   );
 };
 

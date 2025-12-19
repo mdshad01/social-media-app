@@ -1,12 +1,11 @@
 import Security from "@/components/settings/Content/Security";
-import VerificationGuard from "@/components/guards/VerificationGuard";
-import React from "react";
+import ProtectedRoute from "@/components/guards/ProtectedRoute";
 
 const SecurityPage = () => {
   return (
-    <VerificationGuard>
+    <ProtectedRoute>
       <Security />
-    </VerificationGuard>
+    </ProtectedRoute>
   );
 };
 

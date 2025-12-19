@@ -1,5 +1,5 @@
 import Profile from "@/components/Profile/Profile";
-import VerificationGuard from "@/components/guards/VerificationGuard";
+import ProtectedRoute from "@/components/guards/ProtectedRoute";
 import React from "react";
 
 type PageProps = {
@@ -11,9 +11,9 @@ const ProfilePage = async ({ params }: PageProps) => {
 
   return (
     <div className="bg-slate-100">
-      <VerificationGuard>
+      <ProtectedRoute>
       <Profile id={id} />
-      </VerificationGuard>
+      </ProtectedRoute>
     </div>
   );
 };

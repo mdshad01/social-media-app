@@ -1,11 +1,10 @@
-import VerificationGuard from "@/components/guards/VerificationGuard";
-import React from "react";
+import ProtectedRoute from "@/components/guards/ProtectedRoute";
 
 const PrivacyPage = () => {
   return (
-    <VerificationGuard>
+    <ProtectedRoute>
       <div>PrivacyPage</div>
-    </VerificationGuard>
+    </ProtectedRoute>
   );
 };
 

@@ -1,13 +1,14 @@
 import Home from "@/components/Home/Home";
-import VerificationGuard from "@/components/guards/VerificationGuard";
+import ProtectedRoute from "@/components/guards/ProtectedRoute";
 import React from "react";
 
 const HomePage = () => {
   return (
     <div>
-      <Home />
-      {/* <VerificationGuard> */}
-      {/* </VerificationGuard> */}
+      <ProtectedRoute>
+          <Home />
+      </ProtectedRoute>
+
     </div>
   );
 };
