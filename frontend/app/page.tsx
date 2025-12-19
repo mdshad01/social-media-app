@@ -5,9 +5,9 @@ import React from "react";
 const HomePage = () => {
   return (
     <div>
-      <VerificationGuard>
+      {/* <VerificationGuard> */}
       <Home />
-      </VerificationGuard>
+      {/* </VerificationGuard> */}
     </div>
   );
 };
