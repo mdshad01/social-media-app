@@ -7,7 +7,8 @@ interface ApiErrorResponse {
 
 export const handleAuthRequest = async <T>(
   requestCallback: () => Promise<T>,
-  setLoading?: (loading: boolean) => void
+  setLoading?: (loading: boolean) => void,
+  showErrorToast: boolean = true // Add option to suppress error toast
 ): Promise<T | null> => {
   if (setLoading) setLoading(true);
   try {
@@ -16,11 +17,15 @@ export const handleAuthRequest = async <T>(
   } catch (error) {
     const axiosError = error as AxiosError<ApiErrorResponse>;
     console.log(error);
-    if (axiosError?.response?.data?.message) {
-      console.log(axiosError?.response?.data?.message);
-      toast.error(axiosError?.response?.data?.message);
-    } else {
-      toast.error("An unexpected error occurred. Please try again.");
+    
+    // Only show toast if showErrorToast is true
+    if (showErrorToast) {
+      if (axiosError?.response?.data?.message) {
+        console.log(axiosError?.response?.data?.message);
+        toast.error(axiosError?.response?.data?.message);
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
     }
     return null;
   } finally {

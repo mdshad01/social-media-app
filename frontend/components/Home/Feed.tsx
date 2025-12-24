@@ -22,18 +22,23 @@ const Feed = () => {
 
   // console.log("POSTS", posts);
 
-  useEffect(() => {
-    const getPosts = async () => {
-      const getAllPostReq = async () => await axios.get(`${BASE_API_URL}/posts/all`,{ withCredentials: true });
+useEffect(() => {
+  // Don't fetch if user is not loaded yet
+  if (!user) return;
 
-      const result = await handleAuthRequest(getAllPostReq, setIsLoading);
+  const getPosts = async () => {
+    const getAllPostReq = async () => 
+      await axios.get(`${BASE_API_URL}/posts/all`, { withCredentials: true });
 
-      if (result) {
-        dispatch(setPost(result.data.data.posts));
-      }
-    };
-    getPosts();
-  }, [dispatch]);
+    const result = await handleAuthRequest(getAllPostReq, setIsLoading);
+
+    if (result) {
+      dispatch(setPost(result.data.data.posts));
+    }
+  };
+  getPosts();
+}, [dispatch, user]); // Add user as dependency
+
   const handleComment = async (id: string) => {};
   if (isLoading) {
     return (

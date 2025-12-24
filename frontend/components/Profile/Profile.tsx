@@ -56,14 +56,18 @@ const Profile = ({ id }: Props) => {
   }, [user, router]);
 
   useEffect(() => {
-    const getUser = async () => {
-      const getUserReq = async () =>
-        await axios.get(`${BASE_API_URL}/users/profile/${id}`,{ withCredentials: true });
-      const result = await handleAuthRequest(getUserReq, setIsLoading);
-      if (result) setUserProfile(result.data.data.user);
-    };
-    getUser();
-  }, [router, id]);
+  // Don't fetch if user is not loaded yet
+  if (!user) return;
+
+  const getUser = async () => {
+    const getUserReq = async () =>
+      await axios.get(`${BASE_API_URL}/users/profile/${id}`, { withCredentials: true });
+    const result = await handleAuthRequest(getUserReq, setIsLoading);
+    if (result) setUserProfile(result.data.data.user);
+  };
+  getUser();
+}, [router, id, user]);
+
   if (isLoading) {
     return (
       <div className="w-full h-screen flex flex-col items-center justify-center bg-background">
