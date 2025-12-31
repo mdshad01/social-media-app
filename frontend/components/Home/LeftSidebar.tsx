@@ -4,7 +4,6 @@ import { RootState } from "@/store/store";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React from "react";
 import { AiFillHome } from "react-icons/ai";
 import {
   FaBookmark,
@@ -15,13 +14,17 @@ import { FaGear } from "react-icons/fa6";
 import { MdLogout } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
+import { useState } from "react";
+import { LoginSkeleton } from "@/components/Skeleton";
 
 const LeftSidebar = ({ onItemClick }: { onItemClick?: () => void }) => {
   const user = useSelector((state: RootState) => state.auth.user);
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     await axios.post(
       `${BASE_API_URL}/users/logout`,
       {},
@@ -39,42 +42,46 @@ const LeftSidebar = ({ onItemClick }: { onItemClick?: () => void }) => {
   };
   const sideBarLinks = [
     {
-      icon: <AiFillHome className="text-blue-500 w-5 h-5" />,
+      icon: <AiFillHome className="text-primary w-5 h-5" />,
       label: "Home",
-      bg: "bg-blue-100 group-hover:bg-blue-200 dark:bg-blue-900/30 dark:group-hover:bg-blue-800/40 transition-all duration-100",
+      bg: "bg-primary/10 group-hover:bg-primary/20 dark:bg-primary/20 dark:group-hover:bg-primary/30 transition-all duration-100",
       href: "/",
     },
     {
-      icon: <FaUser className="text-orange-500 w-5 h-5" />,
+      icon: <FaUser className="text-chart-5 w-5 h-5" />,
       label: "My profile",
-      bg: "bg-orange-100 group-hover:bg-orange-200 dark:bg-orange-900/30 dark:group-hover:bg-orange-800/40 transition-all duration-100",
+      bg: "bg-chart-5/15 group-hover:bg-chart-5/25 dark:bg-chart-5/20 dark:group-hover:bg-chart-5/30 transition-all duration-100",
       href: `/profile/${user?._id}`,
     },
     {
-      icon: <FaPoll className="text-purple-500 w-5 h-5" />,
+      icon: <FaPoll className="text-chart-4 w-5 h-5" />,
       label: "Activity",
-      bg: "bg-purple-200 group-hover:bg-purple-300 dark:bg-purple-900/30 dark:group-hover:bg-purple-800/40 transition-all duration-100",
+      bg: "bg-chart-4/15 group-hover:bg-chart-4/25 dark:bg-chart-4/20 dark:group-hover:bg-chart-4/30 transition-all duration-100",
       href: "/activity",
     },
     {
-      icon: <FaBookmark className="text-rose-500 w-5 h-5" />,
+      icon: <FaBookmark className="text-destructive w-5 h-5" />,
       label: "Saved",
-      bg: "bg-rose-200 group-hover:bg-rose-300 dark:bg-rose-900/30 dark:group-hover:bg-rose-800/40 transition-all duration-100",
+      bg: "bg-destructive/10 group-hover:bg-destructive/20 dark:bg-destructive/20 dark:group-hover:bg-destructive/30 transition-all duration-100",
       href: `/profile/${user?._id}/saved-posts`,
     },
     {
-      icon: <FaGear className="text-gray-600 w-5 h-5" />,
+      icon: <FaGear className="text-muted-foreground w-5 h-5" />,
       label: "Settings",
-      bg: "bg-gray-300 group-hover:bg-gray-400 dark:bg-gray-700 dark:group-hover:bg-gray-600 transition-all duration-100",
+      bg: "bg-muted group-hover:bg-accent dark:bg-muted dark:group-hover:bg-accent transition-all duration-100",
       href: "/settings",
     },
     {
-      icon: <MdLogout className="text-red-600 w-5 h-5" />,
+      icon: <MdLogout className="text-destructive w-5 h-5" />,
       label: "Logout",
-      bg: "bg-red-100 group-hover:bg-red-200 dark:bg-red-900/30 dark:group-hover:bg-red-800/40 transition-all duration-100",
+      bg: "bg-destructive/10 group-hover:bg-destructive/20 dark:bg-destructive/20 dark:group-hover:bg-destructive/30 transition-all duration-100",
       href: "/",
     },
   ];
+
+  if (isLoggingOut) {
+    return <LoginSkeleton />;
+  }
 
   return (
     <div className="mt-4 py-4 sm:px-3 md:px-3 lg:px-4 flex flex-col item-center justify-start bg-transparent gap-2">

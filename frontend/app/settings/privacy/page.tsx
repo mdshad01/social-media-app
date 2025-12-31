@@ -1,10 +1,14 @@
 import ProtectedRoute from "@/components/guards/ProtectedRoute";
 import Privacy from "@/components/settings/Content/Privacy";
+import { PrivacySettingsSkeleton } from "@/components/Skeleton";
+import { Suspense } from "react";
 
 const PrivacyPage = () => {
   return (
     <ProtectedRoute>
-      <div><Privacy/></div>
+      <Suspense fallback={<PrivacySettingsSkeleton />}>
+        <Privacy />
+      </Suspense>
     </ProtectedRoute>
   );
 };

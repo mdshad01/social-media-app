@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { Loader } from "lucide-react";
+import { LoginSkeleton } from "@/components/Skeleton";
 
 type Props = {
   children: React.ReactNode;
@@ -25,22 +25,14 @@ export default function ProtectedRoute({ children, requireVerification = true }:
     }
   }, [user, router, requireVerification]);
 
-  // Loading state while checking
+  // Loading state while checking - show LoginSkeleton when redirecting to login
   if (!user) {
-    return (
-      <div className="h-screen flex justify-center items-center bg-background">
-        <Loader className="w-20 h-20 animate-spin text-foreground" />
-      </div>
-    );
+    return <LoginSkeleton />;
   }
 
-  // User exists but not verified (and verification required)
+  // User exists but not verified (and verification required) - show LoginSkeleton when redirecting to verify
   if (requireVerification && !user.isVerified) {
-    return (
-      <div className="h-screen flex justify-center items-center bg-background">
-        <Loader className="w-20 h-20 animate-spin text-foreground" />
-      </div>
-    );
+    return <LoginSkeleton />;
   }
 
   return <>{children}</>;

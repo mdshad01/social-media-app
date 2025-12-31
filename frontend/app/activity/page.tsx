@@ -1,14 +1,15 @@
 import Activity from "@/components/Activity/Activity";
 import ProtectedRoute from "@/components/guards/ProtectedRoute";
-import React from "react";
+import { ActivitySkeleton } from "@/components/Skeleton";
+import React, { Suspense } from "react";
 
 const ActivityPage = () => {
   return (
-    <div>
-      <ProtectedRoute>
+    <ProtectedRoute>
+      <Suspense fallback={<ActivitySkeleton />}>
         <Activity />
-      </ProtectedRoute>
-    </div>
+      </Suspense>
+    </ProtectedRoute>
   );
 };
 

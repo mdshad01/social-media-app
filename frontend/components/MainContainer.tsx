@@ -10,8 +10,9 @@ export default function MainContainer({
   const pathname = usePathname();
 
   const noPadding = pathname.startsWith("/settings");
+  const noPadding1 = pathname.startsWith("/auth");
 
-  const className = noPadding
+  const className = noPadding || noPadding1
     ? "bg-forground h-[90vh] lg:h-[92vh]" // no padding
     : "bg-forground sm:px-0 md:px-8 lg:px-16 xl:px-28 2xl:px-64 h-[90vh] lg:h-[90vh]";
 

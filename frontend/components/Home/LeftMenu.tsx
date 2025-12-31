@@ -16,7 +16,7 @@ const LeftMenu = ({ type }: { type: "home" | "profile" }) => {
   return (
     <div className="flex flex-col gap-6">
       {type === "home" && <ProfileCard />}
-      <div className="p-4 bg-card rounded-lg shadow-md border border-border text-muted-foreground flex flex-col gap-4 text-sm">
+      <div className="p-4 bg-card rounded-xl shadow-lg border border-border/50 text-muted-foreground flex flex-col gap-4 text-sm">
         <Link
           href={`/profile/${user?._id}/my-posts`}
           className="flex items-center gap-4 p-2 rounded-lg hover:bg-accent"

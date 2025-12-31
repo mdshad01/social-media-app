@@ -8,7 +8,7 @@ import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { setPost } from "@/store/postSlice";
-import { Loader } from "lucide-react";
+import { FeedSkeleton } from "@/components/Skeleton";
 import PostCard from "./Util/PostCard";
 import DotButton from "./Util/DotButton";
 
@@ -40,13 +40,11 @@ useEffect(() => {
 }, [dispatch, user]); // Add user as dependency
 
   const handleComment = async (id: string) => {};
+  
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center w-full h-screen">
-        <Loader className="animate-spin" />
-      </div>
-    );
+    return <FeedSkeleton count={3} />;
   }
+  
   if (posts.length < 1) {
     return <div className="text-3xl m-8 text-center capitalize font-black">No post avaliable</div>;
   }

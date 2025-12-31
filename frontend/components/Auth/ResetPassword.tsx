@@ -51,7 +51,7 @@ const ResetPassword = () => {
       <input
         type="number"
         placeholder="Enter Otp"
-        className="py-3.5 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground block w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[30%] mx-auto no-spinner outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+        className="py-3.5 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground block w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[30%] mx-auto no-spinner outline-none focus:ring-2 focus:ring-primary mb-3"
         value={otp}
         onChange={(e) => setOtp(e.target.value)}
       />
@@ -59,7 +59,7 @@ const ResetPassword = () => {
         <PasswordInput
           name="password"
           placeholder="Enter New Password"
-          inputClassName="py-3 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+          inputClassName="py-3 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary mb-3"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -68,7 +68,7 @@ const ResetPassword = () => {
         <PasswordInput
           name="passwordconfirm"
           placeholder="Confirm Password"
-          inputClassName="py-3 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-blue-500"
+          inputClassName="py-3 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary"
           value={passwordConfirm}
           onChange={(e) => setPasswordConfirm(e.target.value)}
         />

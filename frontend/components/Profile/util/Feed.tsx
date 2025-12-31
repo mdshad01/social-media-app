@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { User } from "@/type";
-// import PostCard from "./PostCard";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { setPost } from "@/store/postSlice";
-import { Loader } from "lucide-react";
+import { ProfileFeedSkeleton } from "@/components/Skeleton";
 import PostCard from "@/components/Home/Util/PostCard";
 
 type Props = {
@@ -33,11 +32,7 @@ const Feed = ({ userProfile }: Props) => {
   }, [userProfile]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center w-full h-screen bg-background">
-        <Loader className="animate-spin" />
-      </div>
-    );
+    return <ProfileFeedSkeleton />;
   }
   if (posts.length < 1) {
     return <div className="text-3xl m-8 text-center capitalize font-black">No post avaliable</div>;

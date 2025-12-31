@@ -38,26 +38,41 @@ type ActivityPostData =
     };
 
 type Props = {
-  post: ActivityPostData;
+  post: ActivityPostData | null;
   showUser?: boolean; // Optional: show user info if available
 };
 
 const ActivityPostCard: React.FC<Props> = ({ post, showUser = true }) => {
   const router = useRouter();
 
-  // Check if user is an object (not just string ID)
-  const hasUserObject = post.user && typeof post.user === "object";
+  // Handle null post
+  if (!post) {
+    return (
+      <div className="flex flex-col gap-4 bg-card py-4 rounded-md">
+        <div className="px-4 text-muted-foreground text-center py-8">
+          <p>Post not available</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Safely extract user data
+  let userData: { _id: string; username: string; profilePicture: string } | null = null;
+  
+  if (post.user && typeof post.user === "object" && "username" in post.user) {
+    userData = post.user;
+  }
 
   return (
     <div className="flex flex-col gap-4 bg-card py-4 rounded-md">
       {/* USER - Only show if user data is available as object */}
-      {showUser && hasUserObject && (
+      {showUser && userData && (
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center gap-4">
             <Image
-              onClick={() => router.push(`/profile/${post.user._id}`)}
+              onClick={() => router.push(`/profile/${userData!._id}`)}
               src={
-                post.user.profilePicture ||
+                userData!.profilePicture ||
                 "https://images.pexels.com/photos/32409117/pexels-photo-32409117.jpeg"
               }
               alt=""
@@ -66,10 +81,10 @@ const ActivityPostCard: React.FC<Props> = ({ post, showUser = true }) => {
               className="w-10 h-10 rounded-full object-cover cursor-pointer"
             />
             <span
-              onClick={() => router.push(`/profile/${post.user._id}`)}
+              onClick={() => router.push(`/profile/${userData!._id}`)}
               className="font-medium cursor-pointer"
             >
-              {post.user.username}
+              {userData!.username}
             </span>
           </div>
         </div>

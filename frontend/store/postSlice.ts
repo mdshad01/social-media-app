@@ -67,10 +67,20 @@ const postSlice = createSlice({
         }
       }
     },
+    sharePost: (state, action: PayloadAction<{ postId: string; userId: string }>) => {
+      const post = state.posts.find((post) => post._id === action.payload.postId);
+      if (post) {
+        if (post.share.includes(action.payload.userId)) {
+          post.share = post.share.filter((id) => id !== action.payload.userId);
+        } else {
+          post.share.push(action.payload.userId);
+        }
+      }
+    },
   },
 });
 
-export const { setPost, addPost, deletePost, likeOrDislike, addComment, deleteComment, likeComment, addReply } =
+export const { setPost, addPost, deletePost, likeOrDislike, addComment, deleteComment, likeComment, addReply, sharePost } =
   postSlice.actions;
 
 export default postSlice.reducer;

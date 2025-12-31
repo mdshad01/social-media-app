@@ -14,7 +14,7 @@ const ProfileCard = () => {
   return (
     <div
       onClick={() => router.push(`/profile/${user?._id}`)}
-      className="pb-2 bg-card rounded-lg shadow-md border border-border flex flex-col gap-6 cursor-pointer hover:shadow-lg transition-shadow"
+      className="pb-2 bg-card rounded-xl shadow-lg border border-border/50 flex flex-col gap-6 cursor-pointer hover:shadow-xl transition-all duration-200"
     >
       <div className="relative h-22">
         <Image

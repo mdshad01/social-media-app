@@ -4,11 +4,11 @@ import React from "react";
 
 const FriendRequests = () => {
   return (
-    <div className="p-4 bg-card rounded-lg shadow-md border border-border text-sm">
+    <div className="p-4 bg-card rounded-xl shadow-lg border border-border/50 text-sm">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
         <span className="text-muted-foreground">Friend Requests</span>
-        <Link href="/" className="text-blue-500 text-xs hover:text-blue-600">
+        <Link href="/" className="text-primary text-xs hover:text-primary/80 transition-colors">
           See all
         </Link>
       </div>

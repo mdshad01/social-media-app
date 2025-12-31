@@ -4,10 +4,36 @@ import { BASE_API_URL } from "@/server";
 import { RootState } from "@/store/store";
 import { User } from "@/type";
 import axios from "axios";
-import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+
+const Skeleton = ({ className = "" }: { className?: string }) => {
+  return <div className={`skeleton rounded ${className}`} />;
+};
+
+const SuggestedUserSkeleton = () => {
+  return (
+    <div className="max-w-xs min-w-x bg-card border border-border/50 p-4 rounded-xl shadow-lg">
+      <div className="flex items-center justify-between mb-4">
+        <Skeleton className="h-5 w-32" />
+        <Skeleton className="h-4 w-16" />
+      </div>
+      {[1, 2, 3, 4].map((i) => (
+        <div key={i} className="flex items-center justify-between py-3">
+          <div className="flex items-center gap-3">
+            <Skeleton className="w-10 h-10 rounded-full" />
+            <div>
+              <Skeleton className="h-4 w-24 mb-1" />
+              <Skeleton className="h-3 w-16" />
+            </div>
+          </div>
+          <Skeleton className="h-8 w-16 rounded-lg" />
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const SuggestedUser = () => {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -26,20 +52,18 @@ const SuggestedUser = () => {
     };
     getSuggestedUser();
   }, []);
+  
   if (isLoading) {
-    return (
-      <div className="w-full h-screen flex items-center justify-center flex-col">
-        <Loader className="animate-spin text-foreground" />
-      </div>
-    );
+    return <SuggestedUserSkeleton />;
   }
+  
   return (
-    <div className="max-w-xs min-w-x bg-card border border-border p-4 rounded-lg shadow-md">
+    <div className="max-w-xs min-w-x bg-card border border-border/50 p-4 rounded-xl shadow-lg">
       <div className="flex items-center justify-between">
         <h2 className="font-medium text-foreground text-[15px]">
           Suggested User
         </h2>
-        <span className="cursor-pointer text-sm text-blue-500 hover:text-blue-600">
+        <span className="cursor-pointer text-sm text-primary hover:text-primary/80 transition-colors">
           See all
         </span>
       </div>
@@ -63,7 +87,7 @@ const SuggestedUser = () => {
                   {sUser.username}
                 </h2>
               </div>
-              <span className="text-blue-600 font-medium cursor-pointer hover:text-blue-700">
+              <span className="text-primary font-medium cursor-pointer hover:text-primary/80 transition-colors">
                 Details
               </span>
             </div>

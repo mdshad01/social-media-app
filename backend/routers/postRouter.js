@@ -14,6 +14,7 @@ import {
   replyToComment,
   rsvpToEvent,
   saveOrUnsavePost,
+  sharePost,
   voteOnPoll,
 } from "../controllers/postController.js";
 
@@ -32,5 +33,6 @@ postRouter.post("/comment/:id", isAuthenticated, isVerified, addComment);
 postRouter.post("/comment/like/:commentId", isAuthenticated, isVerified, likeOrDislikeComment);
 postRouter.post("/comment/reply/:commentId", isAuthenticated, isVerified, replyToComment);
 postRouter.delete("/comment/:commentId", isAuthenticated, isVerified, deleteComment);
+postRouter.post("/share/:id", isAuthenticated, isVerified, sharePost);
 
 export default postRouter;

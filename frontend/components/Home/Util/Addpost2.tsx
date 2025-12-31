@@ -23,7 +23,7 @@ const Addpost2 = () => {
 
   return (
     <>
-      <div className="p-4 bg-card shadow rounded-lg flex gap-4 justify-between text-sm">
+      <div className="p-4 bg-card shadow-lg rounded-xl border border-border/50 flex gap-4 justify-between text-sm">
         {/* POST */}
         <div className="flex-1">
           <div className="flex gap-4">

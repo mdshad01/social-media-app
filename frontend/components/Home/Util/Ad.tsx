@@ -3,7 +3,7 @@ import React from "react";
 
 const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
   return (
-    <div className="p-4 bg-card rounded-lg shadow-md border border-border text-sm">
+    <div className="p-4 bg-card rounded-xl shadow-lg border border-border/50 text-sm">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground font-medium">Sponsored Ads</span>
@@ -34,7 +34,7 @@ const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
           height={24}
           className="w-6 h-6 rounded-full"
         />
-        <span className="text-blue-500 font-medium text-sm">
+        <span className="text-primary font-medium text-sm">
           Fruit Cocktail
         </span>
       </div>

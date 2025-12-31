@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 import LeftSidebar from "../Home/LeftSidebar";
 import Image from "next/image";
+import { LoginSkeleton } from "@/components/Skeleton";
 
 const Navbar = () => {
   const user = useSelector((state: RootState) => state?.auth.user);
@@ -23,6 +24,7 @@ const Navbar = () => {
   const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -43,6 +45,7 @@ const Navbar = () => {
   }, [showDropdown]);
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     try {
       await axios.post(`${BASE_API_URL}/users/logout`, {}, { withCredentials: true });
       dispatch(setAuthUser(null));
@@ -50,6 +53,7 @@ const Navbar = () => {
       router.push("/auth/login");
     } catch (error) {
       toast.error("Failed to logout");
+      setIsLoggingOut(false);
     }
   };
 
@@ -83,6 +87,10 @@ const Navbar = () => {
       onClick: () => console.log("Notifications clicked"),
     },
   ];
+
+  if (isLoggingOut) {
+    return <LoginSkeleton />;
+  }
 
   return (
     <nav className="flex lg:h-[10vh] md:px-3 px-2 pt-3 md:pt-0 items-center w-full h-full bg-card">

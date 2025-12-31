@@ -499,3 +499,35 @@ export const deleteComment = catchAsync(async (req, res, next) => {
     message: "Comment deleted successfully",
   });
 });
+
+// Share Post
+export const sharePost = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user._id;
+
+  const post = await Post.findById(id);
+
+  if (!post) return next(new AppError("Post not found", 404));
+
+  const hasShared = post.share.includes(userId);
+
+  if (hasShared) {
+    // User already shared, remove share (toggle off)
+    await Post.findByIdAndUpdate(id, { $pull: { share: userId } }, { new: true });
+
+    res.status(200).json({
+      status: "success",
+      message: "Share removed",
+      shared: false,
+    });
+  } else {
+    // Add share
+    await Post.findByIdAndUpdate(id, { $addToSet: { share: userId } }, { new: true });
+    
+    res.status(200).json({
+      status: "success",
+      message: "Post shared successfully",
+      shared: true,
+    });
+  }
+});

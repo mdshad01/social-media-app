@@ -28,7 +28,7 @@ const ForgetPassword = () => {
   };
   return (
     <div className="flex bg-background flex-col items-center justify-center h-screen w-full">
-      <KeySquareIcon className="w-20 h-20 sm:w-32 sm:h-32 text-blue-500 mb-12" />
+      <KeySquareIcon className="w-20 h-20 sm:w-32 sm:h-32 text-primary mb-12" />
       <h1 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">
         Forget Your Password?
       </h1>
@@ -39,7 +39,7 @@ const ForgetPassword = () => {
       <input
         type="email"
         placeholder="Enter Your Email"
-        className="py-3.5 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-blue-500 block w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[30%] mx-auto"
+        className="py-3.5 px-6 rounded-lg bg-muted text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary block w-[90%] sm:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[30%] mx-auto"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />

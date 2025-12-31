@@ -148,7 +148,7 @@ const Comments = ({ user, post }: Props) => {
           />
           <button
             onClick={() => handleComment(post!._id)}
-            className="cursor-pointer rounded-lg px-3 py-1 bg-blue-500 text-gray-50"
+            className="cursor-pointer rounded-lg px-3 py-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
           >
             post
           </button>
@@ -175,7 +175,7 @@ const Comments = ({ user, post }: Props) => {
                 <div className="flex flex-col gap-2 flex-1">
                   <span className="font-medium">{item?.user?.username}</span>
                   <p>{item?.text}</p>
-                  <div className="flex items-center gap-8 text-sm text-gray-500 mt-2">
+                  <div className="flex items-center gap-8 text-sm text-muted-foreground mt-2">
                     <div className="flex items-center gap-4">
                       <div
                         onClick={() => handleLikeComment(item._id)}
@@ -199,14 +199,14 @@ const Comments = ({ user, post }: Props) => {
                           />
                         )}
                       </div>
-                      <span className="text-gray-300">|</span>
-                      <span className="text-gray-500">
+                      <span className="text-border">|</span>
+                      <span className="text-muted-foreground">
                         {item.likes?.length || 0} Likes
                       </span>
                     </div>
                     <div
                       onClick={() => toggleReply(item._id)}
-                      className="cursor-pointer"
+                      className="cursor-pointer hover:text-primary transition-colors"
                     >
                       Reply {replyCount > 0 && `(${replyCount})`}
                     </div>
@@ -233,7 +233,7 @@ const Comments = ({ user, post }: Props) => {
                                 <span className="font-medium text-sm">
                                   {reply?.user?.username}
                                 </span>
-                                <p className="text-sm text-gray-700">
+                                <p className="text-sm text-muted-foreground">
                                   {reply?.text}
                                 </p>
                               </div>
@@ -251,17 +251,17 @@ const Comments = ({ user, post }: Props) => {
                           height={24}
                           className="rounded-full w-6 h-6 cursor-pointer"
                         />
-                        <div className="flex items-center justify-between bg-slate-100 rounded-xl text-xs px-3 py-2 flex-1">
+                        <div className="flex items-center justify-between bg-accent rounded-xl text-xs px-3 py-2 flex-1">
                           <input
                             value={replyText}
                             onChange={(e) => setReplyText(e.target.value)}
                             type="text"
                             placeholder={`Reply to ${item?.user?.username}...`}
-                            className="bg-transparent outline-none flex-1"
+                            className="bg-transparent outline-none flex-1 text-foreground placeholder:text-muted-foreground"
                           />
                           <button
                             onClick={() => handlePostReply(item._id)}
-                            className="cursor-pointer rounded-lg px-2 py-1 bg-blue-500 text-gray-50"
+                            className="cursor-pointer rounded-lg px-2 py-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                           >
                             post
                           </button>
@@ -291,10 +291,10 @@ const Comments = ({ user, post }: Props) => {
 
                     {/* Dropdown Menu */}
                     {openDropdown === item._id && (
-                      <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                      <div className="absolute right-0 mt-2 w-40 bg-card rounded-lg shadow-lg border border-border py-1 z-50">
                         <button
                           onClick={() => handleDeleteComment(item._id)}
-                          className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-3 text-red-600 transition-colors"
+                          className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-destructive transition-colors"
                         >
                           <MdDeleteOutline className="text-lg" />
                           <span>Delete</span>

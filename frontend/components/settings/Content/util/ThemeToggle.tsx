@@ -28,7 +28,7 @@ export default function ThemeToggle() {
         onClick={() => setTheme("light")}
         className={`flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-lg border-2 transition-all ${
           theme === "light"
-            ? "border-chart-1 bg-blue-50 dark:bg-blue-900/20"
+            ? "border-primary bg-primary/10 dark:bg-primary/20"
             : "border-border bg-background hover:bg-accent"
         }`}
       >
@@ -50,7 +50,7 @@ export default function ThemeToggle() {
         onClick={() => setTheme("dark")}
         className={`flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-lg border-2 transition-all ${
           theme === "dark"
-            ? "border-chart-1 bg-blue-50 dark:bg-background"
+            ? "border-primary bg-primary/10 dark:bg-primary/20"
             : "border-border bg-background hover:bg-accent"
         }`}
       >
@@ -72,7 +72,7 @@ export default function ThemeToggle() {
         onClick={() => setTheme("system")}
         className={`flex flex-col items-center justify-center gap-2 px-6 py-4 rounded-lg border-2 transition-all ${
           theme === "system"
-            ? "border-chart-1 bg-blue-50 dark:bg-background"
+            ? "border-primary bg-primary/10 dark:bg-primary/20"
             : "border-border bg-background hover:bg-accent"
         }`}
       >

@@ -125,12 +125,12 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/30 bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-card text-card-foreground rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto border border-border shadow-xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold">Create post</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700 text-2xl">
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <h2 className="text-xl font-semibold text-foreground">Create post</h2>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground text-2xl transition-colors">
             ×
           </button>
         </div>
@@ -145,8 +145,8 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
             className="w-14 h-14 object-cover rounded-full"
           />
           <div>
-            <p className="font-semibold">{user?.username || "User"}</p>
-            <select className="text-sm bg-gray-100 rounded px-2 py-1 mt-1">
+            <p className="font-semibold text-foreground">{user?.username || "User"}</p>
+            <select className="text-sm bg-muted text-foreground rounded px-2 py-1 mt-1 border border-border">
               <option>Public</option>
               <option>Friends</option>
               <option>Only me</option>
@@ -161,7 +161,7 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
             value={postText}
             onChange={(e) => setPostText(e.target.value)}
             placeholder="What's on your mind?"
-            className="w-full min-h-[120px] text-lg outline-none resize-none"
+            className="w-full min-h-[120px] text-lg outline-none resize-none bg-transparent text-foreground placeholder:text-muted-foreground"
           />
 
           {/* File Previews */}
@@ -176,7 +176,7 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
                   )}
                   <button
                     onClick={() => removeFile(index)}
-                    className="absolute top-2 right-2 bg-white rounded-full w-8 h-8 shadow-md hover:bg-gray-100 flex items-center justify-center text-xl">
+                    className="absolute top-2 right-2 bg-card text-foreground rounded-full w-8 h-8 shadow-md hover:bg-accent flex items-center justify-center text-xl transition-colors">
                     ×
                   </button>
                 </div>
@@ -186,10 +186,10 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
 
           {/* Poll Options */}
           {showPoll && (
-            <div className="mt-4 p-4 border rounded-lg space-y-2">
+            <div className="mt-4 p-4 border border-border rounded-lg space-y-2 bg-muted/30">
               <div className="flex justify-between items-center">
-                <p className="font-semibold">Poll Options</p>
-                <button onClick={() => setShowPoll(false)} className="text-red-500 hover:text-red-700 text-sm">
+                <p className="font-semibold text-foreground">Poll Options</p>
+                <button onClick={() => setShowPoll(false)} className="text-destructive hover:text-destructive/80 text-sm transition-colors">
                   Remove Poll
                 </button>
               </div>
@@ -200,17 +200,17 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
                     value={option}
                     onChange={(e) => updatePollOption(index, e.target.value)}
                     placeholder={`Option ${index + 1}`}
-                    className="flex-1 border rounded-lg px-3 py-2"
+                    className="flex-1 border border-border rounded-lg px-3 py-2 bg-background text-foreground placeholder:text-muted-foreground"
                   />
                   {pollOptions.length > 2 && (
-                    <button onClick={() => removePollOption(index)} className="text-red-500 hover:text-red-700 w-8">
+                    <button onClick={() => removePollOption(index)} className="text-destructive hover:text-destructive/80 w-8 transition-colors">
                       ×
                     </button>
                   )}
                 </div>
               ))}
               {pollOptions.length < 4 && (
-                <button onClick={addPollOption} className="text-blue-500 hover:text-blue-700 text-sm">
+                <button onClick={addPollOption} className="text-primary hover:text-primary/80 text-sm transition-colors">
                   + Add option
                 </button>
               )}
@@ -219,10 +219,10 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
 
           {/* Event Form */}
           {showEvent && (
-            <div className="mt-4 p-4 border rounded-lg space-y-3">
+            <div className="mt-4 p-4 border border-border rounded-lg space-y-3 bg-muted/30">
               <div className="flex justify-between items-center">
-                <p className="font-semibold">Event Details</p>
-                <button onClick={() => setShowEvent(false)} className="text-red-500 hover:text-red-700 text-sm">
+                <p className="font-semibold text-foreground">Event Details</p>
+                <button onClick={() => setShowEvent(false)} className="text-destructive hover:text-destructive/80 text-sm transition-colors">
                   Remove Event
                 </button>
               </div>
@@ -231,20 +231,20 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
                 value={eventData.title}
                 onChange={(e) => setEventData({ ...eventData, title: e.target.value })}
                 placeholder="Event title"
-                className="w-full border rounded-lg px-3 py-2"
+                className="w-full border border-border rounded-lg px-3 py-2 bg-background text-foreground placeholder:text-muted-foreground"
               />
               <div className="grid grid-cols-2 gap-2">
                 <input
                   type="date"
                   value={eventData.date}
                   onChange={(e) => setEventData({ ...eventData, date: e.target.value })}
-                  className="border rounded-lg px-3 py-2"
+                  className="border border-border rounded-lg px-3 py-2 bg-background text-foreground"
                 />
                 <input
                   type="time"
                   value={eventData.time}
                   onChange={(e) => setEventData({ ...eventData, time: e.target.value })}
-                  className="border rounded-lg px-3 py-2"
+                  className="border border-border rounded-lg px-3 py-2 bg-background text-foreground"
                 />
               </div>
               <input
@@ -252,20 +252,20 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
                 value={eventData.location}
                 onChange={(e) => setEventData({ ...eventData, location: e.target.value })}
                 placeholder="Location"
-                className="w-full border rounded-lg px-3 py-2"
+                className="w-full border border-border rounded-lg px-3 py-2 bg-background text-foreground placeholder:text-muted-foreground"
               />
             </div>
           )}
         </div>
 
         {/* Add to Post Section */}
-        <div className="px-4 py-3 border-t border-b flex items-center justify-between">
-          <span className="font-semibold">Add to your post</span>
+        <div className="px-4 py-3 border-t border-b border-border flex items-center justify-between">
+          <span className="font-semibold text-foreground">Add to your post</span>
           <div className="flex items-center gap-2">
             {/* Photo */}
             <button
               onClick={() => photoInputRef.current?.click()}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 hover:bg-accent rounded-full transition-colors"
               title="Add photos">
               <Image src="/addimage.png" alt="" height={24} width={24} className="w-6 h-6" />
             </button>
@@ -281,7 +281,7 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
             {/* Video */}
             <button
               onClick={() => videoInputRef.current?.click()}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-2 hover:bg-accent rounded-full transition-colors"
               title="Add video">
               <Image src="/addvideo.png" alt="" height={24} width={24} className="w-6 h-6" />
             </button>
@@ -296,7 +296,7 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
             {/* Poll */}
             <button
               onClick={() => setShowPoll(!showPoll)}
-              className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${showPoll ? "bg-blue-100" : ""}`}
+              className={`p-2 hover:bg-accent rounded-full transition-colors ${showPoll ? "bg-primary/20" : ""}`}
               title="Create poll">
               <Image src="/poll.png" alt="" height={24} width={24} className="w-6 h-6" />
             </button>
@@ -304,7 +304,7 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
             {/* Event */}
             <button
               onClick={() => setShowEvent(!showEvent)}
-              className={`p-2 hover:bg-gray-100 rounded-full transition-colors ${showEvent ? "bg-blue-100" : ""}`}
+              className={`p-2 hover:bg-accent rounded-full transition-colors ${showEvent ? "bg-primary/20" : ""}`}
               title="Create event">
               <Image src="/addevent.png" alt="" height={24} width={24} className="w-6 h-6" />
             </button>
@@ -318,8 +318,8 @@ const CreatePostModal = ({ isOpen, onClose, initialMediaType, user }: Props) => 
             disabled={!postText.trim() && selectedFiles.length === 0 && !showPoll && !showEvent}
             className={`w-full py-2 rounded-lg font-semibold transition-colors ${
               postText.trim() || selectedFiles.length > 0 || showPoll || showEvent
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-muted text-muted-foreground cursor-not-allowed"
             }`}>
             Post
           </button>

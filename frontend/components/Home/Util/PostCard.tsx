@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
-import React, { useState } from "react";
-import Comments from "@/components/Home/Util/Comments";
+import { useState } from "react";
 import { Post, User } from "@/type";
 import DotButton from "./DotButton";
+import PostDetailModal from "./PostDetailModal";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { useDispatch } from "react-redux";
-import { likeOrDislike } from "@/store/postSlice";
+import { likeOrDislike, sharePost } from "@/store/postSlice";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +20,7 @@ type Props = {
 const PostCard = ({ post, user }: Props) => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [commButton, setCommButton] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleLikeOrDislike = async (id: string) => {
     const result = await axios.post(
@@ -32,6 +32,62 @@ const PostCard = ({ post, user }: Props) => {
       if (user?._id) {
         dispatch(likeOrDislike({ postId: id, userId: user?._id }));
         toast.success(result.data.message);
+      }
+    }
+  };
+
+  const handleShare = async () => {
+    if (!post) return;
+
+    // Use Web Share API if available
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${post.user?.username}'s post`,
+          text: post.caption || "Check out this post!",
+          url: `${window.location.origin}/post/${post._id}`,
+        });
+        
+        // Track share in backend only after successful share
+        try {
+          const result = await axios.post(
+            `${BASE_API_URL}/posts/share/${post._id}`,
+            {},
+            { withCredentials: true }
+          );
+          if (result.data.status === "success" && user?._id) {
+            dispatch(sharePost({ postId: post._id, userId: user._id }));
+          }
+        } catch (error) {
+          console.error("Failed to track share:", error);
+        }
+        
+        toast.success("Shared successfully!");
+      } catch (err) {
+        // User cancelled the share or error occurred
+        const error = err as { name?: string };
+        if (error.name !== "AbortError") {
+          toast.error("Failed to share");
+        }
+      }
+    } else {
+      // Fallback: Copy link to clipboard
+      const postUrl = `${window.location.origin}/post/${post._id}`;
+      navigator.clipboard.writeText(postUrl);
+      toast.success("Link copied to clipboard!");
+      
+      // Track share in backend
+      try {
+        const result = await axios.post(
+          `${BASE_API_URL}/posts/share/${post._id}`,
+          {},
+          { withCredentials: true }
+        );
+        if (result.data.status === "success" && user?._id) {
+          dispatch(sharePost({ postId: post._id, userId: user._id }));
+        }
+      } catch (error) {
+        console.error("Failed to track share:", error);
       }
     }
   };
@@ -71,7 +127,15 @@ const PostCard = ({ post, user }: Props) => {
   if (!post) return null;
 
   return (
-    <div className="flex flex-col gap-4 bg-card py-5 rounded-md">
+    <>
+      <PostDetailModal
+        post={post}
+        user={user}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+
+      <div className="flex flex-col gap-4 bg-card py-5 rounded-xl shadow-lg border border-border/50">
       {/* USER */}
       <div className="flex items-center justify-between px-4">
         <div className="flex items-center gap-4">
@@ -86,12 +150,20 @@ const PostCard = ({ post, user }: Props) => {
             height={40}
             className="w-10 h-10 rounded-full object-cover cursor-pointer"
           />
+          <div className="flex flex-col">
+
           <span
             onClick={() => router.push(`/profile/${post?.user?._id}`)}
             className="font-medium cursor-pointer"
-          >
+            >
             {post?.user?.username}
           </span>
+          {post?.user?.bio &&
+          <span className="text-sm text-muted-foreground">
+            {post?.user?.bio.slice(0,55) + "..."}
+          </span>
+          }
+            </div>
         </div>
         <DotButton post={post} user={user} />
       </div>
@@ -99,24 +171,37 @@ const PostCard = ({ post, user }: Props) => {
       {/* CONTENT */}
       <div className="flex flex-col gap-4">
         {/* Caption */}
-        {post?.caption && <p className="px-4">{post.caption}</p>}
+        {post?.caption && (
+          <p 
+            className="px-4 text-sm cursor-pointer text-foreground/90 transition-colors"
+            onClick={() => setIsModalOpen(true)}
+          >
+            {post.caption}
+          </p>
+        )}
 
         {/* IMAGE POST */}
         {post?.image?.url && !post?.video && (
-          <div className="w-full relative overflow-hidden bg-black">
+          <div 
+            className="w-full relative overflow-hidden bg-muted/30 cursor-pointer"
+            onClick={() => setIsModalOpen(true)}
+          >
             <Image
               src={post.image.url}
               alt="Post image"
-              width={600}
-              height={800}
-              className="w-full h-auto object-cover max-h-[700px]"
+              width={800}
+              height={900}
+              className="w-full h-auto object-cover max-h-[80vh]"
             />
           </div>
         )}
 
         {/* VIDEO POST */}
         {post?.video?.url && (
-          <div className="w-full relative overflow-hidden bg-black">
+          <div 
+            className="w-full relative overflow-hidden bg-black cursor-pointer"
+            onClick={() => setIsModalOpen(true)}
+          >
             <video
               src={post.video.url}
               controls
@@ -147,21 +232,21 @@ const PostCard = ({ post, user }: Props) => {
                       <button
                         key={index}
                         onClick={() => handleVoteOnPoll(post._id, index)}
-                        className={`w-full p-3 border rounded-lg hover:bg-gray-50 transition-colors ${
-                          hasVoted ? "bg-blue-50 border-blue-500" : ""
+                        className={`w-full p-3 border border-border rounded-lg hover:bg-accent transition-colors ${
+                          hasVoted ? "bg-primary/10 border-primary" : ""
                         }`}
                       >
                         <div className="flex justify-between items-center mb-1">
-                          <span className="font-medium text-left">{option.text}</span>
-                          <span className="text-sm text-gray-500">
+                          <span className="font-medium text-left text-foreground">{option.text}</span>
+                          <span className="text-sm text-muted-foreground">
                             {percentage.toFixed(0)}% ({option.votes.length})
                           </span>
                         </div>
                         {totalVotes > 0 && (
-                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-2 bg-muted rounded-full overflow-hidden">
                             <div
                               className={`h-full transition-all ${
-                                hasVoted ? "bg-blue-500" : "bg-gray-400"
+                                hasVoted ? "bg-primary" : "bg-muted-foreground/50"
                               }`}
                               style={{ width: `${percentage}%` }}
                             />
@@ -170,7 +255,7 @@ const PostCard = ({ post, user }: Props) => {
                       </button>
                     );
                   })}
-                  <p className="text-sm text-gray-500 mt-2">
+                  <p className="text-sm text-muted-foreground mt-2">
                     Total votes: {totalVotes}
                   </p>
                 </>
@@ -182,9 +267,9 @@ const PostCard = ({ post, user }: Props) => {
         {/* EVENT POST */}
         {post?.postType === "event" && post?.event && (
           <div className="px-4">
-            <div className="border-l-4 border-blue-500 bg-blue-50 p-4 rounded-lg">
-              <h3 className="font-bold text-lg mb-2">{post.event.title}</h3>
-              <div className="space-y-1 text-gray-700 mb-3">
+            <div className="border-l-4 border-primary bg-primary/10 dark:bg-primary/5 p-4 rounded-lg">
+              <h3 className="font-bold text-lg mb-2 text-foreground">{post.event.title}</h3>
+              <div className="space-y-1 text-muted-foreground mb-3">
                 <p className="flex items-center gap-2">
                   <span>📅</span>
                   {new Date(post.event.date).toLocaleDateString("en-US", {
@@ -211,8 +296,8 @@ const PostCard = ({ post, user }: Props) => {
                 onClick={() => handleRSVP(post._id)}
                 className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${
                   user?._id && post.event.attendees.includes(user._id)
-                    ? "bg-green-500 text-white hover:bg-green-600"
-                    : "bg-blue-500 text-white hover:bg-blue-600"
+                    ? "bg-green-500 dark:bg-green-600 text-white hover:bg-green-600 dark:hover:bg-green-700"
+                    : "bg-primary text-primary-foreground hover:bg-primary/90"
                 }`}
               >
                 {user?._id && post.event.attendees.includes(user._id)
@@ -239,45 +324,45 @@ const PostCard = ({ post, user }: Props) => {
                 <Image src="/like.png" alt="" width={20} height={20} />
               )}
             </div>
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-500">
+            <span className="text-border">|</span>
+            <span className="text-muted-foreground">
               {post?.likes?.length}{" "}
               <span className="hidden md:inline">Likes</span>
             </span>
           </div>
 
           <div
-            onClick={() => setCommButton((prev) => !prev)}
+            onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-3 bg-background p-2 rounded-xl transition-all cursor-pointer"
           >
             <Image src="/comment.png" alt="" width={20} height={20} />
-            <span className="text-gray-300">|</span>
-            <span className="text-gray-500">
+            <span className="text-border">|</span>
+            <span className="text-muted-foreground">
               {post?.comments?.length}{" "}
               <span className="hidden md:inline">Comments</span>
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 bg-background p-2 rounded-xl">
+        <div 
+          onClick={handleShare}
+          className="flex items-center gap-3 bg-background p-2 rounded-xl cursor-pointer hover:bg-accent transition-colors"
+        >
           <Image
             src="/share.png"
             alt=""
             width={20}
             height={20}
-            className="cursor-pointer"
           />
-          <span className="text-gray-300">|</span>
-          <span className="text-gray-500">
+          <span className="text-border">|</span>
+          <span className="text-muted-foreground">
             {post?.share?.length}{" "}
             <span className="hidden md:inline">Shares</span>
           </span>
         </div>
       </div>
-
-      {/* COMMENTS */}
-      {commButton && <Comments post={post} user={user} />}
     </div>
+    </>
   );
 };
 

@@ -14,8 +14,8 @@ const UserMediaCart = ({ userProfile }: Props) => {
     <div className="p-4 bg-card rounded-lg shadow-md text-sm min-w-[19rem]">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
-        <span className="text-gray-500">Saved Posts</span>
-        <Link href="/" className="text-blue-500 text-xs">
+        <span className="text-muted-foreground">Saved Posts</span>
+        <Link href="/" className="text-primary text-xs hover:text-primary/80 transition-colors">
           See all
         </Link>
       </div>

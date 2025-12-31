@@ -32,26 +32,26 @@ const UserInfoCard = ({
     <div className=" max-w-xs min-w-[19rem] px-4 pt-4 pb-2 text-muted-foreground bg-card rounded-lg shadow text-sm flex flex-col gap-2">
       {/* TOP */}
       <div className="flex items-center justify-between font-medium">
-        <span className="text-gray-500">User Information</span>
+        <span className="text-muted-foreground">User Information</span>
         {isOwnProfile ? (
           <span
-            className="cursor-pointer"
+            className="cursor-pointer text-primary hover:text-primary/80 transition-colors"
             onClick={() => setIsEdit((prev) => !prev)}
           >
             edit
           </span>
         ) : (
-          <Link href="/" className="text-muted-foreground text-xs">
+          <Link href="/" className="text-muted-foreground text-xs hover:text-foreground transition-colors">
             See all
           </Link>
         )}
       </div>
       {/* BOTTOM */}
       <div className="flex gap-2 items-center mt-2">
-        <span className="text-xl font-medium">
+        <span className="text-xl font-medium text-foreground">
           {userProfile?.username || "Jhon Carter"}
         </span>
-        <span className="text-gray-500 font-medium">
+        <span className="text-muted-foreground font-medium">
           @{userProfile?.username.replace(/\s+/g, "").toLowerCase()}
         </span>
       </div>
@@ -99,11 +99,11 @@ const UserInfoCard = ({
           className="flex flex-col pb-2 gap-2 "
         >
           {isOwnProfile ? null : !isFollowing ? (
-            <button className="bg-[#1a2254] text-white w-full p-2 font-medium rounded-md cursor-pointer">
+            <button className="bg-primary text-primary-foreground w-full p-2 font-medium rounded-md cursor-pointer hover:bg-primary/90 transition-colors">
               Follow
             </button>
           ) : (
-            <button className="bg-red-600 text-white w-full p-2 font-medium rounded-md cursor-pointer">
+            <button className="bg-destructive text-white w-full p-2 font-medium rounded-md cursor-pointer hover:bg-destructive/90 transition-colors">
               Unfollow
             </button>
           )}

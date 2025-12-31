@@ -173,14 +173,14 @@ const Edit = ({ setIsEdit }: Props) => {
     <div className="fixed bg-black/20 bg-opacity-20 z-50 flex items-center justify-center p-4 overflow-y-auto inset-0">
       <div className="bg-card rounded-lg shadow-xl w-full max-w-4xl my-8 relative">
         {/* Header */}
-        <div className="stickey top-0 bg-card border-b border-gray-200 px-6 py-4 rounded-t-lg flex items-center justify-between">
+        <div className="stickey top-0 bg-card border-b border-border px-6 py-4 rounded-t-lg flex items-center justify-between">
           <h2 className="text-2xl font-semibold text-primary">Edit Profile</h2>
           <button
             onClick={() => setIsEdit((prev) => !prev)}
-            className="p-2 hover:bg-primary rounded-full transition-colors"
+            className="p-2 hover:bg-accent rounded-full transition-colors"
             disabled={isLoading}
           >
-            <X className="w-6 h-6 text-primary" />
+            <X className="w-6 h-6 text-foreground" />
           </button>
         </div>
 
@@ -263,7 +263,7 @@ const Edit = ({ setIsEdit }: Props) => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your name"
-              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary transition-all"
             />
           </div>
           {/* Bio Section  */}
@@ -277,7 +277,7 @@ const Edit = ({ setIsEdit }: Props) => {
               onChange={(e) => setBio(e.target.value)}
               placeholder="Write a short bio about yourself..."
               rows={4}
-              className="w-[80%] h-42 px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+              className="w-[80%] h-42 px-4 py-3 rounded-lg bg-input text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary transition-all resize-none"
             />
             {/* <LoadingButton
               className="bg-blue-600 text-white hover:bg-blue-700 block transition-colors font-medium mt-2"
@@ -296,7 +296,7 @@ const Edit = ({ setIsEdit }: Props) => {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="Enter your city"
-              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary transition-all"
             />
           </div>
 
@@ -308,7 +308,7 @@ const Edit = ({ setIsEdit }: Props) => {
               value={school}
               onChange={(e) => setSchool(e.target.value)}
               placeholder="Enter your school or university"
-              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary transition-all"
             />
           </div>
 
@@ -320,7 +320,7 @@ const Edit = ({ setIsEdit }: Props) => {
               value={work}
               onChange={(e) => setWork(e.target.value)}
               placeholder="Enter your current work or company"
-              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary transition-all"
             />
           </div>
 
@@ -332,13 +332,13 @@ const Edit = ({ setIsEdit }: Props) => {
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
               placeholder="https://yourwebsite.com"
-              className="w-full px-4 py-3 rounded-lg bg-input outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+              className="w-full px-4 py-3 rounded-lg bg-input text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary transition-all"
             />
           </div>
 
           {/* Password Change Section */}
-          <div className="pt-6 border-t border-gray-200">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="pt-6 border-t border-border">
+            <h3 className="text-xl font-semibold text-foreground mb-4">
               Change Password
             </h3>
             <form action="" className="" onSubmit={handlePasswordChange}>
@@ -350,7 +350,7 @@ const Edit = ({ setIsEdit }: Props) => {
                     placeholder="Enter current password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
-                    labelClassName="text-gray-700"
+                    labelClassName="text-foreground"
                   />
                 </div>
                 <div className="w-[90%] md:w-[80%] lg:w-[55%]">
@@ -360,7 +360,7 @@ const Edit = ({ setIsEdit }: Props) => {
                     placeholder="Enter new password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    labelClassName="text-gray-700"
+                    labelClassName="text-foreground"
                   />
                 </div>
                 <div className="w-[90%] md:w-[80%] lg:w-[55%]">
@@ -370,7 +370,7 @@ const Edit = ({ setIsEdit }: Props) => {
                     placeholder="Confirm new password"
                     value={newPasswordConfirm}
                     onChange={(e) => setNewPasswordConfirm(e.target.value)}
-                    labelClassName="text-gray-700"
+                    labelClassName="text-foreground"
                   />
                 </div>
                 <div className="">
@@ -387,11 +387,11 @@ const Edit = ({ setIsEdit }: Props) => {
           </div>
         </div>
         {/* Footer */}
-        <div className="sticky bottom-0 bg-card border-t border-gray-200 px-6 py-4 rounded-b-lg flex items-center justify-end gap-3">
+        <div className="sticky bottom-0 bg-card border-t border-border px-6 py-4 rounded-b-lg flex items-center justify-end gap-3">
           <button
             onClick={handleDiscard}
             disabled={isLoading}
-            className="px-6 py-2 rounded-lg border  border-gray-300 text-primary hover:bg-gray-50 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-2 rounded-lg border border-border text-foreground hover:bg-accent transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Cancel
           </button>

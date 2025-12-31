@@ -27,7 +27,7 @@ const FollowActivity: React.FC<FollowActivityProps> = ({ activity }) => {
         />
         <div>
           <p>You followed {activity.user.username}</p>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-muted-foreground">
             {formatActivityDate(activity.createdAt)}
           </span>
         </div>

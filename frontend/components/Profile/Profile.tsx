@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { handleAuthRequest } from "../util/apiRequest";
-import { Loader} from "lucide-react";
+import { FullProfileSkeleton } from "@/components/Skeleton";
 
 import ProfileCard from "./util/ProfileCard";
 import UserInfoCard from "./util/UserInfoCard";
@@ -69,11 +69,7 @@ const Profile = ({ id }: Props) => {
 }, [router, id, user]);
 
   if (isLoading) {
-    return (
-      <div className="w-full h-screen flex flex-col items-center justify-center bg-background">
-        <Loader className="animate-spin" />
-      </div>
-    );
+    return <FullProfileSkeleton />;
   }
 
   return (

@@ -1,5 +1,6 @@
 "use client";
-import { Loader, MailCheck } from "lucide-react";
+import { MailCheck } from "lucide-react";
+import { VerifySkeleton } from "@/components/Skeleton";
 import React, {
   ChangeEvent,
   KeyboardEvent,
@@ -95,16 +96,12 @@ const Verify = () => {
   };
 
   if (isPageLoading) {
-    return (
-      <div className="h-screen flex justify-center items-center bg-background">
-        <Loader className="w-20 h-20 animate-spin text-foreground" />
-      </div>
-    );
+    return <VerifySkeleton />;
   }
 
   return (
     <div className="h-screen flex flex-col justify-center items-center bg-background">
-      <MailCheck className="w-20 h-20 sm:h-32 sm:w-32 text-blue-500 mb-12" />
+      <MailCheck className="w-20 h-20 sm:h-32 sm:w-32 text-primary mb-12" />
       <h1 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">
         OTP Verification
       </h1>
@@ -118,7 +115,7 @@ const Verify = () => {
               type="number"
               maxLength={1}
               key={index}
-              className="w-10 h-10 sm:h-24 sm:w-24 bg-muted text-foreground text-center rounded-lg text-lg sm:text-4xl font-bold outline-none focus:ring-2 focus:ring-blue-500 no-spinner"
+              className="w-10 h-10 sm:h-24 sm:w-24 bg-muted text-foreground text-center rounded-lg text-lg sm:text-4xl font-bold outline-none focus:ring-2 focus:ring-primary no-spinner"
               value={otp[index] || ""}
               ref={(el) => {
                 inputRefs.current[index] = el;
@@ -135,7 +132,7 @@ const Verify = () => {
         </h3>
         <button
           onClick={handleResendOtp}
-          className="text-sm sm:text-lg font-medium text-blue-600 hover:text-blue-700 underline"
+          className="text-sm sm:text-lg font-medium text-primary hover:text-primary/80 underline transition-colors"
         >
           Resend code
         </button>
