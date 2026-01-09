@@ -79,6 +79,9 @@ const Verify = () => {
     if (result) {
       dispatch(setAuthUser(result.data.data.user));
       toast.success(result.data.message);
+      
+      // Small delay to ensure Redux state is persisted before navigation
+      await new Promise(resolve => setTimeout(resolve, 100));
       router.push("/");
     }
   };

@@ -257,6 +257,45 @@ export const getUserPost = catchAsync(async (req, res, next) => {
   });
 });
 
+export const getSinglePost = catchAsync(async (req, res, next) => {
+  const postId = req.params.id;
+
+  const post = await Post.findById(postId)
+    .populate({
+      path: "user",
+      select: "username profilePicture bio",
+    })
+    .populate({
+      path: "comments",
+      select: "text user likes replies createdAt",
+      populate: [
+        {
+          path: "user",
+          select: "username profilePicture",
+        },
+        {
+          path: "replies",
+          select: "text user likes createdAt",
+          populate: {
+            path: "user",
+            select: "username profilePicture",
+          },
+        },
+      ],
+    });
+
+  if (!post) {
+    return next(new AppError("Post not found", 404));
+  }
+
+  return res.status(200).json({
+    status: "success",
+    data: {
+      post,
+    },
+  });
+});
+
 export const saveOrUnsavePost = catchAsync(async (req, res, next) => {
   const userId = req.user._id;
   const postId = req.params.postId;

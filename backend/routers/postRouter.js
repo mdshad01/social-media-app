@@ -8,6 +8,7 @@ import {
   deleteComment,
   deletePost,
   getAllPosts,
+  getSinglePost,
   getUserPost,
   likeOrDislikeComment,
   likeOrDislikePost,
@@ -25,6 +26,7 @@ postRouter.post("/create-post", isAuthenticated, isVerified, upload.single("imag
 postRouter.post("/poll/vote", isAuthenticated, isVerified, voteOnPoll);
 postRouter.post("/event/rsvp/:postId", isAuthenticated, isVerified, rsvpToEvent);
 postRouter.get("/all", isAuthenticated, isVerified, getAllPosts);
+postRouter.get("/single/:id", isAuthenticated, isVerified, getSinglePost);
 postRouter.get("/user-post/:id", isAuthenticated, isVerified, getUserPost);
 postRouter.post("/save-unsave-post/:postId", isAuthenticated, isVerified, saveOrUnsavePost);
 postRouter.delete("/delete-post/:id", isAuthenticated, isVerified, deletePost);

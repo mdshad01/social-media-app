@@ -81,9 +81,12 @@ const Login = () => {
         setDeactivatedUserData(user);
         setShowReactivateModal(true);
       } else {
-        // Normal login flow
+        // Normal login flow - dispatch first, then navigate
         dispatch(setAuthUser(user));
         toast.success(result.data.message);
+        
+        // Small delay to ensure Redux state is persisted before navigation
+        await new Promise(resolve => setTimeout(resolve, 100));
         router.push("/");
       }
     }

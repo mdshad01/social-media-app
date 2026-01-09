@@ -1,23 +1,15 @@
 "use client";
 import store from "@/store/store";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode } from "react";
 import { Provider } from "react-redux";
-import { Persistor, persistStore } from "redux-persist";
+import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import { HomeSkeleton } from "@/components/Skeleton";
 
+// Create persistor outside component to avoid recreation on re-renders
+const persistor = persistStore(store);
+
 const ClientProvider = ({ children }: { children: ReactNode }) => {
-  const [persistor, setPersistor] = useState<Persistor | null>(null);
-  
-  useEffect(() => {
-    const clientPersistor = persistStore(store);
-    setPersistor(clientPersistor);
-  }, []);
-
-  if (!persistor) {
-    return <HomeSkeleton />;
-  }
-
   return (
     <Provider store={store}>
       <PersistGate 

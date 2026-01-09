@@ -1,5 +1,4 @@
 "use client";
-import Post from "./Util/PostCard";
 import React, { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -10,47 +9,57 @@ import { handleAuthRequest } from "@/components/util/apiRequest";
 import { setPost } from "@/store/postSlice";
 import { FeedSkeleton } from "@/components/Skeleton";
 import PostCard from "./Util/PostCard";
-import DotButton from "./Util/DotButton";
 
 const Feed = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
   const posts = useSelector((state: RootState) => state.posts.posts);
 
-  const [comment, setComment] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasFetched, setHasFetched] = useState(false);
 
-  // console.log("POSTS", posts);
-
-useEffect(() => {
-  // Don't fetch if user is not loaded yet
-  if (!user) return;
-
-  const getPosts = async () => {
-    const getAllPostReq = async () => 
-      await axios.get(`${BASE_API_URL}/posts/all`, { withCredentials: true });
-
-    const result = await handleAuthRequest(getAllPostReq, setIsLoading);
-
-    if (result) {
-      dispatch(setPost(result.data.data.posts));
+  useEffect(() => {
+    // Don't fetch if user is not loaded yet
+    if (!user) {
+      setIsLoading(false);
+      return;
     }
-  };
-  getPosts();
-}, [dispatch, user]); // Add user as dependency
 
-  const handleComment = async (id: string) => {};
-  
+    // Don't fetch again if already fetched
+    if (hasFetched) return;
+
+    const getPosts = async () => {
+      setIsLoading(true);
+      const getAllPostReq = async () => 
+        await axios.get(`${BASE_API_URL}/posts/all`, { withCredentials: true });
+
+      const result = await handleAuthRequest(getAllPostReq, undefined, false);
+
+      if (result) {
+        dispatch(setPost(result.data.data.posts));
+      }
+      setIsLoading(false);
+      setHasFetched(true);
+    };
+    
+    getPosts();
+  }, [dispatch, user, hasFetched]);
+
   if (isLoading) {
     return <FeedSkeleton count={3} />;
   }
   
-  if (posts.length < 1) {
-    return <div className="text-3xl m-8 text-center capitalize font-black">No post avaliable</div>;
+  if (!user) {
+    return <FeedSkeleton count={3} />;
   }
+  
+  if (posts.length < 1) {
+    return <div className="text-3xl m-8 text-center capitalize font-black">No post available</div>;
+  }
+  
   return (
     <div className="py-4 bg-transparent flex flex-col gap-4 scrollbar-hide">
-      {user && posts.map((post, index) => <PostCard post={post} user={user} key={index} />)}
+      {posts.map((post, index) => <PostCard post={post} user={user} key={post._id || index} />)}
     </div>
   );
 };
