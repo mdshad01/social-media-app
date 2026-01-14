@@ -58,7 +58,7 @@ const Feed = () => {
   }
   
   return (
-    <div className="py-4 bg-transparent flex flex-col gap-4 scrollbar-hide">
+    <div className="flex flex-col gap-4">
       {posts.map((post, index) => <PostCard post={post} user={user} key={post._id || index} />)}
     </div>
   );

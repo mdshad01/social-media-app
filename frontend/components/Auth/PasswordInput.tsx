@@ -1,6 +1,6 @@
 "use client";
 import { Eye, EyeOff } from "lucide-react";
-import React, { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 interface Props {
   name: string;
@@ -31,7 +31,7 @@ const PasswordInput = ({
     <>
       {label && (
         <label
-          className={`font-semibold mb-2 block text-foreground ${labelClassName}`}
+          className={`block text-sm font-medium text-foreground mb-2 ${labelClassName}`}
         >
           {label}
         </label>
@@ -43,12 +43,12 @@ const PasswordInput = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`px-4 py-4 w-full bg-input rounded-lg text-foreground placeholder:text-muted-foreground block outline-none focus:ring-2 focus:ring-chart-8 ${inputClassName}`}
+          className={`w-full px-4 py-3 pr-12 rounded-xl bg-accent/50 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${inputClassName}`}
         />
         <button
           type="button"
           onClick={togglePasswordVisibility}
-          className={`absolute outline-none right-4 top-4 p-0 text-muted-foreground hover:text-foreground ${iconClassName}`}
+          className={`absolute outline-none right-3 top-1/2 -translate-y-1/2 p-1.5 text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent ${iconClassName}`}
         >
           {showPassword ? (
             <Eye className="h-5 w-5" />

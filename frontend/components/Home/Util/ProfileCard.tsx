@@ -1,8 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useRouter } from "next/navigation";
@@ -14,9 +11,9 @@ const ProfileCard = () => {
   return (
     <div
       onClick={() => router.push(`/profile/${user?._id}`)}
-      className="pb-2 bg-card rounded-xl shadow-lg border border-border/50 flex flex-col gap-6 cursor-pointer hover:shadow-xl transition-all duration-200"
+      className="pb-2 bg-gradient-to-br from-card via-card to-primary/5 rounded-md shadow-lg border border-border/50 flex flex-col gap-3 cursor-pointer hover:shadow-xl hover:scale-[1.01] transition-all duration-300 overflow-hidden group"
     >
-      <div className="relative h-22">
+      <div className="relative h-16">
         <Image
           src={
             user?.backgroundImage ||
@@ -24,8 +21,9 @@ const ProfileCard = () => {
           }
           alt=""
           fill
-          className="rounded-t-md object-cover"
+          className="rounded-t-md object-cover group-hover:scale-105 transition-transform duration-300"
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-card/50"></div>
         <Image
           src={
             user?.profilePicture ||
@@ -34,26 +32,22 @@ const ProfileCard = () => {
           alt=""
           width={48}
           height={48}
-          className="rounded-full object-cover w-16 h-16 absolute left-0 right-34 m-auto -bottom-6 ring-2 ring-background z-10"
+          className="rounded-full object-cover w-12 h-12 absolute left-0 right-0 m-auto -bottom-5 ring-4 ring-background shadow-lg z-10 group-hover:ring-primary/50 transition-all duration-300"
         />
       </div>
-      <div className="flex flex-col items-start px-3 mt-1">
-        <span className="text-xl font-semibold text-foreground">
+      <div className="flex flex-col items-center px-3 mt-2">
+        <span className="text-base font-semibold text-foreground group-hover:text-primary transition-colors">
           {user?.username}
         </span>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-muted-foreground">
-            {user?.bio || "No bio available"}
-          </span>
-        </div>
-        <div className="self-center w-full mb-1 mt-2">
-          <button
-            onClick={() => router.push(`/profile/${user?._id}`)}
-            className="bg-primary text-primary-foreground text-xs p-2 rounded-md font-semibold w-full hover:opacity-90 transition-opacity"
-          >
-            My Profile
-          </button>
-        </div>
+        <span className="text-xs text-muted-foreground line-clamp-1 text-center">
+          {user?.bio || "No bio available"}
+        </span>
+        <button
+          onClick={() => router.push(`/profile/${user?._id}`)}
+          className="bg-primary/90 hover:bg-primary text-primary-foreground text-xs px-4 py-1.5 rounded-lg font-medium w-full transition-all duration-300 shadow-sm hover:shadow-md"
+        >
+          View Profile
+        </button>
       </div>
     </div>
   );

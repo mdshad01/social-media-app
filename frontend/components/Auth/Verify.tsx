@@ -1,7 +1,7 @@
 "use client";
-import { MailCheck } from "lucide-react";
+import { MailCheck, Sparkles } from "lucide-react";
 import { VerifySkeleton } from "@/components/Skeleton";
-import React, {
+import {
   ChangeEvent,
   KeyboardEvent,
   useEffect,
@@ -35,8 +35,9 @@ const Verify = () => {
       setIsPageLoading(false);
     }
   }, [user, router]);
+
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  // console.log(otp);
+
   const handleChanges = (
     index: number,
     event: ChangeEvent<HTMLInputElement>
@@ -51,6 +52,7 @@ const Verify = () => {
       inputRefs.current[index + 1]?.focus();
     }
   };
+
   const handleKeyDown = (
     index: number,
     event: KeyboardEvent<HTMLInputElement>
@@ -103,51 +105,78 @@ const Verify = () => {
   }
 
   return (
-    <div className="h-screen flex flex-col justify-center items-center bg-background">
-      <MailCheck className="w-20 h-20 sm:h-32 sm:w-32 text-primary mb-12" />
-      <h1 className="text-2xl sm:text-3xl font-bold mb-3 text-foreground">
-        OTP Verification
-      </h1>
-      <p className="text-sm mb-6 sm:text-base font-medium text-muted-foreground">
-        We have sent a code to {user?.email}
-      </p>
-      <div className="flex space-x-4">
-        {[0, 1, 2, 3, 4, 5].map((index) => {
-          return (
-            <input
-              type="number"
-              maxLength={1}
-              key={index}
-              className="w-10 h-10 sm:h-24 sm:w-24 bg-muted text-foreground text-center rounded-lg text-lg sm:text-4xl font-bold outline-none focus:ring-2 focus:ring-primary no-spinner"
-              value={otp[index] || ""}
-              ref={(el) => {
-                inputRefs.current[index] = el;
-              }}
-              onKeyDown={(e) => handleKeyDown(index, e)}
-              onChange={(e) => handleChanges(index, e)}
-            />
-          );
-        })}
+    <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
+      <div className="w-full max-w-lg">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center gap-2 mb-6">
+            <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+              <Sparkles className="w-6 h-6 text-white" />
+            </div>
+            <span className="text-2xl font-bold text-primary">ShadSocial</span>
+          </div>
+        </div>
+
+        {/* Card */}
+        <div className="bg-card border border-border/50 rounded-2xl p-6 sm:p-8 shadow-xl shadow-primary/5">
+          <div className="flex justify-center mb-6">
+            <div className="w-20 h-20 bg-primary/10 rounded-2xl flex items-center justify-center">
+              <MailCheck className="w-12 h-12 text-primary" />
+            </div>
+          </div>
+
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-2">OTP Verification</h2>
+            <p className="text-muted-foreground text-sm">
+              We&apos;ve sent a code to <span className="font-semibold text-foreground">{user?.email}</span>
+            </p>
+          </div>
+
+          <div className="flex justify-center gap-2 sm:gap-3 mb-6">
+            {[0, 1, 2, 3, 4, 5].map((index) => {
+              return (
+                <input
+                  type="number"
+                  maxLength={1}
+                  key={index}
+                  className="w-10 h-12 sm:w-14 sm:h-16 bg-accent/50 border border-border text-foreground text-center rounded-xl text-xl sm:text-2xl font-bold outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all no-spinner"
+                  value={otp[index] || ""}
+                  ref={(el) => {
+                    inputRefs.current[index] = el;
+                  }}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  onChange={(e) => handleChanges(index, e)}
+                />
+              );
+            })}
+          </div>
+
+          <div className="text-center mb-6">
+            <p className="text-sm text-muted-foreground inline">
+              Didn&apos;t receive the code?{" "}
+            </p>
+            <button
+              onClick={handleResendOtp}
+              className="text-sm font-semibold text-primary hover:text-primary/80 underline transition-colors"
+            >
+              Resend OTP
+            </button>
+          </div>
+
+          <LoadingButton
+            onClick={handleSubmit}
+            isLoading={isLoading}
+            size="lg"
+            className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 shadow-lg shadow-primary/25 hover:shadow-primary/40"
+          >
+            Verify Account
+          </LoadingButton>
+        </div>
+
+        <p className="text-center text-muted-foreground text-xs mt-6">
+          Enter the 6-digit code to verify your account
+        </p>
       </div>
-      <div className="flex items-center mt-4 space-x-2">
-        <h3 className="text-sm sm:text-lg font-medium text-muted-foreground">
-          Didn&apos;t get the otp?
-        </h3>
-        <button
-          onClick={handleResendOtp}
-          className="text-sm sm:text-lg font-medium text-primary hover:text-primary/80 underline transition-colors"
-        >
-          Resend code
-        </button>
-      </div>
-      <LoadingButton
-        onClick={handleSubmit}
-        isLoading={isLoading}
-        size={"lg"}
-        className="mt-6 w-52"
-      >
-        Verify
-      </LoadingButton>
     </div>
   );
 };

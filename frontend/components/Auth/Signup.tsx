@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import PasswordInput from "./PasswordInput";
 import LoadingButton from "../Helper/LoadingButton";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { setAuthUser } from "@/store/authSlice";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { Share2, Users, LayoutList, ShieldCheck } from "lucide-react";
+import { Share2, Users, LayoutList, ShieldCheck, Sparkles } from "lucide-react";
 
 interface FormData {
   username: string;
@@ -55,155 +55,150 @@ const Signup = () => {
   };
 
   const features = [
-    {
-      icon: <Share2 className="w-10 h-10 text-primary-foreground bg-primary rounded-lg p-2" />,
-      title: "Seamless Sharing",
-      desc: "Post updates, photos, and videos instantly.",
-    },
-    {
-      icon: <Users className="w-10 h-10 text-primary-foreground bg-primary rounded-lg p-2" />,
-      title: "Engage with Friends",
-      desc: "Like, comment, and connect in real-time.",
-    },
-    {
-      icon: (
-        <LayoutList className="w-10 h-10 text-primary-foreground bg-primary rounded-lg p-2" />
-      ),
-      title: "Smart Feed",
-      desc: "Stay updated with content you love.",
-    },
-    {
-      icon: (
-        <ShieldCheck className="w-10 h-10 text-primary-foreground bg-primary rounded-lg p-2" />
-      ),
-      title: "Private & Secure",
-      desc: "Your data, your privacy — always protected.",
-    },
+    { icon: <Share2 className="w-5 h-5" />, title: "Seamless Sharing", desc: "Post updates, photos, and videos instantly." },
+    { icon: <Users className="w-5 h-5" />, title: "Engage with Friends", desc: "Like, comment, and connect in real-time." },
+    { icon: <LayoutList className="w-5 h-5" />, title: "Smart Feed", desc: "Stay updated with content you love." },
+    { icon: <ShieldCheck className="w-5 h-5" />, title: "Private & Secure", desc: "Your data, your privacy — always protected." },
   ];
 
   return (
-    <div className="w-full h-screen overflow-hidden bg-background">
-      <div className="flex flex-col lg:flex-row justify-between pr-12">
-        {/* Banner */}
-        <div className="lg:w-[55%] h-screen hidden lg:block relative">
-          <Image
-            src="/Banner8.jpg"
-            alt="signup"
-            width={1000}
-            height={1000}
-            className="w-full h-full object-cover"
-          />
-          <div className="lg:w-160 lg:h-140 bg-transparent backdrop-blur-2xl border-2 rounded-3xl flex flex-col py-6 absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] border-transparent">
-            <div className="flex flex-col items-center mb-5">
-              <h1 className="font-bold lg:text-3xl uppercase mb-8 text-primary bg-white/85 hover:bg-white/90 backdrop-blur-2xl px-4 py-2 rounded-lg">
+    <div className="min-h-screen w-full bg-gradient-to-br from-background via-background to-primary/5">
+      <div className="flex min-h-screen">
+        {/* Left Side - Banner (Desktop Only) */}
+        <div className="hidden lg:flex lg:w-[55%] relative overflow-hidden">
+          <Image src="/Banner8.jpg" alt="banner" fill className="object-cover" priority />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" />
+          
+          <div className="relative z-10 flex flex-col justify-center px-12 xl:px-16">
+            <div className="mb-8">
+              <span className="inline-block px-4 py-2 bg-primary text-primary-foreground font-bold text-xl rounded-lg mb-6">
                 SHADSOCIAL
-              </h1>
-              <h3 className="font-bold leading-tight text-3xl text-white mb-2">
+              </span>
+              <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-4">
                 Where Connections Turn Into Communities
-              </h3>
-              <p className="text-base text-white/90">
+              </h1>
+              <p className="text-lg text-white/80 max-w-md">
                 Create, connect, and discover with people who matter to you.
               </p>
             </div>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4 px-4 mb-4 mt-5">
+
+            <div className="grid grid-cols-2 gap-4 max-w-lg">
               {features.map((item, i) => (
-                <div
-                  key={i}
-                  className="bg-white/10 flex flex-col backdrop-blur-3xl mb-3 p-3 rounded-lg hover:scale-105 transition-all duration-300 hover:bg-white/15"
-                >
-                  <div className="flex gap-4 mb-3 items-center">
-                    {item.icon}
-                    <h3 className="text-white/90 font-medium text-lg">
-                      {item.title}
-                    </h3>
+                <div key={i} className="bg-white/10 backdrop-blur-md p-4 rounded-xl border border-white/10 hover:bg-white/15 transition-all duration-300 group">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-primary/20 rounded-lg text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                      {item.icon}
+                    </div>
+                    <h3 className="text-white font-semibold text-sm">{item.title}</h3>
                   </div>
-                  <p className="text-white/75">{item.desc}</p>
+                  <p className="text-white/60 text-xs leading-relaxed">{item.desc}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
-        {/* Form */}
-        <div className="lg:w-[42%] h-screen p-8">
-          <div className="h-full w-full flex flex-col items-center justify-center bg-primary/10 dark:bg-card rounded-lg relative overflow-hidden z-10">
-            <div className="bg-primary/20 dark:bg-primary/10 rounded-full absolute h-70 w-70 top-10 left-15 -translate-x-1/2 -translate-y-1/2 -z-10 blur-3xl"></div>
-            <div className="bg-primary/15 dark:bg-primary/5 rounded-full absolute h-84 w-84 -bottom-30 -right-35 -translate-x-1/5 -translate-y-1/5 -z-10 blur-3xl"></div>
-            <h1 className="font-bold text-xl sm:text-2xl text-foreground uppercase mb-8">
-              Sign Up with <span className="text-primary">ShadSocial</span>
-            </h1>
-            <form
-              onSubmit={handleSubmit}
-              className="block w-[90%] sm:w-[80%] md:w-[60%] lg:w-[90%] xl:w-[80%]"
-            >
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="font-semibold mb-2 block text-foreground"
+
+        {/* Right Side - Form */}
+        <div className="w-full lg:w-[45%] flex items-center justify-center p-4 sm:p-8">
+          <div className="w-full max-w-md">
+            {/* Mobile Logo */}
+            <div className="lg:hidden text-center mb-8">
+              <div className="inline-flex items-center gap-2 mb-4">
+                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center">
+                  <Sparkles className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-2xl font-bold text-primary">ShadSocial</span>
+              </div>
+              <p className="text-muted-foreground text-sm">Connect with friends and the world</p>
+            </div>
+
+            {/* Form Card */}
+            <div className="bg-card border border-border/50 rounded-2xl p-6 sm:p-8 shadow-xl shadow-primary/5">
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold text-foreground mb-2">Create Account</h2>
+                <p className="text-muted-foreground text-sm">Join ShadSocial today</p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="username" className="block text-sm font-medium text-foreground mb-2">Username</label>
+                  <input
+                    name="username"
+                    type="text"
+                    id="username"
+                    placeholder="Choose a username"
+                    className="w-full px-4 py-3 rounded-xl bg-accent/50 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    value={formData.username}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">Email Address</label>
+                  <input
+                    name="email"
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    className="w-full px-4 py-3 rounded-xl bg-accent/50 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div>
+                  <PasswordInput
+                    label="Password"
+                    name="password"
+                    placeholder="Create a password"
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div>
+                  <PasswordInput
+                    label="Confirm Password"
+                    name="passwordConfirm"
+                    placeholder="Confirm your password"
+                    value={formData.passwordConfirm}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <LoadingButton
+                  size="lg"
+                  className="w-full mt-6 bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-xl transition-all duration-300 shadow-lg shadow-primary/25 hover:shadow-primary/40"
+                  type="submit"
+                  isLoading={isLoading}
                 >
-                  Username
-                </label>
-                <input
-                  name="username"
-                  type="text"
-                  id="username"
-                  placeholder="username"
-                  className="px-4 py-4 w-full rounded-lg bg-input text-foreground placeholder:text-muted-foreground backdrop-blur-3xl block outline-none focus:ring-2 focus:ring-chart-8"
-                  value={formData.username}
-                  onChange={handleChange}
-                />
+                  Create Account
+                </LoadingButton>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-muted-foreground text-sm">
+                  Already have an account?{" "}
+                  <Link href="/auth/login" className="text-primary hover:text-primary/80 font-semibold transition-colors">Sign In</Link>
+                </p>
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="name"
-                  className="font-semibold mb-2 block text-foreground"
-                >
-                  Email
-                </label>
-                <input
-                  name="email"
-                  type="email"
-                  id="email"
-                  placeholder="email address"
-                  className="px-4 py-4 w-full rounded-lg bg-input text-foreground placeholder:text-muted-foreground backdrop-blur-3xl block outline-none focus:ring-2 focus:ring-chart-8"
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-4">
-                <PasswordInput
-                  label="Password"
-                  name="password"
-                  placeholder="Enter password"
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="mb-4">
-                <PasswordInput
-                  label="Confirm Password"
-                  name="passwordConfirm"
-                  placeholder="Confirm password"
-                  value={formData.passwordConfirm}
-                  onChange={handleChange}
-                />
-              </div>
-              <LoadingButton
-                size={"lg"}
-                className="w-full mt-3 gradient-btn text-white"
-                isLoading={isLoading}
-              >
-                Sign Up
-              </LoadingButton>
-            </form>
-            <h1 className="mt-4 text-lg text-foreground">
-              Already have account?{" "}
-              <Link href="/auth/login">
-                {" "}
-                <span className="text-primary hover:text-primary/80 font-semibold underline transition-colors">
-                  Login Here
-                </span>
-              </Link>
-            </h1>
+            </div>
+
+            {/* Mobile Features */}
+            <div className="lg:hidden mt-8 grid grid-cols-2 gap-3">
+              {features.slice(0, 2).map((item, i) => (
+                <div key={i} className="bg-card/50 border border-border/50 p-3 rounded-xl">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="p-1.5 bg-primary/10 rounded-lg text-primary">{item.icon}</div>
+                    <h3 className="text-foreground font-medium text-xs">{item.title}</h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-center text-muted-foreground text-xs mt-6">
+              By signing up, you agree to our Terms of Service and Privacy Policy
+            </p>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Bookmark, Grid } from "lucide-react";
-import React, { Dispatch, SetStateAction } from "react";
-import { IoGridOutline } from "react-icons/io5";
+import { Bookmark, Grid3x3 } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
   postOrSave: string;
@@ -11,33 +10,36 @@ type Props = {
 
 const PostOrSaveBtn = ({ postOrSave, setPostOrSave, isProfileOwn }: Props) => {
   return (
-    <div className="mt-10 flex gap-10 items-center justify-center bg-card h-[8vh] rounded-lg">
-      <div className="flex items-center justify-center space-x-12">
-        <div
+    <div className="mt-6 flex items-center justify-center bg-card rounded-xl shadow-md border border-border/50 p-1">
+      <div className="flex items-center gap-2 w-full">
+        <button
           className={cn(
-            "flex items-center space-x-2 cursor-pointer text-muted-foreground",
-            postOrSave === "POST" && "text-foreground"
+            "flex-1 flex items-center justify-center gap-2 py-3 rounded-lg cursor-pointer transition-all duration-200 font-medium",
+            postOrSave === "POST" 
+              ? "bg-primary text-primary-foreground shadow-sm" 
+              : "text-muted-foreground hover:bg-accent/50"
           )}
           onClick={() => setPostOrSave("POST")}
         >
-          <IoGridOutline size={20} />
-          <span className="font-medium">Post</span>
-        </div>
-      </div>
-      {isProfileOwn && (
-        <div className="flex items-center justify-center space-x-12">
-          <div
+          <Grid3x3 className="w-5 h-5" />
+          <span>Posts</span>
+        </button>
+        
+        {isProfileOwn && (
+          <button
             className={cn(
-              "flex items-center space-x-2 cursor-pointer text-muted-foreground",
-              postOrSave === "SAVE" && "text-foreground"
+              "flex-1 flex items-center justify-center gap-2 py-3 rounded-lg cursor-pointer transition-all duration-200 font-medium",
+              postOrSave === "SAVE" 
+                ? "bg-primary text-primary-foreground shadow-sm" 
+                : "text-muted-foreground hover:bg-accent/50"
             )}
             onClick={() => setPostOrSave("SAVE")}
           >
-            <Bookmark size={20} />
-            <span className="font-medium">Save</span>
-          </div>
-        </div>
-      )}
+            <Bookmark className="w-5 h-5" />
+            <span>Saved</span>
+          </button>
+        )}
+      </div>
     </div>
   );
 };

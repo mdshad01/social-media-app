@@ -1,9 +1,5 @@
-import { RootState } from "@/store/store";
 import { User } from "@/type";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React from "react";
-import { useSelector } from "react-redux";
 
 type Props = {
   userProfile?: User;
@@ -11,8 +7,8 @@ type Props = {
 
 const ProfileCard = ({ userProfile }: Props) => {
   return (
-    <div className=" flex flex-col items-center justify-center gap-4 md:px-0">
-      <div className="relative md:h-60 h-44 w-full shadow">
+    <div className="flex flex-col items-center justify-center gap-4 md:px-0">
+      <div className="relative md:h-56 h-44 w-full shadow">
         <Image
           src={
             userProfile?.backgroundImage ||
@@ -33,22 +29,24 @@ const ProfileCard = ({ userProfile }: Props) => {
           className="rounded-full object-cover w-34 h-34 bg-card absolute left-0 right-0 m-auto -bottom-16 ring-4 ring-accent z-10 shadow "
         />
       </div>
-      <div className="px-10 w-full bg-card flex flex-col gap-5 items-center justify-center pb-4 md:rounded-lg shadow">
-        <span className="text-2xl font-semibold mt-16 mb-2">
-          {userProfile?.username}
-        </span>
-        <div className="flex gap-10 items-center justify-center">
-          <div className="flex flex-col items-center font-medium text-foreground">
-            <span>{userProfile?.posts.length}</span>
-            <span className="">Posts</span>
-          </div>
-          <div className="flex flex-col gap-1  items-center font-medium text-foreground">
-            <span>{userProfile?.followers.length}</span>
-            <span className="">Followers</span>
-          </div>
-          <div className="flex flex-col gap-1  items-center font-medium text-foreground">
-            <span>{userProfile?.following.length}</span>
-            <span className="">Following</span>
+      <div className="relative w-full bg-card flex flex-col gap-4 items-center justify-center pt-2 pb-6 md:rounded-b-xl shadow-md">
+        <div className="mt-16 md:mt-16 flex flex-col gap-4 items-center w-full">
+          <span className="text-2xl font-bold text-foreground">
+            {userProfile?.username}
+          </span>
+          <div className="flex gap-8 md:gap-12 items-center justify-center">
+            <div className="flex flex-col items-center font-medium text-foreground group cursor-pointer">
+              <span className="text-2xl font-bold text-primary group-hover:text-primary/80 transition-colors">{userProfile?.posts.length}</span>
+              <span className="text-sm text-muted-foreground">Posts</span>
+            </div>
+            <div className="flex flex-col items-center font-medium text-foreground group cursor-pointer">
+              <span className="text-2xl font-bold text-primary group-hover:text-primary/80 transition-colors">{userProfile?.followers.length}</span>
+              <span className="text-sm text-muted-foreground">Followers</span>
+            </div>
+            <div className="flex flex-col items-center font-medium text-foreground group cursor-pointer">
+              <span className="text-2xl font-bold text-primary group-hover:text-primary/80 transition-colors">{userProfile?.following.length}</span>
+              <span className="text-sm text-muted-foreground">Following</span>
+            </div>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { useDispatch } from "react-redux";
 import { likeOrDislike, addComment, likeComment, addReply, sharePost, deleteComment } from "@/store/postSlice";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { X } from "lucide-react";
+import { X, Heart, MessageCircle, Share2, Send } from "lucide-react";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { MdDeleteOutline } from "react-icons/md";
 
@@ -262,11 +262,7 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
                     onClick={() => handleLikeComment(item._id)}
                     className="cursor-pointer hover:text-foreground transition-colors flex items-center gap-1"
                   >
-                    {isLiked ? (
-                      <Image src="/liked.png" alt="" width={12} height={12} className="w-3 h-3" />
-                    ) : (
-                      <Image src="/like.png" alt="" width={12} height={12} className="w-3 h-3" />
-                    )}
+                    <Heart className={`w-3 h-3 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
                     {item.likes?.length || 0} likes
                   </span>
                   <span onClick={() => toggleReply(item._id)} className="cursor-pointer hover:text-foreground transition-colors">
@@ -330,19 +326,31 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
   const renderInteractionBar = () => (
     <div className="flex items-center justify-between px-4 py-3 border-b border-border">
       <div className="flex gap-6">
-        <div onClick={() => handleLikeOrDislike(post._id)} className="cursor-pointer flex items-center gap-2">
-          {user?._id && post?.likes?.includes(user._id) ? <Image src="/liked.png" alt="" width={24} height={24} /> : <Image src="/like.png" alt="" width={24} height={24} />}
+        <button 
+          onClick={() => handleLikeOrDislike(post._id)} 
+          className="cursor-pointer flex items-center gap-2 hover:scale-110 transition-transform group"
+        >
+          <Heart 
+            className={`w-6 h-6 transition-colors ${
+              user?._id && post?.likes?.includes(user._id) 
+                ? 'fill-red-500 text-red-500' 
+                : 'text-muted-foreground group-hover:text-red-500'
+            }`} 
+          />
           <span className="text-sm text-muted-foreground">{post?.likes?.length}</span>
-        </div>
+        </button>
         <div className="flex items-center gap-2">
-          <Image src="/comment.png" alt="" width={24} height={24} />
+          <MessageCircle className="w-6 h-6 text-muted-foreground" />
           <span className="text-sm text-muted-foreground">{post?.comments?.length}</span>
         </div>
       </div>
-      <div onClick={handleShare} className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
-        <Image src="/share.png" alt="" width={24} height={24} />
+      <button 
+        onClick={handleShare} 
+        className="flex items-center gap-2 cursor-pointer hover:scale-110 transition-transform group"
+      >
+        <Share2 className="w-6 h-6 text-muted-foreground group-hover:text-green-600 transition-colors" />
         <span className="text-sm text-muted-foreground">{post?.share?.length}</span>
-      </div>
+      </button>
     </div>
   );
 
@@ -352,7 +360,10 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
         <Image src={user?.profilePicture || "/noAvatar.png"} alt="" width={32} height={32} className="rounded-full w-8 h-8 flex-shrink-0" />
         <div className="flex items-center justify-between bg-accent rounded-xl text-sm px-4 py-2 flex-1">
           <input value={comment} onChange={(e) => setComment(e.target.value)} type="text" placeholder="write a comment..." className="bg-transparent outline-none flex-1 text-foreground placeholder:text-muted-foreground" onKeyDown={(e) => e.key === "Enter" && handleComment(post._id)} />
-          <button onClick={() => handleComment(post._id)} className="cursor-pointer rounded-lg px-3 py-1 bg-primary text-white hover:bg-primary/90 transition-colors ml-2">post</button>
+          <button onClick={() => handleComment(post._id)} className="cursor-pointer rounded-lg px-3 py-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors ml-2 flex items-center gap-1.5">
+            <Send className="w-4 h-4" />
+            <span className="text-sm font-medium">Post</span>
+          </button>
         </div>
       </div>
     </div>

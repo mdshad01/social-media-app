@@ -1,14 +1,13 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
-import { FaBell } from "react-icons/fa";
+import { useState, useRef, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { BiAperture, BiSolidMessageDetail } from "react-icons/bi";
+import { BiAperture } from "react-icons/bi";
 import { useRouter } from "next/navigation";
 import { IoSearch } from "react-icons/io5";
 import { FiLogOut, FiUser } from "react-icons/fi";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, Sparkles, MessageCircle, Bell } from "lucide-react";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { setAuthUser } from "@/store/authSlice";
@@ -51,7 +50,7 @@ const Navbar = () => {
       dispatch(setAuthUser(null));
       toast.success("Logged out successfully");
       router.push("/auth/login");
-    } catch (error) {
+    } catch {
       toast.error("Failed to logout");
       setIsLoggingOut(false);
     }
@@ -77,12 +76,12 @@ const Navbar = () => {
 
   const navIcons = [
     {
-      icon: <BiSolidMessageDetail className="text-xl sm:text-2xl text-foreground" />,
+      icon: <MessageCircle className="w-5 h-5 text-primary" />,
       label: "messages",
       onClick: () => console.log("Messages clicked"),
     },
     {
-      icon: <FaBell className="text-xl sm:text-2xl text-foreground" />,
+      icon: <Bell className="w-5 h-5 text-primary" />,
       label: "notifications",
       onClick: () => console.log("Notifications clicked"),
     },
@@ -93,69 +92,77 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flex lg:h-[10vh] md:px-3 px-2 pt-3 md:pt-0 items-center w-full h-full bg-card">
+    <nav className="flex lg:h-[10vh] md:px-3 px-2 py-1 md:pt-0 items-center w-full h-full bg-card border-b border-border/50 backdrop-blur-sm sticky top-0 z-40">
       {/* Logo */}
       <div
         onClick={() => router.push("/")}
-        className="text-foreground cursor-pointer flex items-center gap-0 md:w-[20%] justify-start md:justify-center">
-        <BiAperture className="w-8 h-8 sm:w-10 sm:h-10" />
-        <span className="hidden sm:block text-xl sm:text-2xl md:text-3xl font-bold">Shadsocial.</span>
+        className="text-foreground cursor-pointer flex items-center gap-0 md:w-[20%] justify-start md:justify-center group">
+        <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+          <Sparkles className="w-6 h-6 text-primary" />
+        </div>
+        <span className="hidden sm:block text-xl sm:text-2xl md:text-3xl font-bold ml-2 bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Shadsocial.</span>
       </div>
 
       {/* Search box - Responsive */}
       <div className="flex relative items-center justify-end flex-1 md:w-1/2 h-full mx-2 sm:mx-4">
-        <IoSearch className="w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground opacity-90 absolute left-3" />
+        <IoSearch className="w-4 h-4 text-muted-foreground absolute left-3" />
         <input
           type="text"
           placeholder="Search..."
-          className="w-full px-8 sm:px-10 md:px-12 py-1.5 sm:py-2 text-sm sm:text-base rounded-full md:rounded-3xl bg-background text-foreground outline-none placeholder:text-muted-foreground"
+          className="w-full px-8 py-1.5 text-sm rounded-full bg-accent/50 border border-border/50 text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
         />
       </div>
 
       {/* Nav icons - Responsive */}
-      <div className="flex gap-2 sm:gap-4 md:gap-6 lg:gap-8 items-center md:w-[30%] h-full justify-end">
+      <div className="flex gap-3 sm:gap-5 items-center md:w-[30%] h-full justify-end">
         {/* Messages Icon - Hidden on mobile */}
         <span
           onClick={navIcons[0].onClick}
-          className="hidden md:flex cursor-pointer w-10 h-10 sm:w-12 sm:h-12 bg-muted hover:bg-accent items-center justify-center rounded-full transition-colors">
+          className="hidden md:flex cursor-pointer w-10 h-10 bg-primary/10 hover:bg-primary/20 hover:scale-105 items-center justify-center rounded-xl transition-all duration-200 shadow-sm relative">
           {navIcons[0].icon}
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-white text-xs rounded-full flex items-center justify-center font-semibold shadow-md">3</span>
         </span>
 
         {/* Notifications Icon - Always visible */}
         <span
           onClick={navIcons[1].onClick}
-          className="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-muted hover:bg-accent flex items-center justify-center rounded-full transition-colors">
+          className="cursor-pointer w-10 h-10 bg-primary/10 hover:bg-primary/20 hover:scale-105 flex items-center justify-center rounded-xl transition-all duration-200 shadow-sm relative">
           {navIcons[1].icon}
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-destructive text-white text-xs rounded-full flex items-center justify-center font-semibold shadow-md">5</span>
         </span>
 
         {/* Avatar with Dropdown */}
         <div className="relative hidden md:block" ref={dropdownRef}>
           <span
             onClick={handleAvatarClick}
-            className="cursor-pointer w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-muted hover:bg-accent flex items-center justify-center rounded-full transition-colors">
-            <Avatar className="w-8 h-8 sm:w-9 sm:h-9 md:w-11 md:h-11">
+            className="cursor-pointer w-10 h-10 bg-primary/10 hover:bg-primary/20 hover:scale-105 flex items-center justify-center rounded-xl transition-all duration-200 shadow-sm ring-2 ring-transparent hover:ring-primary/30">
+            <Avatar className="w-9 h-9">
               <AvatarImage src={user?.profilePicture} className="w-full h-full" />
               <AvatarFallback>
-                <Image src="/noAvatar3.svg" alt="image" width={40} height={40} />
+                <Image src="/noAvatar3.svg" alt="image" width={36} height={36} />
               </AvatarFallback>
             </Avatar>
           </span>
 
           {/* Dropdown Menu */}
           {user && showDropdown && (
-            <div className="absolute right-0 mt-2 w-44 sm:w-48 bg-card rounded-lg shadow-lg border border-border py-2 z-50">
+            <div className="absolute right-0 mt-3 w-48 bg-card rounded-xl shadow-2xl border border-border/50 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
               <button
                 onClick={handleViewProfile}
-                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors text-sm sm:text-base">
-                <FiUser className="text-base sm:text-lg" />
-                <span>View Profile</span>
+                className="w-full px-4 py-2.5 text-left hover:bg-accent flex items-center gap-3 text-foreground transition-colors text-sm group">
+                <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                  <FiUser className="text-base text-primary" />
+                </div>
+                <span className="font-medium">View Profile</span>
               </button>
-              <div className="border-t border-border my-1"></div>
+              <div className="border-t border-border my-1.5"></div>
               <button
                 onClick={handleLogoutClick}
-                className="w-full px-4 py-2 text-left hover:bg-accent flex items-center gap-3 text-red-600 transition-colors text-sm sm:text-base">
-                <FiLogOut className="text-base sm:text-lg" />
-                <span>Logout</span>
+                className="w-full px-4 py-2.5 text-left hover:bg-destructive/10 flex items-center gap-3 text-destructive transition-colors text-sm group">
+                <div className="w-8 h-8 bg-destructive/10 rounded-lg flex items-center justify-center group-hover:bg-destructive/20 transition-colors">
+                  <FiLogOut className="text-base" />
+                </div>
+                <span className="font-medium">Logout</span>
               </button>
             </div>
           )}
@@ -165,7 +172,7 @@ const Navbar = () => {
       <div className="md:hidden">
         <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
-            <button className="p-2 hover:bg-accent rounded-lg">
+            <button className="p-2 hover:bg-accent rounded-xl transition-colors">
               <MenuIcon className="w-6 h-6 text-foreground" />
             </button>
           </SheetTrigger>
@@ -173,12 +180,14 @@ const Navbar = () => {
             <SheetTitle></SheetTitle>
             <SheetDescription></SheetDescription>
             <div className="text-foreground flex items-center gap-2 justify-start mb-4">
-              <BiAperture className="w-10 h-10" />
+              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-primary" />
+              </div>
               <span
-                className="text-2xl font-bold"
+                className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent"
                 onClick={() => {
                   router.push("/");
-                  setIsSheetOpen(false); // Close sheet
+                  setIsSheetOpen(false);
                 }}>
                 Shadsocial.
               </span>

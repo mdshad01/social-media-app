@@ -3,7 +3,7 @@ import React from "react";
 
 const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
   return (
-    <div className="p-4 bg-card rounded-xl shadow-lg border border-border/50 text-sm">
+    <div className="p-4 bg-card rounded-md shadow-md hover:shadow-lg transition-shadow duration-300 border border-border/50 text-sm">
       {/* TOP */}
       <div className="flex items-center justify-between">
         <span className="text-muted-foreground font-medium">Sponsored Ads</span>
@@ -50,7 +50,7 @@ const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
           ? "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti voluptas veniam asperiores rerum sapiente autem modi vero eum."
           : "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cupiditate quos ipsum quae at velit assumenda et ipsa consectetur, consequuntur, necessitatibus fugiat placeat dolorem? Quae, totam placeat officia sint at voluptate? Maiores modi eum hic sunt quam architecto! Commodi obcaecati illo assumenda doloremque in explicabo accusantium. Repellat quibusdam illum error modi, blanditiis animi, quasi ducimus asperiores nemo consectetur at exercitationem pariatur!"}
       </p>
-      <button className="bg-muted hover:bg-accent w-full p-1 mt-3 rounded-lg text-foreground transition-colors">
+      <button className="bg-primary/90 hover:bg-primary w-full p-2 mt-3 rounded-lg text-primary-foreground transition-all duration-200 font-medium text-sm">
         Learn More
       </button>
     </div>

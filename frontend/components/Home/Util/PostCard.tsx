@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { handleAuthRequest } from "@/components/util/apiRequest";
 import { MdDeleteOutline } from "react-icons/md";
+import { Heart, MessageCircle, Share2, Send } from "lucide-react";
 
 type Props = {
   post: Post | null;
@@ -28,7 +29,45 @@ const PostCard = ({ post, user }: Props) => {
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState("");
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [imageAspect, setImageAspect] = useState<"portrait" | "landscape" | "square">("square");
+  const [videoAspect, setVideoAspect] = useState<"portrait" | "landscape" | "square">("landscape");
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Detect image orientation
+  useEffect(() => {
+    if (post?.image?.url) {
+      const img = new window.Image();
+      img.src = post.image.url;
+      img.onload = () => {
+        const ratio = img.width / img.height;
+        if (ratio > 1.2) {
+          setImageAspect("landscape"); // Wide image
+        } else if (ratio < 0.8) {
+          setImageAspect("portrait"); // Tall image
+        } else {
+          setImageAspect("square"); // Square-ish image
+        }
+      };
+    }
+  }, [post?.image?.url]);
+
+  // Detect video orientation
+  useEffect(() => {
+    if (post?.video?.url) {
+      const video = document.createElement("video");
+      video.src = post.video.url;
+      video.onloadedmetadata = () => {
+        const ratio = video.videoWidth / video.videoHeight;
+        if (ratio > 1.2) {
+          setVideoAspect("landscape");
+        } else if (ratio < 0.8) {
+          setVideoAspect("portrait");
+        } else {
+          setVideoAspect("square");
+        }
+      };
+    }
+  }, [post?.video?.url]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -235,10 +274,10 @@ const PostCard = ({ post, user }: Props) => {
         onClose={() => setIsModalOpen(false)}
       />
 
-      <div className="flex flex-col gap-4 bg-card py-5 rounded-xl shadow-lg border border-border/50">
+      <div className="flex flex-col gap-0 bg-card rounded md:rounded-md shadow-md border border-border/50 overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {/* USER */}
-      <div className="flex items-center justify-between px-4">
-        <div className="flex items-center gap-4">
+      <div className="flex items-center justify-between px-4 py-3 bg-card">
+        <div className="flex items-center gap-3">
           <Image
             onClick={() => router.push(`/profile/${post?.user?._id}`)}
             src={
@@ -248,50 +287,55 @@ const PostCard = ({ post, user }: Props) => {
             alt=""
             width={40}
             height={40}
-            className="w-10 h-10 rounded-full object-cover cursor-pointer"
+            className="w-10 h-10 rounded-full object-cover cursor-pointer ring-2 ring-border hover:ring-primary/50 transition-all"
           />
           <div className="flex flex-col">
-
-          <span
-            onClick={() => router.push(`/profile/${post?.user?._id}`)}
-            className="font-medium cursor-pointer"
+            <span
+              onClick={() => router.push(`/profile/${post?.user?._id}`)}
+              className="font-semibold cursor-pointer hover:text-primary transition-colors text-sm"
             >
-            {post?.user?.username}
-          </span>
-          {post?.user?.bio &&
-          <span className="text-sm text-muted-foreground">
-            {post?.user?.bio.slice(0,55) + "..."}
-          </span>
-          }
-            </div>
+              {post?.user?.username}
+            </span>
+            {post?.user?.bio && (
+              <span className="text-xs text-muted-foreground line-clamp-1">
+                {post?.user?.bio}
+              </span>
+            )}
+          </div>
         </div>
         <DotButton post={post} user={user} />
       </div>
 
       {/* CONTENT */}
-      <div className="flex flex-col gap-4">
-        {/* Caption */}
+      <div className="flex flex-col">
+        {/* Caption - BEFORE image (LinkedIn style) */}
         {post?.caption && (
-          <p 
-            className="px-4 text-sm cursor-pointer text-foreground/90 transition-colors"
-            onClick={() => setIsModalOpen(true)}
-          >
-            {post.caption}
-          </p>
+          <div className="px-4 py-3">
+            <p className="text-sm text-foreground whitespace-pre-wrap">
+              {post.caption}
+            </p>
+          </div>
         )}
 
         {/* IMAGE POST */}
         {post?.image?.url && !post?.video && (
           <div 
-            className="w-full relative overflow-hidden bg-muted/30 cursor-pointer"
+            className={`w-full relative overflow-hidden bg-black cursor-pointer ${
+              imageAspect === "landscape" 
+                ? "aspect-video" // 16:9 for landscape
+                : imageAspect === "portrait"
+                ? "aspect-[4/5]" // 4:5 for portrait (Instagram/LinkedIn style)
+                : "aspect-square" // 1:1 for square
+            }`}
             onClick={() => setIsModalOpen(true)}
           >
             <Image
               src={post.image.url}
               alt="Post image"
-              width={800}
-              height={900}
-              className="w-full h-auto object-cover max-h-[80vh]"
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-300"
+              sizes="(max-width: 768px) 100vw, 600px"
+              priority={false}
             />
           </div>
         )}
@@ -299,13 +343,19 @@ const PostCard = ({ post, user }: Props) => {
         {/* VIDEO POST */}
         {post?.video?.url && (
           <div 
-            className="w-full relative overflow-hidden bg-black cursor-pointer"
+            className={`w-full relative overflow-hidden bg-black cursor-pointer ${
+              videoAspect === "landscape" 
+                ? "aspect-video" // 16:9 for landscape
+                : videoAspect === "portrait"
+                ? "aspect-[4/5]" // 4:5 for portrait
+                : "aspect-square" // 1:1 for square
+            }`}
             onClick={() => setIsModalOpen(true)}
           >
             <video
               src={post.video.url}
               controls
-              className="w-full h-auto max-h-[700px]"
+              className="w-full h-full object-cover"
             />
           </div>
         )}
@@ -411,75 +461,76 @@ const PostCard = ({ post, user }: Props) => {
       </div>
 
       {/* INTERACTIONS */}
-      <div className="flex items-center justify-between text-sm mb-2 px-4">
-        <div className="flex gap-8">
-          <div className="flex items-center gap-3 bg-background p-2 rounded-xl">
-            <div
+      <div className="px-2 sm:px-4 pt-3 pb-2 border-t border-border/30">
+        <div className="flex items-center justify-between">
+          <div className="flex gap-0.5 sm:gap-1">
+            {/* Like Button */}
+            <button
               onClick={() => handleLikeOrDislike(post._id)}
-              className="cursor-pointer"
+              className={`relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 group ${
+                user?._id && post?.likes && post?.likes.includes(user._id)
+                  ? "text-red-500"
+                  : "text-muted-foreground hover:text-red-500"
+              }`}
             >
-              {user?._id && post?.likes && post?.likes.includes(user._id) ? (
-                <Image src="/liked.png" alt="" width={20} height={20} />
-              ) : (
-                <Image src="/like.png" alt="" width={20} height={20} />
-              )}
-            </div>
-            <span className="text-border">|</span>
-            <span className="text-muted-foreground">
-              {post?.likes?.length}{" "}
-              <span className="hidden md:inline">Likes</span>
-            </span>
-          </div>
+              <Heart
+                className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 group-hover:scale-110 ${
+                  user?._id && post?.likes && post?.likes.includes(user._id)
+                    ? "fill-red-500"
+                    : "group-hover:fill-red-500/20"
+                }`}
+              />
+              <span className="text-xs sm:text-sm font-medium">{post?.likes?.length}</span>
+              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-card border border-border px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-10">
+                Like
+              </span>
+            </button>
 
-          <div
-            onClick={() => setShowComments(!showComments)}
-            className="flex items-center gap-3 bg-background p-2 rounded-xl transition-all cursor-pointer"
-          >
-            <Image src="/comment.png" alt="" width={20} height={20} />
-            <span className="text-border">|</span>
-            <span className="text-muted-foreground">
-              {post?.comments?.length}{" "}
-              <span className="hidden md:inline">Comments</span>
-            </span>
-          </div>
-        </div>
+            {/* Comment Button */}
+            <button
+              onClick={() => setShowComments(!showComments)}
+              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 text-muted-foreground hover:text-primary group"
+            >
+              <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 group-hover:scale-110 group-hover:fill-primary/20" />
+              <span className="text-xs sm:text-sm font-medium">{post?.comments?.length}</span>
+              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-card border border-border px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-10">
+                Comment
+              </span>
+            </button>
 
-        <div 
-          onClick={handleShare}
-          className="flex items-center gap-3 bg-background p-2 rounded-xl cursor-pointer hover:bg-accent transition-colors"
-        >
-          <Image
-            src="/share.png"
-            alt=""
-            width={20}
-            height={20}
-          />
-          <span className="text-border">|</span>
-          <span className="text-muted-foreground">
-            {post?.share?.length}{" "}
-            <span className="hidden md:inline">Shares</span>
-          </span>
+            {/* Share Button */}
+            <button
+              onClick={handleShare}
+              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 text-muted-foreground hover:text-green-600 group"
+            >
+              <Share2 className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 group-hover:scale-110 group-hover:fill-green-600/20" />
+              <span className="text-sm font-medium">{post?.share?.length}</span>
+              <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-card border border-border px-2 py-1 rounded text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none shadow-lg z-10">
+                Share
+              </span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* INLINE COMMENTS SECTION */}
       {showComments && (
-        <div className="px-4 border-t border-border/50 pt-4">
+        <div className="px-4 pb-4 border-t border-border/30 pt-4 bg-card">
           {/* WRITE COMMENT */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 mb-4">
             <Image
               src={user?.profilePicture || "/noAvatar.png"}
               alt=""
               width={32}
               height={32}
-              className="rounded-full w-8 h-8 cursor-pointer"
+              className="rounded-full w-8 h-8 cursor-pointer ring-2 ring-border"
             />
-            <div className="flex items-center justify-between bg-accent rounded-xl text-sm px-4 py-2 flex-1">
+            <div className="flex items-center gap-2 bg-accent/30 rounded-full text-sm px-4 py-2.5 flex-1 border border-border/30">
               <input
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 type="text"
-                placeholder="write a comment..."
+                placeholder="Add a comment..."
                 className="bg-transparent outline-none flex-1 text-foreground placeholder:text-muted-foreground"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -487,12 +538,14 @@ const PostCard = ({ post, user }: Props) => {
                   }
                 }}
               />
-              <button
-                onClick={() => handleComment(post._id)}
-                className="cursor-pointer rounded-lg px-3 py-1 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-              >
-                post
-              </button>
+              {comment && (
+                <button
+                  onClick={() => handleComment(post._id)}
+                  className="cursor-pointer p-1.5 rounded-full bg-primary text-white hover:bg-primary/90 transition-all hover:scale-110"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
 

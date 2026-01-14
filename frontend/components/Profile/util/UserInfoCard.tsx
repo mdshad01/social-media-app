@@ -2,12 +2,8 @@ import { useFollowUnfollow } from "@/components/hooks/use-auth";
 import { RootState } from "@/store/store";
 import { User } from "@/type";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
-import { FaLink } from "react-icons/fa";
-import { FaLocationDot } from "react-icons/fa6";
-import { IoCalendar, IoSchool } from "react-icons/io5";
-import { MdOutlineWork } from "react-icons/md";
+import { MapPin, GraduationCap, Briefcase, Calendar, Link as LinkIcon, Edit2 } from "lucide-react";
 import { useSelector } from "react-redux";
 
 type Props = {
@@ -29,86 +25,100 @@ const UserInfoCard = ({
   const isOwnProfile = user?._id === id;
   const isFollowing = user?.following?.includes(id!) || false;
   return (
-    <div className=" max-w-xs min-w-[19rem] px-4 pt-4 pb-2 text-muted-foreground bg-card rounded-lg shadow text-sm flex flex-col gap-2">
+    <div className="max-w-xs bg-card rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-border/50 overflow-hidden">
       {/* TOP */}
-      <div className="flex items-center justify-between font-medium">
-        <span className="text-muted-foreground">User Information</span>
+      <div className="flex items-center justify-between p-4 border-b border-border/30 bg-gradient-to-r from-primary/5 to-transparent">
+        <span className="text-foreground font-semibold text-sm">User Information</span>
         {isOwnProfile ? (
-          <span
-            className="cursor-pointer text-primary hover:text-primary/80 transition-colors"
+          <button
+            className="flex items-center gap-1.5 text-primary hover:text-primary/80 transition-colors text-sm font-medium"
             onClick={() => setIsEdit((prev) => !prev)}
           >
-            edit
-          </span>
+            <Edit2 className="w-3.5 h-3.5" />
+            Edit
+          </button>
         ) : (
-          <Link href="/" className="text-muted-foreground text-xs hover:text-foreground transition-colors">
+          <Link href="/" className="text-muted-foreground text-xs hover:text-primary transition-colors font-medium">
             See all
           </Link>
         )}
       </div>
+      
       {/* BOTTOM */}
-      <div className="flex gap-2 items-center mt-2">
-        <span className="text-xl font-medium text-foreground">
-          {userProfile?.username || "Jhon Carter"}
-        </span>
-        <span className="text-muted-foreground font-medium">
-          @{userProfile?.username.replace(/\s+/g, "").toLowerCase()}
-        </span>
-      </div>
-      <p className="text-muted-foreground">
-        {userProfile?.bio ||
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aliquid atque, dolore libero quisquam."}
-      </p>
-      <div className="flex flex-col gap-4">
-        <div className="flex gap-2 items-center">
-          <FaLocationDot className="w-4 h-4 opacity-65" />
-          <span className="">
-            Liveing in <b>{userProfile?.city || "Denver"}</b>
+      <div className="p-4 flex flex-col gap-4">
+        <div className="flex flex-col gap-1">
+          <span className="text-xl font-bold text-foreground">
+            {userProfile?.username || "Jhon Carter"}
+          </span>
+          <span className="text-sm text-muted-foreground font-medium">
+            @{userProfile?.username.replace(/\s+/g, "").toLowerCase()}
           </span>
         </div>
-        <div className="flex gap-2 items-center">
-          <IoSchool className="w-4 h-4 opacity-65" />
-          <span className="">
-            Went to <b>{userProfile?.school || "Edgar High School"}</b>
-          </span>
-        </div>
-        <div className="flex gap-2 items-center">
-          <MdOutlineWork className="w-4 h-4 opacity-65" />
-          <span className="">
-            Work at <b>{userProfile?.work || "Apple inc"}</b>.
-          </span>
-        </div>
-        <div className="flex items-center justify-between">
-          <div className="flex gap-1 items-center">
-            {/* <FaCalendarAlt className="w-4 h-4" /> */}
-            <IoCalendar className="w-4 h-4 opacity-65" />
-            <span className=" font-medium">
-              {userProfile?.joined
-                ? userProfile.joined.toLocaleDateString()
-                : "Joined November 2024"}{" "}
-            </span>
+        
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {userProfile?.bio ||
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Est aliquid atque, dolore libero quisquam."}
+        </p>
+        
+        <div className="flex flex-col gap-3 pt-2">
+          <div className="flex gap-3 items-center text-sm text-foreground group hover:text-primary transition-colors cursor-pointer">
+            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <MapPin className="w-4 h-4 text-primary" />
+            </div>
+            <span>Living in <b>{userProfile?.city || "Denver"}</b></span>
           </div>
-          <div className="flex gap-1 items-center cursor-pointer">
-            <FaLink className="w-4 h-4 opacity-65" />
-            {userProfile?.website && <Link href={userProfile?.website} />}
+          
+          <div className="flex gap-3 items-center text-sm text-foreground group hover:text-primary transition-colors cursor-pointer">
+            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <GraduationCap className="w-4 h-4 text-primary" />
+            </div>
+            <span>Went to <b>{userProfile?.school || "Edgar High School"}</b></span>
+          </div>
+          
+          <div className="flex gap-3 items-center text-sm text-foreground group hover:text-primary transition-colors cursor-pointer">
+            <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <Briefcase className="w-4 h-4 text-primary" />
+            </div>
+            <span>Work at <b>{userProfile?.work || "Apple inc"}</b></span>
+          </div>
+          
+          <div className="flex items-center justify-between pt-2 border-t border-border/30">
+            <div className="flex gap-2 items-center text-sm text-muted-foreground">
+              <Calendar className="w-4 h-4" />
+              <span className="font-medium">
+                {userProfile?.joined
+                  ? userProfile.joined.toLocaleDateString()
+                  : "Joined November 2024"}
+              </span>
+            </div>
+            {userProfile?.website && (
+              <Link 
+                href={userProfile.website} 
+                className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors"
+                target="_blank"
+              >
+                <LinkIcon className="w-4 h-4" />
+              </Link>
+            )}
           </div>
         </div>
 
-        <div
-          onClick={() => handleFollowUnfollow(id!, updateFollowerCount)}
-          className="flex flex-col pb-2 gap-2 "
-        >
-          {isOwnProfile ? null : !isFollowing ? (
-            <button className="bg-primary text-primary-foreground w-full p-2 font-medium rounded-md cursor-pointer hover:bg-primary/90 transition-colors">
-              Follow
-            </button>
-          ) : (
-            <button className="bg-destructive text-white w-full p-2 font-medium rounded-md cursor-pointer hover:bg-destructive/90 transition-colors">
-              Unfollow
-            </button>
-          )}
-          {/* <button className="text-red-500 opacity-90 text-xs self-end font-medium cursor-pointer">Block User</button> */}
-        </div>
+        {!isOwnProfile && (
+          <div
+            onClick={() => handleFollowUnfollow(id!, updateFollowerCount)}
+            className="pt-2"
+          >
+            {!isFollowing ? (
+              <button className="bg-primary text-primary-foreground w-full py-2.5 font-semibold rounded-lg cursor-pointer hover:bg-primary/90 transition-all hover:scale-[1.02] shadow-sm">
+                Follow
+              </button>
+            ) : (
+              <button className="bg-destructive text-white w-full py-2.5 font-semibold rounded-lg cursor-pointer hover:bg-destructive/90 transition-all hover:scale-[1.02] shadow-sm">
+                Unfollow
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
