@@ -6,6 +6,7 @@ import ClientProvider from "@/HOC/ClientProvider";
 import NavbarWrapper from "@/components/NavbarWrapper";
 import MainContainer from "@/components/MainContainer";
 import { ThemeProvider } from "next-themes";
+import "@/lib/axiosInterceptor"; // Import axios interceptor to handle 401 errors globally
 
 // const roboto = Roboto({
 //   weight: ["100", "300", "400", "500", "700", "900"],

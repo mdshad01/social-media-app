@@ -11,12 +11,43 @@ import { dirname } from "path";
 import AppError from "./utils/appError.js";
 import userRouter from "./routers/userRouter.js";
 import postRouter from "./routers/postRouter.js";
+import mongoose from "mongoose";
 
 // ES module __dirname equivalent
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
+
+// ✅ MongoDB connection with caching for Vercel serverless
+let cachedDb = null;
+
+async function connectToDatabase() {
+  // Return cached connection if available
+  if (cachedDb && mongoose.connection.readyState === 1) {
+    console.log("Using cached database connection");
+    return cachedDb;
+  }
+
+  try {
+    // Optimized connection settings for Vercel serverless
+    const db = await mongoose.connect(process.env.DB, {
+      serverSelectionTimeoutMS: 10000, // Increased from 5s to 10s
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10, // Connection pooling
+      minPoolSize: 2,
+      maxIdleTimeMS: 10000,
+    });
+    
+    cachedDb = db;
+    console.log("Database connected successfully");
+    return db;
+  } catch (error) {
+    console.error("Database connection error:", error);
+    cachedDb = null;
+    throw error;
+  }
+}
 
 // Security middleware first
 app.use(helmet());
@@ -51,12 +82,35 @@ app.use(mongoSanitize());
 app.use("/uploads", express.static("uploads")); // User uploads
 app.use(express.static(path.join(__dirname, "public"))); // Static assets
 
+// ✅ Middleware to ensure DB connection before handling requests
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (error) {
+    console.error("Failed to connect to database:", error);
+    res.status(503).json({
+      status: "error",
+      message: "Database connection failed. Please try again.",
+    });
+  }
+});
+
 // DEBUG: Remove this after testing
 app.get("/api/v1/debug", (req, res) => {
   res.json({
     nodeEnv: process.env.NODE_ENV,
     isProduction: process.env.NODE_ENV === "production",
     jwtCookieExpires: process.env.JWT_COOKIE_EXPIRES_IN
+  });
+});
+
+// Health check endpoint for warming up serverless function
+app.get("/api/v1/health", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Server is healthy",
+    timestamp: new Date().toISOString(),
   });
 });
 
