@@ -36,6 +36,8 @@ const createSendToken = (user, statusCode, res, message) => {
     secure: isProduction,
     sameSite: isProduction ? "none" : "lax",
     path: "/",
+    domain: isProduction ? ".vercel.app" : undefined,  // ← ADD THIS!
+    
   };
 
   res.cookie("jwt", token, cookieOption);
