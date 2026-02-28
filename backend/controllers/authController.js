@@ -34,8 +34,7 @@ const createSendToken = (user, statusCode, res, message) => {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
     secure: isProduction,
-    sameSite: "lax",
-    // sameSite: isProduction ? "none" : "lax",
+    sameSite: isProduction ? "none" : "lax",
     path: "/",
     // domain: isProduction ? ".vercel.app" : undefined,  // ← ADD THIS!
     
