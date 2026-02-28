@@ -127,7 +127,7 @@ const Signup = () => {
                     type="text"
                     id="username"
                     placeholder="Choose a username"
-                    className="w-full px-4 py-3 rounded-xl bg-accent/50 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-muted/80 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                     value={formData.username}
                     onChange={handleChange}
                   />
@@ -140,7 +140,7 @@ const Signup = () => {
                     type="email"
                     id="email"
                     placeholder="Enter your email"
-                    className="w-full px-4 py-3 rounded-xl bg-accent/50 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 rounded-xl bg-muted/80 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
                     value={formData.email}
                     onChange={handleChange}
                   />

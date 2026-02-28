@@ -92,7 +92,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="flex lg:h-[10vh] md:px-3 px-2 py-1 md:pt-0 items-center w-full h-full bg-card border-b border-border/50 backdrop-blur-sm sticky top-0 z-40">
+    <nav className="flex lg:h-[10vh] md:px-3 px-2 py-1 md:pt-0 items-center w-full h-full bg-card border-b border-border/30 backdrop-blur-sm sticky top-0 z-40">
       {/* Logo */}
       <div
         onClick={() => router.push("/")}
@@ -105,11 +105,11 @@ const Navbar = () => {
 
       {/* Search box - Responsive */}
       <div className="flex relative items-center justify-end flex-1 md:w-1/2 h-full mx-2 sm:mx-4">
-        <IoSearch className="w-4 h-4 text-muted-foreground absolute left-3" />
+        <IoSearch className="w-5 h-5 text-muted-foreground absolute left-3 cursor-pointer" />
         <input
           type="text"
           placeholder="Search..."
-          className="w-full px-8 py-1.5 text-sm rounded-full bg-accent/50 border border-border/50 text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
+          className="w-full px-9 py-2 text-sm rounded-full bg-muted/90 border border-border/50 text-foreground outline-none placeholder:text-muted-foreground focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
         />
       </div>
 

@@ -43,7 +43,7 @@ const PasswordInput = ({
           placeholder={placeholder}
           value={value}
           onChange={onChange}
-          className={`w-full px-4 py-3 pr-12 rounded-xl bg-accent/50 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${inputClassName}`}
+          className={`w-full px-4 py-3 pr-12 rounded-xl bg-muted/80 border border-border text-foreground placeholder:text-muted-foreground outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${inputClassName}`}
         />
         <button
           type="button"

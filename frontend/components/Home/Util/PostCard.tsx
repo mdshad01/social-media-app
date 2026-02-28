@@ -469,15 +469,15 @@ const PostCard = ({ post, user }: Props) => {
               onClick={() => handleLikeOrDislike(post._id)}
               className={`relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 group ${
                 user?._id && post?.likes && post?.likes.includes(user._id)
-                  ? "text-red-500"
-                  : "text-muted-foreground hover:text-red-500"
+                  ? "text-destructive"
+                  : "text-accent-foreground hover:text-destructive"
               }`}
             >
               <Heart
-                className={`w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 group-hover:scale-110 ${
+                className={`w-4 h-4  sm:w-5 sm:h-5 transition-all duration-200 group-hover:scale-110 ${
                   user?._id && post?.likes && post?.likes.includes(user._id)
-                    ? "fill-red-500"
-                    : "group-hover:fill-red-500/20"
+                    ? "fill-destructive"
+                    : "group-hover:fill-destructive/20"
                 }`}
               />
               <span className="text-xs sm:text-sm font-medium">{post?.likes?.length}</span>
@@ -489,7 +489,7 @@ const PostCard = ({ post, user }: Props) => {
             {/* Comment Button */}
             <button
               onClick={() => setShowComments(!showComments)}
-              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 text-muted-foreground hover:text-primary group"
+              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 text-accent-foreground hover:text-primary group"
             >
               <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 group-hover:scale-110 group-hover:fill-primary/20" />
               <span className="text-xs sm:text-sm font-medium">{post?.comments?.length}</span>
@@ -501,7 +501,7 @@ const PostCard = ({ post, user }: Props) => {
             {/* Share Button */}
             <button
               onClick={handleShare}
-              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 text-muted-foreground hover:text-green-600 group"
+              className="relative flex items-center gap-1.5 sm:gap-2 px-2 sm:px-4 py-2 sm:py-2.5 rounded-lg transition-all duration-200 hover:bg-accent/50 text-muted-accent hover:text-green-600 group"
             >
               <Share2 className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-200 group-hover:scale-110 group-hover:fill-green-600/20" />
               <span className="text-sm font-medium">{post?.share?.length}</span>

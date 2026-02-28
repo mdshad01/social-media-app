@@ -38,9 +38,9 @@ const Addpost2 = () => {
             {/*  TEXT INPUT*/}
             <div
               onClick={() => handleOpenModal()}
-              className="bg-accent/30 rounded-full flex-1 px-4 py-2 cursor-pointer hover:bg-accent/50 transition-all border border-border/30"
+              className="bg-muted/90 rounded-full flex-1 px-4 py-2 cursor-pointer hover:bg-accent/50 transition-all border border-border/50"
             >
-              <span className="text-muted-foreground/80 text-sm font-medium">
+              <span className="text-muted-foreground/90 text-sm font-medium">
                 What&apos;s on your mind?
               </span>
             </div>
