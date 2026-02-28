@@ -34,7 +34,7 @@ const createSendToken = (user, statusCode, res, message) => {
     expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
     httpOnly: true,
     secure: isProduction,
-    sameSite: "lax",  // Changed to "lax" for same-origin via Vercel proxy
+    sameSite: isProduction ? "none" : "lax",  // Use "none" in production for proxy to work
     path: "/",
   };
 
@@ -180,7 +180,7 @@ export const logout = catchAsync(async (req, res, next) => {
     expires: new Date(Date.now() + 10 * 1000),
     httpOnly: true,
     secure: isProduction,
-    sameSite: "lax",  // Changed to "lax" for same-origin via Vercel proxy
+    sameSite: isProduction ? "none" : "lax",  // Use "none" in production for proxy to work
     path: "/",
   });
 
