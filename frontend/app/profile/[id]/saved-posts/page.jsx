@@ -1,9 +1,13 @@
+"use client";
 import React from 'react'
 import SavedPost from "@/components/Home/Util/SavedPost";
+import ProtectedRoute from "@/components/guards/ProtectedRoute";
 
 const SavedPostPage = () => {
   return (
-    <div><SavedPost /></div>
+    <ProtectedRoute>
+      <SavedPost />
+    </ProtectedRoute>
   )
 }
 
