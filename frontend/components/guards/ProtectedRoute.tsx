@@ -1,3 +1,4 @@
+// frontend/components/guards/ProtectedRoute.tsx
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -14,33 +15,39 @@ export default function ProtectedRoute({ children, requireVerification = true }:
   const router = useRouter();
   const user = useSelector((state: RootState) => state.auth.user);
   const [isChecking, setIsChecking] = useState(true);
+  const [hasChecked, setHasChecked] = useState(false);
 
   useEffect(() => {
-    // Small delay to ensure Redux has rehydrated
+    // Prevent multiple checks
+    if (hasChecked) return;
+
     const checkAuth = () => {
+      // Wait longer for Redux to rehydrate
       if (!user) {
+        console.log("ProtectedRoute: No user found, redirecting to login");
         router.replace("/auth/login");
         return;
       }
 
       if (requireVerification && !user.isVerified) {
+        console.log("ProtectedRoute: User not verified, redirecting to verify");
         router.replace("/auth/verify");
         return;
       }
 
+      console.log("ProtectedRoute: Auth check passed");
       setIsChecking(false);
+      setHasChecked(true);
     };
 
-    // Use a small timeout to ensure Redux persist has completed rehydration
-    const timer = setTimeout(checkAuth, 100);
+    // Increase delay to ensure Redux persist has completed
+    const timer = setTimeout(checkAuth, 300);
     return () => clearTimeout(timer);
-  }, [user, router, requireVerification]);
+  }, [user, router, requireVerification, hasChecked]);
 
-  // Show skeleton while checking auth state
   if (isChecking) {
     return <LoginSkeleton />;
   }
 
-  // User is authenticated and verified (if required)
   return <>{children}</>;
 }
