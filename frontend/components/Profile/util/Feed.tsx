@@ -39,7 +39,7 @@ const Feed = ({ userProfile }: Props) => {
   }
   return (
     <div className="py-4 bg-background shadow-md md:rounded-lg flex flex-col gap-6 md:gap-12  mt-2 scrollbar-hide">
-      {user ? posts.map((post, index) => <PostCard key={index} post={post} user={user} />) : <p>No posts available</p>}
+      {user ? posts.map((post, index) => <PostCard key={post._id} post={post} user={user} />) : <p>No posts available</p>}
     </div>
   );
 };

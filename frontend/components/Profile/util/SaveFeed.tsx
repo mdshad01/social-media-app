@@ -1,4 +1,4 @@
-import React from "react";
+// frontend/components/Profile/util/SaveFeed.tsx
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { Post, User } from "@/type";
@@ -10,9 +10,17 @@ type Props = {
 
 const SaveFeed = ({ userProfile }: Props) => {
   const user = useSelector((state: RootState) => state.auth.user);
+  const allPosts = useSelector((state: RootState) => state.posts.posts);
 
-  // Get saved posts from userProfile (already populated from backend)
-  const savedPosts = userProfile?.savedPosts as Post[] | undefined;
+  // Get saved post IDs from userProfile
+  const savedPostIds = userProfile?.savedPosts?.map((post: Post | string) => 
+    typeof post === 'string' ? post : post._id
+  ) || [];
+
+  // Filter posts from Redux that are in savedPosts
+  const savedPosts = allPosts.filter((post) => 
+    savedPostIds.includes(post._id)
+  );
 
   // No saved posts
   if (!savedPosts || savedPosts.length === 0) {
