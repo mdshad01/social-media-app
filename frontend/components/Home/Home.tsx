@@ -3,6 +3,7 @@ import Feed from "./Feed";
 import RightSidebar from "./RightSidebar";
 import LeftMenu from "./LeftMenu";
 import Addpost2 from "./Util/Addpost2";
+import Stories from "./Util/Stories";
 
 
 const Home = () => {
