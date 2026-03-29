@@ -9,19 +9,39 @@ A full-stack social media application built with Next.js 16, Express.js, MongoDB
 
 ## 📸 Screenshots
 
-> **Note:** Add screenshots of your application here to showcase the UI/UX
-
 ### Home Feed
-![Home Feed](./screenshots/home-feed.png)
+![Home Feed](./frontend/screenshots/home-feed.png)
+*Main feed with posts, stories, and create post section*
 
 ### Profile Page
-![Profile Page](./screenshots/profile.png)
+![Profile Page](./frontend/screenshots/profile.png)
+*User profile with customizable information and posts*
 
 ### Activity Dashboard
-![Activity](./screenshots/activity.png)
+![Activity](./frontend/screenshots/activity.png)
+*Track all interactions - likes, comments, and new followers*
+
+### Post Creation
+![Post Creation](./frontend/screenshots/post-creation.png)
+*Create posts with text, images, videos, polls, and events*
+
+### Post Detail & Comments
+![Post Detail](./frontend/screenshots/post-detail.png)
+*Detailed post view with engagement metrics*
+
+![Comments](./frontend/screenshots/comments.png)
+*Nested comments and replies system*
+
+### Authentication
+![Login](./frontend/screenshots/login.png)
+*Secure login with JWT authentication*
+
+![Signup](./frontend/screenshots/signup.png)
+*User registration with email verification*
 
 ### Dark Mode
-![Dark Mode](./screenshots/dark-mode.png)
+![Dark Mode](./frontend/screenshots/dark-mode.png)
+*Beautiful dark theme for comfortable viewing*
 
 ---
 
