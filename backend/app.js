@@ -82,19 +82,21 @@ app.use(mongoSanitize());
 app.use("/uploads", express.static("uploads")); // User uploads
 app.use(express.static(path.join(__dirname, "public"))); // Static assets
 
-// ✅ Middleware to ensure DB connection before handling requests
-app.use(async (req, res, next) => {
-  try {
-    await connectToDatabase();
-    next();
-  } catch (error) {
-    console.error("Failed to connect to database:", error);
-    res.status(503).json({
-      status: "error",
-      message: "Database connection failed. Please try again.",
-    });
-  }
-});
+// ✅ Middleware to ensure DB connection before handling requests (skip in test mode)
+if (process.env.NODE_ENV !== 'test') {
+  app.use(async (req, res, next) => {
+    try {
+      await connectToDatabase();
+      next();
+    } catch (error) {
+      console.error("Failed to connect to database:", error);
+      res.status(503).json({
+        status: "error",
+        message: "Database connection failed. Please try again.",
+      });
+    }
+  });
+}
 
 // DEBUG: Remove this after testing
 app.get("/api/v1/debug", (req, res) => {
