@@ -31,6 +31,7 @@ const PasswordInput = ({
     <>
       {label && (
         <label
+          htmlFor={name}
           className={`block text-sm font-medium text-foreground mb-2 ${labelClassName}`}
         >
           {label}
@@ -39,6 +40,7 @@ const PasswordInput = ({
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
+          id={name}
           name={name}
           placeholder={placeholder}
           value={value}
