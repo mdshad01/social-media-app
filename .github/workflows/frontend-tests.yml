@@ -1,18 +1,15 @@
 name: Frontend Tests
 
-# Temporarily disabled - will be enabled when Vitest tests are added
-# on:
-#   push:
-#     branches: [ main, develop ]
-#     paths:
-#       - 'frontend/**'
-#   pull_request:
-#     branches: [ main, develop ]
-#     paths:
-#       - 'frontend/**'
-
 on:
-  workflow_dispatch:  # Manual trigger only
+  push:
+    branches: [ main, develop, e2e-cypress ]
+    paths:
+      - 'frontend/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:  # Manual trigger
 
 jobs:
   test:
@@ -51,21 +48,21 @@ jobs:
       env:
         NEXT_PUBLIC_API_URL: http://localhost:5000
 
-    # Uncomment when you add frontend tests
-    # - name: Run tests
-    #   run: npm test
-    #   env:
-    #     NODE_ENV: test
+    - name: Run Vitest unit tests
+      run: npm run test:unit
+      env:
+        NODE_ENV: test
 
-    # - name: Run tests with coverage
-    #   run: npm run test:coverage
-    #   env:
-    #     NODE_ENV: test
+    - name: Run Vitest with coverage
+      run: npm run test:coverage
+      env:
+        NODE_ENV: test
+      if: matrix.node-version == '20.x'
 
-    # - name: Upload coverage reports
-    #   uses: codecov/codecov-action@v4
-    #   with:
-    #     files: ./frontend/coverage/coverage-final.json
-    #     flags: frontend
-    #     name: frontend-coverage
-    #   if: matrix.node-version == '20.x'
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./frontend/coverage/coverage-final.json
+        flags: frontend
+        name: frontend-coverage
+      if: matrix.node-version == '20.x'
