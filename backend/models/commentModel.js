@@ -33,6 +33,15 @@ const commentSchema = new mongoose.Schema(
       ref: "Comment",
       default: null,
     },
+
+    // AI Moderation fields
+    moderation: {
+      isChecked: { type: Boolean, default: false },
+      isFlagged: { type: Boolean, default: false },
+      flagReason: { type: String },
+      moderationResult: { type: Object },
+      checkedAt: { type: Date },
+    },
   },
   { timestamps: true }
 );

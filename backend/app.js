@@ -21,13 +21,24 @@ const app = express();
 
 // ✅ MongoDB connection with caching for Vercel serverless
 let cachedDb = null;
+let isConnecting = false; // Prevent duplicate connection attempts
 
 async function connectToDatabase() {
   // Return cached connection if available
   if (cachedDb && mongoose.connection.readyState === 1) {
-    console.log("Using cached database connection");
+    // console.log("Using cached database connection"); // Removed to reduce noise
     return cachedDb;
   }
+
+  // If already connecting, wait for it
+  if (isConnecting) {
+    while (isConnecting) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    return cachedDb;
+  }
+
+  isConnecting = true;
 
   try {
     // Optimized connection settings for Vercel serverless
@@ -40,12 +51,14 @@ async function connectToDatabase() {
     });
     
     cachedDb = db;
-    console.log("Database connected successfully");
+    console.log("✅ Database connected successfully");
     return db;
   } catch (error) {
-    console.error("Database connection error:", error);
+    console.error("❌ Database connection error:", error);
     cachedDb = null;
     throw error;
+  } finally {
+    isConnecting = false;
   }
 }
 

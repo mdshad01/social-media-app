@@ -56,6 +56,23 @@ const postSchema = new mongoose.Schema(
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     share: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
+
+    // AI Moderation fields
+    moderation: {
+      isChecked: { type: Boolean, default: false },
+      isFlagged: { type: Boolean, default: false },
+      flagReason: { type: String },
+      textModeration: { type: Object },
+      imageModeration: { type: Object },
+      checkedAt: { type: Date },
+      status: {
+        type: String,
+        enum: ["approved", "pending", "hidden", "deleted"],
+        default: "approved",
+      },
+      reviewedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      reviewedAt: { type: Date },
+    },
   },
   { timestamps: true }
 );
