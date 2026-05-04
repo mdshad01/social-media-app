@@ -1,6 +1,6 @@
 // Seed test user for CI/CD E2E tests
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const seedTestUser = async () => {
   try {
@@ -33,7 +33,6 @@ const seedTestUser = async () => {
       console.log('✅ Test user already exists');
       await mongoose.connection.close();
       process.exit(0);
-      return;
     }
     
     // Create test user
