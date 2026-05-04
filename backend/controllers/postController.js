@@ -6,6 +6,8 @@ import Post from "../models/postModel.js";
 import User from "../models/userModel.js";
 import cloudinary from "cloudinary";
 import Comment from "../models/commentModel.js";
+// Import Moder8r.app (FREE, AI-powered with OpenAI + GPT-4)
+import { moderateContent } from "../utils/moder8rIntegration.js";
 
 export const createPost = catchAsync(async (req, res, next) => {
   const { caption, postType, pollData, eventData } = req.body;
@@ -16,12 +18,43 @@ export const createPost = catchAsync(async (req, res, next) => {
     return next(new AppError("User not authenticated", 401));
   }
 
+  // ✅ AI MODERATION - Check text content BEFORE creating post (ONE API CALL ONLY)
+  if (caption && caption.trim().length > 0) {
+    try {
+      // Moder8r.app AI moderation with custom thresholds
+      const textModeration = await moderateContent(caption);
+      
+      // Block if flagged by our custom thresholds
+      if (textModeration.flagged && !textModeration.error) {
+        const reasons = textModeration.categories.join(", ") || "inappropriate content";
+        return next(
+          new AppError(
+            `Your post cannot be published due to ${reasons}. Please review our community guidelines.`,
+            400
+          )
+        );
+      }
+      
+      if (textModeration.error) {
+        console.error("⚠️ Moderation API failed, allowing post (fail-open)");
+      }
+    } catch (error) {
+      console.error("⚠️ Moderation error:", error.message);
+    }
+  }
+
   console.log("Received postType:", postType);
   console.log("File info:", file ? { name: file.originalname, size: file.size, type: file.mimetype } : "No file");
   let postData = {
     caption,
     postType: postType || "text",
     user: userId,
+    moderation: {
+      isChecked: true,
+      isFlagged: false,
+      checkedAt: new Date(),
+      status: "approved",
+    },
   };
 
   // ✅ Handle IMAGE
@@ -421,10 +454,73 @@ export const addComment = catchAsync(async (req, res, next) => {
   if (!post) return next(new AppError("Post not found", 404));
   if (!text) return next(new AppError("Comment text is required", 400));
 
+  // ✅ RATE LIMITING - Check comment frequency
+  const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
+  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+
+  // Count comments in last 1 minute
+  const recentCommentsCount = await Comment.countDocuments({
+    user: userId,
+    createdAt: { $gte: oneMinuteAgo },
+  });
+
+  if (recentCommentsCount >= 4) {
+    return next(
+      new AppError(
+        "You're commenting too fast. Please wait a moment before commenting again.",
+        429
+      )
+    );
+  }
+
+  // Count comments in last 10 minutes
+  const commentsInTenMinutes = await Comment.countDocuments({
+    user: userId,
+    createdAt: { $gte: tenMinutesAgo },
+  });
+
+  if (commentsInTenMinutes >= 15) {
+    return next(
+      new AppError(
+        "You've reached the maximum number of comments. Please try again in a few minutes.",
+        429
+      )
+    );
+  }
+
+  // ✅ AI MODERATION - Check comment content
+  if (text && text.trim().length > 0) {
+    try {
+      const textModeration = await moderateContent(text);
+
+      // Block if flagged by our custom thresholds
+      if (textModeration.flagged && !textModeration.error) {
+        const reasons = textModeration.categories.join(", ") || "inappropriate content";
+        return next(
+          new AppError(
+            `Your comment cannot be posted due to ${reasons}. Please review our community guidelines.`,
+            400
+          )
+        );
+      }
+
+      if (textModeration.error) {
+        console.error("⚠️ Moderation API failed, allowing comment (fail-open)");
+      }
+    } catch (error) {
+      console.error("⚠️ Moderation error:", error.message);
+    }
+  }
+
   const comment = await Comment.create({
     text,
     user: userId,
-    post:postId
+    post: postId,
+    moderation: {
+      isChecked: true,
+      isFlagged: false,
+      checkedAt: new Date(),
+    },
   });
 
   post.comments.push(comment._id);
@@ -486,12 +582,75 @@ export const replyToComment = catchAsync(async (req, res, next) => {
   const parentComment = await Comment.findById(commentId);
   if (!parentComment) return next(new AppError("Comment not found", 404));
 
+  // ✅ RATE LIMITING - Check reply frequency (replies count as comments)
+  const oneMinuteAgo = new Date(Date.now() - 60 * 1000);
+  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+
+  // Count comments/replies in last 1 minute
+  const recentCommentsCount = await Comment.countDocuments({
+    user: userId,
+    createdAt: { $gte: oneMinuteAgo },
+  });
+
+  if (recentCommentsCount >= 5) {
+    return next(
+      new AppError(
+        "You're replying too fast. Please wait a moment before replying again.",
+        429
+      )
+    );
+  }
+
+  // Count comments/replies in last 10 minutes
+  const commentsInTenMinutes = await Comment.countDocuments({
+    user: userId,
+    createdAt: { $gte: tenMinutesAgo },
+  });
+
+  if (commentsInTenMinutes >= 20) {
+    return next(
+      new AppError(
+        "You've reached the maximum number of replies. Please try again in a few minutes.",
+        429
+      )
+    );
+  }
+
+  // ✅ AI MODERATION - Check reply content
+  if (text && text.trim().length > 0) {
+    try {
+      const textModeration = await moderateContent(text);
+
+      // Block if flagged by our custom thresholds
+      if (textModeration.flagged && !textModeration.error) {
+        const reasons = textModeration.categories.join(", ") || "inappropriate content";
+        return next(
+          new AppError(
+            `Your reply cannot be posted due to ${reasons}. Please review our community guidelines.`,
+            400
+          )
+        );
+      }
+
+      if (textModeration.error) {
+        console.error("⚠️ Moderation API failed, allowing reply (fail-open)");
+      }
+    } catch (error) {
+      console.error("⚠️ Moderation error:", error.message);
+    }
+  }
+
   // Create reply
   const reply = await Comment.create({
     text,
     user: userId,
     post: parentComment.post,
     parentComment: commentId,
+    moderation: {
+      isChecked: true,
+      isFlagged: false,
+      checkedAt: new Date(),
+    },
   });
 
   // Add reply to parent comment
