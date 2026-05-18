@@ -1,0 +1,30 @@
+# Environment variables (NEVER commit these - contain secrets!)
+.env
+.env.*
+*.env
+
+# Docker personal learning notes (not needed in repo)
+DOCKER-LEARNING-GUIDE.md
+DOCKER-VISUAL-CHEATSHEET.md
+DOCKER-FAQ.md
+DOCKER-QUICK-REFERENCE.md
+DOCKER-ARCHITECTURE.md
+DOCKER-SETUP.md
+DOCKER-COMMIT-GUIDE.md
+DOCKER-IMPLEMENTATION-SUMMARY.md
+DOCKER-FIX-SUMMARY.md
+START-HERE-DOCKER.md
+
+# Testing guides (personal notes)
+TESTING-GUIDE-*.md
+CI-VERIFICATION-CHECKLIST.md
+PRE-PUSH-CHECKLIST.md
+QUICK-PUSH-GUIDE.md
+UPDATED-PR-DESCRIPTION.md
+
+# Node modules
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db

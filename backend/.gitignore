@@ -2,3 +2,4 @@
 
 .envcoverage/
 .env
+.env.docker

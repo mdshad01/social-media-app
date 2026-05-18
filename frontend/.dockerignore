@@ -1,0 +1,13 @@
+node_modules
+.next
+npm-debug.log
+.env*.local
+coverage
+*.md
+.git
+.gitignore
+cypress
+cypress.config.ts
+.vscode
+.DS_Store
+README.md
