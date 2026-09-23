@@ -176,12 +176,39 @@ export const voteOnPoll = catchAsync(async (req, res, next) => {
   const { postId, optionIndex } = req.body;
   const userId = req.user._id;
 
+  console.log('📊 Vote request:', { postId, optionIndex, userId: userId.toString() });
+
   const post = await Post.findById(postId);
   if (!post || post.postType !== "poll") {
     return next(new AppError("Poll not found", 404));
   }
 
-  // Remove previous vote if exists
+  // Check if user already voted for this specific option
+  const selectedOption = post.poll.options[optionIndex];
+  const hasVotedThisOption = selectedOption.votes.some(
+    (id) => id.toString() === userId.toString()
+  );
+
+  console.log('📊 Current votes for option:', selectedOption.votes.map(id => id.toString()));
+  console.log('📊 Has voted this option:', hasVotedThisOption);
+
+  if (hasVotedThisOption) {
+    // ✅ UNVOTE: Remove vote from this option (toggle off)
+    selectedOption.votes = selectedOption.votes.filter(
+      (id) => id.toString() !== userId.toString()
+    );
+    await post.save();
+
+    console.log('✅ Vote removed');
+
+    return res.status(200).json({
+      status: "success",
+      message: "Vote removed",
+      data: { poll: post.poll },
+    });
+  }
+
+  // Remove previous vote from other options if exists
   post.poll.options.forEach((option) => {
     option.votes = option.votes.filter((id) => id.toString() !== userId.toString());
   });
@@ -189,6 +216,8 @@ export const voteOnPoll = catchAsync(async (req, res, next) => {
   // Add new vote
   post.poll.options[optionIndex].votes.push(userId);
   await post.save();
+
+  console.log('✅ Vote recorded');
 
   res.status(200).json({
     status: "success",

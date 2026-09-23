@@ -6,7 +6,8 @@ import DotButton from "./DotButton";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { useDispatch } from "react-redux";
-import { likeOrDislike, addComment, likeComment, addReply, sharePost, deleteComment } from "@/store/postSlice";
+import { likeOrDislike, addComment, likeComment, addReply, sharePost, deleteComment, updatePoll, updateEvent } from "@/store/postSlice";
+import { formatRelativeTime, formatFullDate } from "@/lib/timeFormatter";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { X, Heart, MessageCircle, Share2, Send } from "lucide-react";
@@ -76,8 +77,9 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
         { withCredentials: true }
       );
       if (result.data.status === "success") {
+        // Update Redux state with new poll data
+        dispatch(updatePoll({ postId, poll: result.data.data.poll }));
         toast.success(result.data.message);
-        router.refresh();
       }
     } catch {
       toast.error("Failed to vote");
@@ -91,9 +93,14 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
         {},
         { withCredentials: true }
       );
-      if (result.data.status === "success") {
+      if (result.data.status === "success" && post?.event) {
+        // Update Redux state with new attendees
+        const updatedEvent = {
+          ...post.event,
+          attendees: result.data.data.attendees,
+        };
+        dispatch(updateEvent({ postId, event: updatedEvent }));
         toast.success(result.data.message);
-        router.refresh();
       }
     } catch {
       toast.error("Failed to RSVP");
@@ -379,7 +386,16 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
             <div className="flex items-center gap-3">
               <Image onClick={() => { onClose(); router.push(`/profile/${post?.user?._id}`); }} src={post?.user?.profilePicture || "/noAvatar3.svg"} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover cursor-pointer" />
               <div className="flex flex-col">
-                <span onClick={() => { onClose(); router.push(`/profile/${post?.user?._id}`); }} className="font-semibold cursor-pointer">{post?.user?.username}</span>
+                <div className="flex items-center gap-2">
+                  <span onClick={() => { onClose(); router.push(`/profile/${post?.user?._id}`); }} className="font-semibold cursor-pointer">{post?.user?.username}</span>
+                  <span className="text-muted-foreground text-xs">•</span>
+                  <span 
+                    className="text-xs text-muted-foreground cursor-default"
+                    title={formatFullDate(post.createdAt)}
+                  >
+                    {formatRelativeTime(post.createdAt)}
+                  </span>
+                </div>
                 {post?.user?.bio && <span className="text-xs text-muted-foreground line-clamp-1">{post.user.bio}</span>}
               </div>
             </div>
@@ -403,11 +419,11 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
                   return (<>{post.poll!.options.map((option, index) => {
                     const percentage = totalVotes > 0 ? (option.votes.length / totalVotes) * 100 : 0;
                     const hasVoted = user?._id && option.votes.includes(user._id);
-                    return (<button key={index} onClick={() => handleVoteOnPoll(post._id, index)} className={`w-full p-3 border border-border rounded-lg hover:bg-accent transition-colors ${hasVoted ? "bg-primary/10 border-primary" : ""}`}>
-                      <div className="flex justify-between items-center mb-1"><span className="font-medium text-left text-foreground">{option.text}</span><span className="text-sm text-muted-foreground">{percentage.toFixed(0)}% ({option.votes.length})</span></div>
+                    return (<button key={index} onClick={() => handleVoteOnPoll(post._id, index)} className={`w-full p-3 border rounded-lg transition-all ${hasVoted ? "bg-primary/10 border-primary hover:bg-primary/20" : "border-border hover:bg-accent"}`} title={hasVoted ? "Click again to remove your vote" : "Click to vote"}>
+                      <div className="flex justify-between items-center mb-1"><span className="font-medium text-left text-foreground flex items-center gap-2">{hasVoted && <span className="text-primary">✓</span>}{option.text}</span><span className="text-sm text-muted-foreground">{percentage.toFixed(0)}% ({option.votes.length})</span></div>
                       {totalVotes > 0 && <div className="h-2 bg-muted rounded-full overflow-hidden"><div className={`h-full transition-all ${hasVoted ? "bg-primary" : "bg-muted-foreground/50"}`} style={{ width: `${percentage}%` }} /></div>}
                     </button>);
-                  })}<p className="text-sm text-muted-foreground mt-2">Total votes: {totalVotes}</p></>);
+                  })}<div className="flex items-center justify-between text-sm text-muted-foreground mt-2"><p>Total votes: {totalVotes}</p>{user?._id && post.poll!.options.some(opt => opt.votes.includes(user._id)) && <p className="text-xs text-primary">Click your choice to remove vote</p>}</div></>);
                 })()}
               </div>
             )}
@@ -452,7 +468,18 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
             <div className="flex items-center justify-between p-4 border-b border-border">
               <div className="flex items-center gap-3">
                 <Image onClick={() => { onClose(); router.push(`/profile/${post?.user?._id}`); }} src={post?.user?.profilePicture || "/noAvatar3.svg"} alt="" width={40} height={40} className="w-10 h-10 rounded-full object-cover cursor-pointer" />
-                <span onClick={() => { onClose(); router.push(`/profile/${post?.user?._id}`); }} className="font-semibold cursor-pointer hover:text-primary transition-colors">{post?.user?.username}</span>
+                <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <span onClick={() => { onClose(); router.push(`/profile/${post?.user?._id}`); }} className="font-semibold cursor-pointer hover:text-primary transition-colors">{post?.user?.username}</span>
+                    <span className="text-muted-foreground text-xs">•</span>
+                    <span 
+                      className="text-xs text-muted-foreground cursor-default"
+                      title={formatFullDate(post.createdAt)}
+                    >
+                      {formatRelativeTime(post.createdAt)}
+                    </span>
+                  </div>
+                </div>
               </div>
               <DotButton post={post} user={user} />
             </div>
@@ -475,11 +502,11 @@ const PostDetailModal = ({ post, user, isOpen, onClose }: Props) => {
                     return (<>{post.poll!.options.map((option, index) => {
                       const percentage = totalVotes > 0 ? (option.votes.length / totalVotes) * 100 : 0;
                       const hasVoted = user?._id && option.votes.includes(user._id);
-                      return (<button key={index} onClick={() => handleVoteOnPoll(post._id, index)} className={`w-full p-3 border border-border rounded-lg hover:bg-accent transition-colors ${hasVoted ? "bg-primary/10 border-primary" : ""}`}>
-                        <div className="flex justify-between items-center mb-1"><span className="font-medium text-left text-foreground">{option.text}</span><span className="text-sm text-muted-foreground">{percentage.toFixed(0)}% ({option.votes.length})</span></div>
+                      return (<button key={index} onClick={() => handleVoteOnPoll(post._id, index)} className={`w-full p-3 border rounded-lg transition-all ${hasVoted ? "bg-primary/10 border-primary hover:bg-primary/20" : "border-border hover:bg-accent"}`} title={hasVoted ? "Click again to remove your vote" : "Click to vote"}>
+                        <div className="flex justify-between items-center mb-1"><span className="font-medium text-left text-foreground flex items-center gap-2">{hasVoted && <span className="text-primary">✓</span>}{option.text}</span><span className="text-sm text-muted-foreground">{percentage.toFixed(0)}% ({option.votes.length})</span></div>
                         {totalVotes > 0 && <div className="h-2 bg-muted rounded-full overflow-hidden"><div className={`h-full transition-all ${hasVoted ? "bg-primary" : "bg-muted-foreground/50"}`} style={{ width: `${percentage}%` }} /></div>}
                       </button>);
-                    })}<p className="text-sm text-muted-foreground mt-2">Total votes: {totalVotes}</p></>);
+                    })}<div className="flex items-center justify-between text-sm text-muted-foreground mt-2"><p>Total votes: {totalVotes}</p>{user?._id && post.poll!.options.some(opt => opt.votes.includes(user._id)) && <p className="text-xs text-primary">Click your choice to remove vote</p>}</div></>);
                   })()}
                 </div>
               )}
