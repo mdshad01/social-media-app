@@ -7,7 +7,8 @@ import PostDetailModal from "./PostDetailModal";
 import axios from "axios";
 import { BASE_API_URL } from "@/server";
 import { useDispatch } from "react-redux";
-import { likeOrDislike, sharePost, addComment, likeComment, addReply, deleteComment } from "@/store/postSlice";
+import { likeOrDislike, sharePost, addComment, likeComment, addReply, deleteComment, updatePoll, updateEvent } from "@/store/postSlice";
+import { formatRelativeTime, formatFullDate } from "@/lib/timeFormatter";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { handleAuthRequest } from "@/components/util/apiRequest";
@@ -233,16 +234,23 @@ const PostCard = ({ post, user }: Props) => {
 
   const handleVoteOnPoll = async (postId: string, optionIndex: number) => {
     try {
+      console.log('Voting on poll:', { postId, optionIndex, userId: user?._id });
+      
       const result = await axios.post(
         `${BASE_API_URL}/posts/poll/vote`,
         { postId, optionIndex },
         { withCredentials: true }
       );
+      
+      console.log('Vote response:', result.data);
+      
       if (result.data.status === "success") {
+        // Update Redux state with new poll data
+        dispatch(updatePoll({ postId, poll: result.data.data.poll }));
         toast.success(result.data.message);
-        router.refresh();
       }
-    } catch {
+    } catch (error) {
+      console.error('Vote error:', error);
       toast.error("Failed to vote");
     }
   };
@@ -254,9 +262,14 @@ const PostCard = ({ post, user }: Props) => {
         {},
         { withCredentials: true }
       );
-      if (result.data.status === "success") {
+      if (result.data.status === "success" && post?.event) {
+        // Update Redux state with new attendees
+        const updatedEvent = {
+          ...post.event,
+          attendees: result.data.data.attendees,
+        };
+        dispatch(updateEvent({ postId, event: updatedEvent }));
         toast.success(result.data.message);
-        router.refresh();
       }
     } catch {
       toast.error("Failed to RSVP");
@@ -282,20 +295,29 @@ const PostCard = ({ post, user }: Props) => {
             onClick={() => router.push(`/profile/${post?.user?._id}`)}
             src={
               post?.user?.profilePicture ||
-              "/noAvatar3.svg"
+              "/noAvatar01.png"
             }
             alt=""
             width={40}
             height={40}
-            className="w-10 h-10 rounded-full object-cover cursor-pointer ring-2 ring-border hover:ring-primary/50 transition-all"
+            className="w-10 h-10 rounded-full bg-noavatar object-cover cursor-pointer ring-2 ring-secondary-foreground/40  transition-all"
           />
           <div className="flex flex-col">
-            <span
-              onClick={() => router.push(`/profile/${post?.user?._id}`)}
-              className="font-semibold cursor-pointer hover:text-primary transition-colors text-sm"
-            >
-              {post?.user?.username}
-            </span>
+            <div className="flex items-center gap-2">
+              <span
+                onClick={() => router.push(`/profile/${post?.user?._id}`)}
+                className="font-semibold cursor-pointer hover:text-primary transition-colors text-sm"
+              >
+                {post?.user?.username}
+              </span>
+              <span className="text-muted-foreground text-xs">•</span>
+              <span 
+                className="text-xs text-muted-foreground cursor-default"
+                title={formatFullDate(post.createdAt)}
+              >
+                {formatRelativeTime(post.createdAt)}
+              </span>
+            </div>
             {post?.user?.bio && (
               <span className="text-xs text-muted-foreground line-clamp-1">
                 {post?.user?.bio}
@@ -309,7 +331,8 @@ const PostCard = ({ post, user }: Props) => {
       {/* CONTENT */}
       <div className="flex flex-col">
         {/* Caption - BEFORE image (LinkedIn style) */}
-        {post?.caption && (
+        {/* For polls, only show caption if it's different from poll question */}
+        {post?.caption && !(post.postType === "poll" && post.caption === post.poll?.question) && (
           <div className="px-4 py-3">
             <p className="text-sm text-foreground whitespace-pre-wrap">
               {post.caption}
@@ -362,8 +385,8 @@ const PostCard = ({ post, user }: Props) => {
 
           {/* POLL POST */}
         {post?.postType === "poll" && post?.poll && (
-          <div className="px-4 space-y-2">
-            <p className="font-semibold mb-3">{post.poll.question}</p>
+          <div className="px-4 py-4 space-y-3">
+            <p className="font-semibold text-base mb-3">{post.poll.question}</p>
             {(() => {
               // ✅ Calculate totalVotes once, outside the map
               const totalVotes = post.poll!.options.reduce(
@@ -382,14 +405,19 @@ const PostCard = ({ post, user }: Props) => {
                       <button
                         key={index}
                         onClick={() => handleVoteOnPoll(post._id, index)}
-                        className={`w-full p-3 border border-border rounded-lg hover:bg-accent transition-colors ${
-                          hasVoted ? "bg-primary/10 border-primary" : ""
+                        className={`w-full p-3 border rounded-lg transition-all ${
+                          hasVoted 
+                            ? "bg-primary/10 border-primary hover:bg-primary/20" 
+                            : "border-border hover:bg-accent"
                         }`}
+                        title={hasVoted ? "Click again to remove your vote" : "Click to vote"}
                       >
                         <div className="flex justify-between items-center mb-1">
-                          <span className="font-medium text-left text-foreground">{option.text}</span>
+                          <span className="font-medium text-left text-foreground flex items-center gap-2">
+                            {option.text}
+                          </span>
                           <span className="text-sm text-muted-foreground">
-                            {percentage.toFixed(0)}% ({option.votes.length})
+                            {percentage.toFixed(0)}%
                           </span>
                         </div>
                         {totalVotes > 0 && (
@@ -405,9 +433,9 @@ const PostCard = ({ post, user }: Props) => {
                       </button>
                     );
                   })}
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Total votes: {totalVotes}
-                  </p>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mt-2">
+                    <p>Total votes: {totalVotes}</p>
+                  </div>
                 </>
               );
             })()}
@@ -519,11 +547,11 @@ const PostCard = ({ post, user }: Props) => {
           {/* WRITE COMMENT */}
           <div className="flex items-center gap-3 mb-4">
             <Image
-              src={user?.profilePicture || "/noAvatar.png"}
+              src={user?.profilePicture || "/noAvatar02.png"}
               alt=""
               width={32}
               height={32}
-              className="rounded-full w-8 h-8 cursor-pointer ring-2 ring-border"
+              className="rounded-full w-8 h-8 bg-noavatar cursor-pointer ring-1 ring-secondary-foreground/50 "
             />
             <div className="flex items-center gap-2 bg-accent/30 rounded-full text-sm px-4 py-2.5 flex-1 border border-border/30">
               <input

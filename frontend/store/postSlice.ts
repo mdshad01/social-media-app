@@ -77,10 +77,22 @@ const postSlice = createSlice({
         }
       }
     },
+    updatePoll: (state, action: PayloadAction<{ postId: string; poll: Post["poll"] }>) => {
+      const post = state.posts.find((post) => post._id === action.payload.postId);
+      if (post) {
+        post.poll = action.payload.poll;
+      }
+    },
+    updateEvent: (state, action: PayloadAction<{ postId: string; event: Post["event"] }>) => {
+      const post = state.posts.find((post) => post._id === action.payload.postId);
+      if (post) {
+        post.event = action.payload.event;
+      }
+    },
   },
 });
 
-export const { setPost, addPost, deletePost, likeOrDislike, addComment, deleteComment, likeComment, addReply, sharePost } =
+export const { setPost, addPost, deletePost, likeOrDislike, addComment, deleteComment, likeComment, addReply, sharePost, updatePoll, updateEvent } =
   postSlice.actions;
 
 export default postSlice.reducer;
