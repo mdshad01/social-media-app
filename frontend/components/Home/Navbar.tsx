@@ -139,7 +139,7 @@ const Navbar = () => {
             <Avatar className="w-9 h-9">
               <AvatarImage src={user?.profilePicture} className="w-full h-full" />
               <AvatarFallback>
-                <Image src="/noAvatar01.png" alt="image" width={36} height={36} />
+                <Image src="/noAvatar3.svg" alt="image" width={36} height={36} />
               </AvatarFallback>
             </Avatar>
           </span>

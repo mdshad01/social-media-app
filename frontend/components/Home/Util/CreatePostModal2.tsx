@@ -152,7 +152,6 @@ const CreatePostModal2 = ({ isOpen, onClose, user }: Props) => {
     if (showPoll) {
       postType = "poll";
       const validOptions = pollOptions.filter((opt) => opt.trim());
-      // Use caption as poll question, it will be shown only once in the UI
       formData.append(
         "pollData",
         JSON.stringify({

@@ -27,12 +27,12 @@ const ProfileCard = () => {
         <Image
           src={
             user?.profilePicture ||
-            "/noAvatar01.png"
+            "/noAvatar3.svg"
           }
           alt=""
           width={48}
           height={48}
-          className="rounded-full bg-noavatar object-cover w-12 h-12 absolute left-0 right-0 m-auto -bottom-5 ring-4 shadow-lg z-10 ring-secondary-foreground/30  transition-all duration-300"
+          className="rounded-full object-cover w-12 h-12 absolute left-0 right-0 m-auto -bottom-5 ring-4 ring-background shadow-lg z-10 group-hover:ring-primary/50 transition-all duration-300"
         />
       </div>
       <div className="flex flex-col items-center px-3 mt-2">

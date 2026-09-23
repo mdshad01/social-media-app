@@ -8,7 +8,6 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --color-noavatar: var(--noavatar);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -89,7 +88,6 @@
   --border: oklch(0.85 0.01 250);
   --input: oklch(0.96 0.005 250);
   --ring: oklch(0.55 0.25 255);
-  --noavatar:oklch(0.89835 0.01273 255.51);
 
   /* Chart Colors - Vibrant */
   --chart-1: oklch(0.6 0.26 255);
@@ -110,7 +108,6 @@
   --sidebar-accent-foreground: oklch(0.2 0.05 250);
   --sidebar-border: oklch(0.85 0.01 250);
   --sidebar-ring: oklch(0.55 0.25 255);
-  
 }
 
 .dark {
@@ -154,7 +151,6 @@
   --border: oklch(0.32 0 0);
   --input: oklch(0.18 0 0);
   --ring: oklch(0.62 0.2 255);
-  --noavatar:oklch(0.89835 0.01273 255.51);
 
   /* Chart Colors - Vibrant on dark */
   --chart-1: oklch(0.65 0.18 255);
@@ -173,7 +169,6 @@
   --sidebar-accent-foreground: oklch(0.93 0 0);
   --sidebar-border: oklch(0.32 0 0);
   --sidebar-ring: oklch(0.62 0.2 255);
-
 }
 
 @layer base {

@@ -28,12 +28,12 @@ const Addpost2 = () => {
               onClick={() => router.push(`/profile/${user?._id}`)}
               src={
                 user?.profilePicture ||
-                "/noAvatar02.png"
+                "/noAvatar3.svg"
               }
               alt=""
               height={48}
               width={48}
-              className="w-12 h-12 object-cover rounded-full ring-2 ring-secondary-foreground/50  cursor-pointer  transition-all bg-noavatar"
+              className="w-12 h-12 object-cover rounded-full ring-2 ring-border cursor-pointer hover:ring-primary/50 transition-all"
             />
             {/*  TEXT INPUT*/}
             <div
